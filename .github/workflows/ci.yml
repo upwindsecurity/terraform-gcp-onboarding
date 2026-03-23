@@ -101,11 +101,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Run Trivy Security Scanner
-<<<<<<< HEAD
-      uses: aquasecurity/trivy-action@0.31.0
-=======
       uses: aquasecurity/trivy-action@v0.35.0
->>>>>>> old-repo/main
       with:
         version: ${{ env.TRIVY_VERSION }}
         scan-type: 'config'
