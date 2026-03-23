@@ -6,6 +6,73 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## 1.0.0 (2026-03-23)
+
+### ⚠ BREAKING CHANGES
+
+* creates a shared module `_shared`, and moves API enablement there.
+  Further resources will be moved across in stages.
+
+* chore(AG-3628): remove APIs to rely on external script, move project based roles to shared
+
+* chore(AG-3628): move remaining resources to shared module - secrets and WIF
+
+* chore(AG-3628): add labels by default to applicable resources
+
+* chore(AG-3628): remove unused API variables, other var cleanup
+
+* feat(AG-3628): add folder deployment option
+
+* chore(AG-3628): update READMEs
+
+* chore(AG-3628): add dummy secret with user defined labels for later use
+
+* chore(AG-3628): add missing moved block for compute agent minimal permissions
+
+* chore(AG-3628): add moved blocks for secrets
+* **AG-2890:** this upgrades the Upwind GCP deployments
+    to use Workload Identity Federation instead of directly
+    using Service Accounts by creating a private key.
+
+    An identity pool is created and trust is configured with the
+    Upwind AWS account. It will be necessary for a customer to
+    provide a credential configuration for WIF after creation
+    using the gcloud command specified in the documentation, and
+    uploading this to Upwind.
+
+* feat!(AG-3628): support gcp onboarding at project multiproject and folder level ([#48](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/48)) ([0f67983](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/0f679830a63198dd6b6c8186c49bc81725cbd302))
+
+### Features
+
+* **AG-2890:** GCP Workload Identity Federation ([#1](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/1)) ([8480477](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/84804775c3f9898942e41fe1694622bb7d98a5d6))
+* **AG-2921:** add variable to control WIF project ([#6](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/6)) ([820f1e9](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/820f1e91d6c5e7f24ab094f3c287d6a70aca2468))
+* **AG-2923:** reduce storageAdmin role to only required permissions ([#9](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/9)) ([307cf6a](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/307cf6a67e5f8fafff8673a9fcaafa934eea6a77))
+* **AG-2991:** add storage bucket read permissions to management account ([#19](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/19)) ([feafa66](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/feafa667ea14968515d10e9f6a8942297e9b72f8))
+* **AG-3170:** update for ME region ([#33](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/33)) ([cdea817](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/cdea8176432dd63f3105623687b4f18ac2bcf64f))
+* **AG-3214:** remove unnecessary IAM write role as all IAM creation is now handled within onboarding ([#35](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/35)) ([396e034](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/396e034406a3d3f0e6032c0287a65a45c949ee1d))
+* **AG2922:** remove token creator bindings, allow cloudscanner to impersonate scaler ([#8](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/8)) ([a5c88a1](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/a5c88a1467e64f4dc9519ba46aca70ae6cd18360))
+* update release workflow and CI/CD pipeline ([#3](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/3)) ([7c182b1](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/7c182b187eef7c4f93050b6a0a7d66207f7ac398))
+
+### Bug Fixes
+
+* add missing permissions for certain cases ([#51](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/51)) ([72d260c](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/72d260c920e8e05659829b5c6c687483c5304244))
+* **AG-0:** add deprecation warning to old project module, support private region in WIF ([6e13ba2](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/6e13ba23be10a255174e44d6fbe2c60a00aed52b))
+* **AG-0:** add run.jobs.update permission for stack update operations ([#54](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/54)) ([dbf6c0c](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/dbf6c0cf7e5bbd84fa1865dec423f436373f88f4))
+* **AG-2928:** move disks.createSnapshot permission, fix empty workload ([#12](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/12)) ([6d015e8](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/6d015e8bb06eb466a1cb853a2871c7447306b1ee))
+* **AG-2937:** fix role name for snapshot reader/writer ([#14](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/14)) ([0d538cf](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/0d538cfcf3d374c53b82f57f5977d91e52919a96))
+* **AG-2954:** permissions fixes for scaling and scanning, reorganisation of roles ([#16](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/16)) ([21a17e1](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/21a17e18e96123b32bfb2531e6355ad340fb8f46))
+* **AG-2990:** fix role conditions to use extract with template instead of regex ([#21](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/21)) ([f4bf2a3](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/f4bf2a3bf6780543797c8f8e4cb92c34c3dbf611))
+* **AG-3041:** add missing instanceGroupManagers.update permission for updating scanners ([#26](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/26)) ([cad9199](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/cad919929a5d6b48a8d46cd9d91685f8fb016753))
+* **AG-3476:** add folderViewer permissions to management account ([#39](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/39)) ([42eb32a](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/42eb32a8fed388328580760bc0a09e7e4e4d9176))
+* **AG-3477:** add asset viewer role ([#41](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/41)) ([6f23011](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/6f23011259021df99a42308258b82df9c44e9df5))
+* **AG-3477:** missing cloud asset role for customer asset collector ([#43](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/43)) ([77703d7](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/77703d77fe45bbfe1fee27746896d86ce7512378))
+* **AG-4397:** remove unused local provider ([#59](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/59)) ([965a14b](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/965a14b9b0a7e644caf24f09b53f6ea8763d9b03))
+* **AG-4576:** use workload_identity_trusted_account for WIF authentication ([#64](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/64)) ([67964f4](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/67964f4141aeadd5d808769ef64a1c724653de8f))
+* **AG-4659:** Scaler lambda requires compute.instances.delete when it falls back to directly removing vm insances in the clean up job ([#69](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/69)) ([4cf0950](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/4cf095091c6434652fb06e9b899ad2db0e888261))
+* **AG-4672:** inherit root module provider in gcp onboarding terraform ([#71](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/71)) ([6cc8125](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/6cc81250006308768642d2859c4cd8a12de6613b)), closes [#68](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/68)
+* **AG-4849:** add dependencies for roles to avoid race conditions ([#73](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/73)) ([e12c9ba](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/e12c9ba8aa49fadd042aa1f324558df57beed13a))
+* clean up whitespace and formatting in workflow and documentation files ([#4](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/4)) ([3c1bd15](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/3c1bd152f350702878a625a7e68f683c0b439f89))
+
 ## [3.1.8](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.1.7...v3.1.8) (2026-03-20)
 
 ## [3.1.7](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.1.6...v3.1.7) (2026-03-02)
