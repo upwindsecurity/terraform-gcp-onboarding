@@ -34,16 +34,20 @@ variable "upwind_client_secret" {
   description = "The client secret for authentication with the Upwind Authorization Service."
   type        = string
   sensitive   = true
+
+  validation {
+    condition     = var.upwind_client_secret != null && var.upwind_client_secret != ""
+    error_message = "upwind_client_secret cannot be null or empty."
+  }
 }
 
 variable "scanner_client_id" {
   description = "The client ID used for authentication with the Upwind Cloudscanner Service."
   type        = string
-  default     = ""
 
   validation {
-    condition     = var.scanner_client_id == "" || (can(regex("^[a-zA-Z0-9]{1,}", var.scanner_client_id)))
-    error_message = "The Upwind scanner client ID must be empty or alphanumeric."
+    condition     = can(regex("^[a-zA-Z0-9]{1,}", var.scanner_client_id))
+    error_message = "scanner_client_id cannot be null or empty and must be alphanumeric."
   }
 }
 
@@ -51,7 +55,11 @@ variable "scanner_client_secret" {
   description = "The client secret for authentication with the Upwind Cloudscanner Service."
   type        = string
   sensitive   = true
-  default     = ""
+
+  validation {
+    condition     = var.scanner_client_secret != null && var.scanner_client_secret != ""
+    error_message = "scanner_client_secret cannot be null or empty."
+  }
 }
 
 variable "is_dev" {
