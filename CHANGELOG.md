@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [3.2.1](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.2.0...v3.2.1) (2026-05-11)
+
+### Bug Fixes
+
+* **AG-8744:** added validations upwind and scanner id-secret variables ([f67ee86](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/f67ee8614dce316c0902983eb869708af82fdb24))
+* **UP-730:** fixed indentation ([d642bf2](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/d642bf2aa4d1dad452a60b7caa5c89c78430106e))
+* **UP-730:** prevent race condition in IAM policy updates causing role removal ([e08865d](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/e08865dca612a0470985a9792c3b1f76849fff9d))
+* **UP-730:** upgraded tf ver from 1.5 to 1.11 across modules ([a3c459f](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/a3c459f7eba3f834a15847ce47799029d22a644a))
+
 ## [3.1.8](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.1.7...v3.1.8) (2026-03-20)
 
 ## [3.1.7](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.1.6...v3.1.7) (2026-03-02)
