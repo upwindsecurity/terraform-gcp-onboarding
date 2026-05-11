@@ -51,10 +51,11 @@ output "google_project_iam_member" {
   }
 }
 
-output "google_project_iam_binding" {
-  description = "The IAM bindings at the project level."
+output "google_project_iam_member_disk_writer" {
+  description = "The IAM member bindings for disk writer role."
   value = {
-    cloudscanner_disk_writer_role_binding = var.enable_cloudscanners ? google_project_iam_binding.cloudscanner_disk_writer_role_binding[0] : null
+    cloudscanner_sa_disk_writer_role_member        = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_sa_disk_writer_role_member[0] : null
+    cloudscanner_scaler_sa_disk_writer_role_member = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_scaler_sa_disk_writer_role_member[0] : null
   }
 }
 
