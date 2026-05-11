@@ -12,22 +12,37 @@ variable "upwind_organization_id" {
 variable "upwind_client_id" {
   description = "The client ID used for authentication with the Upwind Authorization Service."
   type        = string
+
+  validation {
+    condition     = var.upwind_client_id != null && var.upwind_client_id != "" && can(regex("^[a-zA-Z0-9]+$", var.upwind_client_id))
+    error_message = "The Upwind client ID must not be null or empty and must be alphanumeric."
+  }
 }
 
 variable "upwind_client_secret" {
   description = "The client secret for authentication with the Upwind Authorization Service."
   type        = string
   sensitive   = true
+
+  validation {
+    condition     = var.upwind_client_secret != null && var.upwind_client_secret != ""
+    error_message = "The Upwind client secret must not be null or empty."
+  }
 }
 
 variable "scanner_client_id" {
-  description = "The client ID used for authentication with the Upwind Cloudscanner Service."
+  description = "The client ID used for authentication with the Upwind Cloudscanner Service. Required when enable_cloudscanners is true."
   type        = string
   default     = ""
+
+  validation {
+    condition     = var.scanner_client_id == "" || can(regex("^[a-zA-Z0-9]+$", var.scanner_client_id))
+    error_message = "The Upwind scanner client ID must be empty or alphanumeric."
+  }
 }
 
 variable "scanner_client_secret" {
-  description = "The client secret for authentication with the Upwind Cloudscanner Service."
+  description = "The client secret for authentication with the Upwind Cloudscanner Service. Required when enable_cloudscanners is true."
   type        = string
   sensitive   = true
   default     = ""

@@ -165,7 +165,7 @@ moved {
 
 moved {
   from = google_project_iam_binding.cloudscanner_disk_writer_role_binding
-  to   = module.iam.google_project_iam_binding.cloudscanner_disk_writer_role_binding
+  to   = module.iam.google_project_iam_member.cloudscanner_sa_disk_writer_role_member
 }
 
 ### Secrets related

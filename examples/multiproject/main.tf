@@ -10,7 +10,7 @@ module "upwind_organization_onboarding" {
   upwind_client_secret   = var.upwind_client_secret
 
   # Required Google Cloud configuration
-  upwind_orchestrator_project = var.upwind_orchestrator_project
+  upwind_orchestrator_project       = var.upwind_orchestrator_project
   workload_identity_trusted_account = "111111111111"
 
   # Optional configuration

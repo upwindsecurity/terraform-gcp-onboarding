@@ -49,33 +49,43 @@ resource "google_project_iam_member" "upwind_cloudscanner_sa_compute_viewer_role
 }
 
 # Required to get disks and snapshots of target instances across projects
-resource "google_project_iam_binding" "upwind_cloudscanner_operations_role_binding" {
+# Using google_project_iam_member (additive) instead of google_project_iam_binding (authoritative)
+# to prevent removal of existing IAM bindings not managed by Terraform
+resource "google_project_iam_member" "upwind_cloudscanner_sa_operations_role_member" {
   for_each = var.enable_cloudscanners ? toset(var.target_project_ids) : toset([])
 
   project = each.value
   role    = google_project_iam_custom_role.upwind_cloudscanner_operations_role[each.key].id
-  members = [
-    "serviceAccount:${module.iam.cloudscanner_sa.email}",
-    "serviceAccount:${module.iam.cloudscanner_scaler_sa.email}"
-  ]
+  member  = "serviceAccount:${module.iam.cloudscanner_sa.email}"
 
   depends_on = [
     module.iam.cloudscanner_sa,
+    google_project_iam_custom_role.upwind_cloudscanner_operations_role
+  ]
+}
+
+resource "google_project_iam_member" "upwind_cloudscanner_scaler_sa_operations_role_member" {
+  for_each = var.enable_cloudscanners ? toset(var.target_project_ids) : toset([])
+
+  project = each.value
+  role    = google_project_iam_custom_role.upwind_cloudscanner_operations_role[each.key].id
+  member  = "serviceAccount:${module.iam.cloudscanner_scaler_sa.email}"
+
+  depends_on = [
     module.iam.cloudscanner_scaler_sa,
     google_project_iam_custom_role.upwind_cloudscanner_operations_role
   ]
 }
 
 # Scaler SA permissions
-resource "google_project_iam_binding" "upwind_cloudscanner_snapshot_deleter_role_binding" {
+# Using google_project_iam_member (additive) instead of google_project_iam_binding (authoritative)
+# to prevent removal of existing IAM bindings not managed by Terraform
+resource "google_project_iam_member" "upwind_cloudscanner_sa_snapshot_deleter_role_member" {
   for_each = var.enable_cloudscanners ? toset(var.target_project_ids) : toset([])
 
   project = each.value
   role    = google_project_iam_custom_role.upwind_cloudscanner_snapshot_deleter_role[each.key].id
-  members = [
-    "serviceAccount:${module.iam.cloudscanner_sa.email}",
-    "serviceAccount:${module.iam.cloudscanner_scaler_sa.email}"
-  ]
+  member  = "serviceAccount:${module.iam.cloudscanner_sa.email}"
   condition {
     # Limit deletion permissions to snapshots we generate only
     title      = "Upwind Cloud Scanner Snapshot Deleter"
@@ -84,6 +94,23 @@ resource "google_project_iam_binding" "upwind_cloudscanner_snapshot_deleter_role
 
   depends_on = [
     module.iam.cloudscanner_sa,
+    google_project_iam_custom_role.upwind_cloudscanner_snapshot_deleter_role
+  ]
+}
+
+resource "google_project_iam_member" "upwind_cloudscanner_scaler_sa_snapshot_deleter_role_member" {
+  for_each = var.enable_cloudscanners ? toset(var.target_project_ids) : toset([])
+
+  project = each.value
+  role    = google_project_iam_custom_role.upwind_cloudscanner_snapshot_deleter_role[each.key].id
+  member  = "serviceAccount:${module.iam.cloudscanner_scaler_sa.email}"
+  condition {
+    # Limit deletion permissions to snapshots we generate only
+    title      = "Upwind Cloud Scanner Snapshot Deleter"
+    expression = "resource.name.extract('snapshots/{snapshot}').startsWith('snap-')"
+  }
+
+  depends_on = [
     module.iam.cloudscanner_scaler_sa,
     google_project_iam_custom_role.upwind_cloudscanner_snapshot_deleter_role
   ]

@@ -252,22 +252,35 @@ resource "google_project_iam_member" "cloudscanner_instance_template_test_creati
 
 
 # Limit disk creation/deletion permissions to Upwind named disks only in orchestrator project
-resource "google_project_iam_binding" "cloudscanner_disk_writer_role_binding" {
+# Using google_project_iam_member (additive) instead of google_project_iam_binding (authoritative)
+# to prevent race conditions where SetIamPolicy overwrites concurrent IAM changes
+resource "google_project_iam_member" "cloudscanner_sa_disk_writer_role_member" {
   count   = var.enable_cloudscanners ? 1 : 0
   project = local.project
   role    = google_project_iam_custom_role.disk_writer[0].name
-  members = [
-    "serviceAccount:${google_service_account.cloudscanner_sa[0].email}",
-    "serviceAccount:${google_service_account.cloudscanner_scaler_sa[0].email}"
-  ]
+  member  = "serviceAccount:${google_service_account.cloudscanner_sa[0].email}"
   condition {
-    # Limit disk creation/deletion permissions to Upwind named disks only in orchestrator project
     title      = "Upwind Cloud Scanner Disk Writer"
     expression = "resource.name.extract('disks/{disk}').startsWith('vol-snap-')"
   }
 
   depends_on = [
     google_service_account.cloudscanner_sa,
+    google_project_iam_custom_role.disk_writer
+  ]
+}
+
+resource "google_project_iam_member" "cloudscanner_scaler_sa_disk_writer_role_member" {
+  count   = var.enable_cloudscanners ? 1 : 0
+  project = local.project
+  role    = google_project_iam_custom_role.disk_writer[0].name
+  member  = "serviceAccount:${google_service_account.cloudscanner_scaler_sa[0].email}"
+  condition {
+    title      = "Upwind Cloud Scanner Disk Writer"
+    expression = "resource.name.extract('disks/{disk}').startsWith('vol-snap-')"
+  }
+
+  depends_on = [
     google_service_account.cloudscanner_scaler_sa,
     google_project_iam_custom_role.disk_writer
   ]
@@ -279,6 +292,11 @@ resource "google_project_iam_member" "cloudrun_service_agent" {
   project = local.project
   role    = "roles/run.serviceAgent"
   member  = "serviceAccount:service-${data.google_project.current.number}@serverless-robot-prod.iam.gserviceaccount.com"
+
+  depends_on = [
+    google_service_account.cloudscanner_sa,
+    google_service_account.cloudscanner_scaler_sa
+  ]
 }
 
 resource "google_project_iam_member" "compute_service_agent_minimal" {
@@ -286,6 +304,12 @@ resource "google_project_iam_member" "compute_service_agent_minimal" {
   project = local.project
   role    = google_project_iam_custom_role.compute_service_agent_minimal[0].name
   member  = "serviceAccount:${data.google_project.current.number}@cloudservices.gserviceaccount.com"
+
+  depends_on = [
+    google_service_account.cloudscanner_sa,
+    google_service_account.cloudscanner_scaler_sa,
+    google_project_iam_custom_role.compute_service_agent_minimal
+  ]
 }
 
 resource "google_secret_manager_secret_iam_member" "terraform_labels_viewer" {
