@@ -131,6 +131,12 @@ variable "enable_dspm_scanning" {
   default     = false
 }
 
+variable "enable_snapshot_act_as" {
+  description = "Grant the CloudScanner operations role iam.serviceAccounts.actAs so it can act as target projects' default Compute Engine service account when creating snapshots. Applied at the operations role binding scope (folder-wide). Enable deliberately."
+  type        = bool
+  default     = false
+}
+
 variable "google_service_account_display_name" {
   description = "The display name for the service account."
   type        = string

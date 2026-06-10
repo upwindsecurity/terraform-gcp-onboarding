@@ -18,8 +18,8 @@ users to seamlessly connect their projects for monitoring and security analysis.
 ## Requirements
 
 | Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.7 |
+| ---- | ------- |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11.0 |
 | <a name="requirement_google"></a> [google](#requirement\_google) | >= 4.17 |
 | <a name="requirement_http"></a> [http](#requirement\_http) | >= 3.4 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.5 |
@@ -27,10 +27,10 @@ users to seamlessly connect their projects for monitoring and security analysis.
 ## Providers
 
 | Name | Version |
-|------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | 7.21.0 |
-| <a name="provider_http"></a> [http](#provider\_http) | 3.5.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.8.1 |
+| ---- | ------- |
+| <a name="provider_google"></a> [google](#provider\_google) | >= 4.17 |
+| <a name="provider_http"></a> [http](#provider\_http) | >= 3.4 |
+| <a name="provider_random"></a> [random](#provider\_random) | >= 3.5 |
 
 ## Modules
 
@@ -39,7 +39,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [google_project_iam_member.pam](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_service_account.sa](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
 | [google_service_account_key.sak](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_key) | resource |
@@ -50,7 +50,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_google_service_account_display_name"></a> [google\_service\_account\_display\_name](#input\_google\_service\_account\_display\_name) | The display name for the service account. | `string` | `"Upwind Security Service Account"` | no |
 | <a name="input_google_service_account_id_prefix"></a> [google\_service\_account\_id\_prefix](#input\_google\_service\_account\_id\_prefix) | The prefix of the service account ID. Changing this forces a new service account to be created. | `string` | `"upwind"` | no |
 | <a name="input_google_service_account_roles"></a> [google\_service\_account\_roles](#input\_google\_service\_account\_roles) | The roles that should be attached to the service account. | `list(string)` | <pre>[<br/>  "roles/viewer",<br/>  "roles/cloudasset.viewer"<br/>]</pre> | no |

@@ -6,6 +6,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [3.2.2](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.2.1...v3.2.2) (2026-05-12)
+
+### Bug Fixes
+
+* **AG-8744:** fix ambiguous move statements ([#10](https://github.com/upwindsecurity/terraform-google-onboarding/issues/10)) ([8711f6e](https://github.com/upwindsecurity/terraform-google-onboarding/commit/8711f6ec7ea4b9000dfdf29799243c6078353fe8))
+
+## [3.2.1](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.2.0...v3.2.1) (2026-05-11)
+
+### Bug Fixes
+
+* **UP-730:** prevent race condition in IAM policy updates causing role removal ([#8](https://github.com/upwindsecurity/terraform-google-onboarding/issues/8)) ([e08865d](https://github.com/upwindsecurity/terraform-google-onboarding/commit/e08865dca612a0470985a9792c3b1f76849fff9d))
+* **UP-730:** upgrade minimum Terraform version from 1.5 to 1.11 across modules ([a3c459f](https://github.com/upwindsecurity/terraform-google-onboarding/commit/a3c459f7eba3f834a15847ce47799029d22a644a))
+* **AG-8744:** add validations for upwind and scanner id/secret variables ([f67ee86](https://github.com/upwindsecurity/terraform-google-onboarding/commit/f67ee8614dce316c0902983eb869708af82fdb24))
+
+## [3.2.0](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.1.9...v3.2.0) (2026-05-01)
+
+### Features
+
+* **AG-8744:** require both scanner_client_id and scanner_client_secret when enable_cloudscanners is true ([305b0b9](https://github.com/upwindsecurity/terraform-google-onboarding/commit/305b0b999ac71a0d18d78ff1174c8926e2e986e1))
+* **AG-8744:** bump minimum Terraform version from 1.0 to 1.5 ([#5](https://github.com/upwindsecurity/terraform-google-onboarding/issues/5)) ([859f639](https://github.com/upwindsecurity/terraform-google-onboarding/commit/859f639d677f201cb742af39d2ce9e6b83b8c577))
+
+## [3.1.9](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.1.8...v3.1.9) (2026-03-20)
+
+### Bug Fixes
+
+* **AG-4849:** add dependencies for roles to avoid race conditions ([#73](https://github.com/upwindsecurity/terraform-google-onboarding/issues/73)) ([e12c9ba](https://github.com/upwindsecurity/terraform-google-onboarding/commit/e12c9ba8aa49fadd042aa1f324558df57beed13a))
+
 ## [3.1.8](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.1.7...v3.1.8) (2026-03-20)
 
 ## [3.1.7](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.1.6...v3.1.7) (2026-03-02)
