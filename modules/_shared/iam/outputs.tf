@@ -114,7 +114,10 @@ output "snapshot_reader_permissions" {
 
 output "snapshot_creator_permissions" {
   description = "List of IAM permissions for snapshot creator role."
-  value       = var.snapshot_creator_permissions
+  value = concat(
+    var.snapshot_creator_permissions,
+    var.enable_snapshot_act_as ? ["iam.serviceAccounts.actAs"] : [],
+  )
 }
 
 output "snapshot_deleter_permissions" {

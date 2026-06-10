@@ -233,13 +233,29 @@ variable "snapshot_reader_permissions" {
 }
 
 variable "snapshot_creator_permissions" {
-  description = "List of IAM permissions for creating and deleting snapshots."
+  description = "List of IAM permissions for creating snapshots and scan resources in target projects."
   type        = list(string)
   default = [
     "compute.snapshots.create",
     "compute.snapshots.setLabels",
-    "compute.snapshots.useReadOnly"
+    "compute.snapshots.useReadOnly",
   ]
+}
+
+variable "enable_snapshot_act_as" {
+  description = <<-EOT
+    Append iam.serviceAccounts.actAs to the CloudScanner operations role.
+
+    Required to act as the target project's default Compute Engine service account
+    when creating snapshot/scan resources. Without it, snapshot jobs fail with
+    "403: does not have access to service account '<project-number>-compute@developer...'".
+
+    NOTE: this permission is applied at the cloudscanner-operations role's binding scope —
+    org-wide for the organization module, folder-wide for folder, per-project for multiproject.
+    Enable deliberately after reviewing that scope.
+  EOT
+  type        = bool
+  default     = false
 }
 
 variable "snapshot_deleter_permissions" {
