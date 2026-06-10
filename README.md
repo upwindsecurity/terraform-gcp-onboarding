@@ -12,7 +12,7 @@ platform, enabling seamless integration for monitoring and security analysis.
 
 This repository contains the following Terraform modules for Google Cloud onboarding:
 
-- [modules/project/](./modules/project/) - Project-level onboarding module for connecting individual Google Cloud
+- [modules/multiproject/](./modules/multiproject/) - Project-level onboarding module for connecting individual Google Cloud
   projects to the Upwind platform
 - [modules/organization/](./modules/organization/) - Organization-level onboarding module for comprehensive monitoring
   and security analysis across entire Google Cloud organizations
@@ -21,7 +21,7 @@ This repository contains the following Terraform modules for Google Cloud onboar
 
 Complete usage examples are available in the [examples](./examples/) directory:
 
-- [examples/project/](./examples/project/) - Basic project onboarding example demonstrating single Google Cloud project integration
+- [examples/multiproject/](./examples/multiproject/) - Basic project onboarding example demonstrating single Google Cloud project integration
 - [examples/organization/](./examples/organization/) - Advanced organization-level onboarding with multiple project
   scenarios and conditional deployments
 
