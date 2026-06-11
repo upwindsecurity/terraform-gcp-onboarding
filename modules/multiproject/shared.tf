@@ -9,7 +9,7 @@ module "iam" {
   scanner_client_secret       = var.scanner_client_secret
   resource_suffix             = var.resource_suffix
   enable_cloudscanners        = var.enable_cloudscanners
-  enable_snapshot_act_as      = var.enable_snapshot_act_as
+  enable_snapshot_act_as      = false
   labels                      = var.labels
 
   google_service_account_display_name = var.google_service_account_display_name

@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [3.2.3](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.2.2...v3.2.3) (2026-06-10)
+
+### Bug Fixes
+
+* **UP-1767:** make iam.serviceAccounts.actAs optional for snapshotting ([#12](https://github.com/upwindsecurity/terraform-google-onboarding/issues/12)) ([36fa393](https://github.com/upwindsecurity/terraform-google-onboarding/commit/36fa393eaa0f6d0dd3b24dad73d703a7d83ff179))
+
 ## [3.2.2](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.2.1...v3.2.2) (2026-05-12)
 
 ### Bug Fixes
