@@ -90,11 +90,15 @@ variable "upwind_orchestrator_project" {
 }
 
 variable "target_project_ids" {
-  description = "List of project IDs to grant access to"
+  description = "List of project IDs to grant access to. The Orchestrator project ID must be present"
   type        = list(string)
   validation {
     condition     = length(var.target_project_ids) > 0
     error_message = "At least one target project ID must be specified."
+  }
+  validation {
+    condition     = contains(var.target_project_ids, var.upwind_orchestrator_project)
+    error_message = "The target project IDs must include the orchestrator project (upwind_orchestrator_project)."
   }
 }
 
@@ -117,12 +121,6 @@ variable "enable_cloudscanners" {
 
 variable "enable_dspm_scanning" {
   description = "Enable DSPM scanning by cloud scanners"
-  type        = bool
-  default     = false
-}
-
-variable "enable_snapshot_act_as" {
-  description = "Grant the CloudScanner operations role iam.serviceAccounts.actAs so it can act as target projects' default Compute Engine service account when creating snapshots. Applied at the operations role binding scope (per target project). Enable deliberately."
   type        = bool
   default     = false
 }

@@ -55,6 +55,7 @@ These are only enabled if `enable_cloudscanners` is true.
 | [Cloud Resource Manager API](https://cloud.google.com/resource-manager/reference/rest)              | `cloudresourcemanager.googleapis.com` |
 
 <!-- BEGIN_TF_DOCS -->
+
 ## Requirements
 
 | Name | Version |
@@ -100,14 +101,13 @@ These are only enabled if `enable_cloudscanners` is true.
 | ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_enable_cloudscanners"></a> [enable\_cloudscanners](#input\_enable\_cloudscanners) | Enable the creation of cloud scanners. | `bool` | `false` | no |
 | <a name="input_enable_dspm_scanning"></a> [enable\_dspm\_scanning](#input\_enable\_dspm\_scanning) | Enable DSPM scanning by cloud scanners | `bool` | `false` | no |
-| <a name="input_enable_snapshot_act_as"></a> [enable\_snapshot\_act\_as](#input\_enable\_snapshot\_act\_as) | Grant the CloudScanner operations role iam.serviceAccounts.actAs so it can act as target projects' default Compute Engine service account when creating snapshots. Applied at the operations role binding scope (per target project). Enable deliberately. | `bool` | `false` | no |
 | <a name="input_google_service_account_display_name"></a> [google\_service\_account\_display\_name](#input\_google\_service\_account\_display\_name) | The display name for the service account. | `string` | `"Upwind Security Service Account"` | no |
 | <a name="input_is_dev"></a> [is\_dev](#input\_is\_dev) | Flag to indicate if the environment is a development environment. | `bool` | `false` | no |
 | <a name="input_labels"></a> [labels](#input\_labels) | A map of labels to apply to all resources | `map(string)` | `{}` | no |
 | <a name="input_resource_suffix"></a> [resource\_suffix](#input\_resource\_suffix) | The suffix to append to all resources created by this module. | `string` | `""` | no |
 | <a name="input_scanner_client_id"></a> [scanner\_client\_id](#input\_scanner\_client\_id) | The client ID used for authentication with the Upwind Cloudscanner Service. Required when enable\_cloudscanners is true. | `string` | `""` | no |
 | <a name="input_scanner_client_secret"></a> [scanner\_client\_secret](#input\_scanner\_client\_secret) | The client secret for authentication with the Upwind Cloudscanner Service. Required when enable\_cloudscanners is true. | `string` | `""` | no |
-| <a name="input_target_project_ids"></a> [target\_project\_ids](#input\_target\_project\_ids) | List of project IDs to grant access to | `list(string)` | n/a | yes |
+| <a name="input_target_project_ids"></a> [target\_project\_ids](#input\_target\_project\_ids) | List of project IDs to grant access to. The Orchestrator project ID must be present | `list(string)` | n/a | yes |
 | <a name="input_upwind_client_id"></a> [upwind\_client\_id](#input\_upwind\_client\_id) | The client ID used for authentication with the Upwind Authorization Service. | `string` | n/a | yes |
 | <a name="input_upwind_client_secret"></a> [upwind\_client\_secret](#input\_upwind\_client\_secret) | The client secret for authentication with the Upwind Authorization Service. | `string` | n/a | yes |
 | <a name="input_upwind_orchestrator_project"></a> [upwind\_orchestrator\_project](#input\_upwind\_orchestrator\_project) | The orchestrator project where Upwind resources are created. | `string` | n/a | yes |

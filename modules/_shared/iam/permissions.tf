@@ -247,15 +247,16 @@ variable "enable_snapshot_act_as" {
     Append iam.serviceAccounts.actAs to the CloudScanner operations role.
 
     Required to act as the target project's default Compute Engine service account
-    when creating snapshot/scan resources. Without it, snapshot jobs fail with
+    when creating snapshot/scan resources. Without it, snapshot jobs may fail with
     "403: does not have access to service account '<project-number>-compute@developer...'".
 
-    NOTE: this permission is applied at the cloudscanner-operations role's binding scope —
-    org-wide for the organization module, folder-wide for folder, per-project for multiproject.
-    Enable deliberately after reviewing that scope.
+    Enabled by default so snapshotting works out of the box. The permission is
+    applied at the cloudscanner-operations role's binding scope — org-wide for the
+    organization module, folder-wide for folder, per-project for multiproject. Set
+    to false to opt out after reviewing that scope.
   EOT
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "snapshot_deleter_permissions" {
