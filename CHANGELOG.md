@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+* **BREAKING:** WIF pool and provider IDs now use the full sanitized Upwind organization ID instead of the last five characters:
+  * Pool: `{org_id}-{YYYYMMDD-hhmm}` (was `upwind-{org_id_truncated}-pool-{YYYYMMDD-hhmm}`)
+  * Provider: `{org_id}-aws` (was `upwind-{org_id_truncated}-aws-provider`)
+  * `{org_id}` is the `upwind_organization_id` with the `org_` prefix removed and lowercased.
+  * Existing pools are not renamed (`workload_identity_pool_id` is ignored after creation); new applies create a provider with the updated ID.
 
 ## [3.2.3](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.2.2...v3.2.3) (2026-06-10)
 
