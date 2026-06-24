@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [3.3.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.2.5...v3.3.0) (2026-06-24)
+
+### Features
+
+* **UP-2468:** Renaming WIF pool and provider to include full org IDs ([43b3b58](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/43b3b589957e919f32b798f1663e0311f9ed4401))
+
 ## [Unreleased]
 
 ### Changed
