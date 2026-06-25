@@ -15,6 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * `{org_id}` is the `upwind_organization_id` with the `org_` prefix removed and lowercased.
   * Existing pools are not renamed (`workload_identity_pool_id` is ignored after creation); new applies create a provider with the updated ID.
 
+## [3.2.5](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.2.4...v3.2.5) (2026-06-22)
+
+### Bug Fixes
+
+* **UP-2419:** adding the ap region descriptions and validation ([c73a53f](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/c73a53f2138d60907bae47297a6c55cf3d23aaa4))
+* **UP-2419:** adding the ap region descriptions and validation ([991ce4e](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/991ce4eedbc2dc170a4842b92c75f92cefe13c07))
+
 ## [3.2.3](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.2.2...v3.2.3) (2026-06-10)
 
 ### Bug Fixes
