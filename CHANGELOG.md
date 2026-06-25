@@ -48,6 +48,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * **AG-4849:** add dependencies for roles to avoid race conditions ([#73](https://github.com/upwindsecurity/terraform-google-onboarding/issues/73)) ([e12c9ba](https://github.com/upwindsecurity/terraform-google-onboarding/commit/e12c9ba8aa49fadd042aa1f324558df57beed13a))
 
+## [3.2.2](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.2.1...v3.2.2) (2026-05-12)
+
+### Bug Fixes
+
+* **AG-8744:** fixed Ambiguous move statements ([8711f6e](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/8711f6ec7ea4b9000dfdf29799243c6078353fe8))
+
 ## [3.1.8](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.1.7...v3.1.8) (2026-03-20)
 
 ## [3.1.7](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.1.6...v3.1.7) (2026-03-02)
