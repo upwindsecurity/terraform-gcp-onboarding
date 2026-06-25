@@ -48,6 +48,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * **AG-4849:** add dependencies for roles to avoid race conditions ([#73](https://github.com/upwindsecurity/terraform-google-onboarding/issues/73)) ([e12c9ba](https://github.com/upwindsecurity/terraform-google-onboarding/commit/e12c9ba8aa49fadd042aa1f324558df57beed13a))
 
+## [3.2.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.1.9...v3.2.0) (2026-05-01)
+
+### Features
+
+* **AG-8744:** added validation where enable_cloudscanners is true, both scanner_client_id and scanner_client_secret must be provided ([305b0b9](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/305b0b999ac71a0d18d78ff1174c8926e2e986e1))
+* **AG-8744:** bumped minimum terraform version from 1.0 to 1.5 ([859f639](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/859f639d677f201cb742af39d2ce9e6b83b8c577))
+
 ## [3.1.8](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.1.7...v3.1.8) (2026-03-20)
 
 ## [3.1.7](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.1.6...v3.1.7) (2026-03-02)
