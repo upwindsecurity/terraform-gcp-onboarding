@@ -21,6 +21,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * **UP-1767:** make iam.serviceAccounts.actAs optional for snapshotting ([#12](https://github.com/upwindsecurity/terraform-google-onboarding/issues/12)) ([36fa393](https://github.com/upwindsecurity/terraform-google-onboarding/commit/36fa393eaa0f6d0dd3b24dad73d703a7d83ff179))
 
+## [3.2.3](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.2.2...v3.2.3) (2026-06-10)
+
+### Bug Fixes
+
+* **AG-0:** Update README ([4c3becd](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/4c3becd8a8597f67813615f90ffa0124e86e477d))
+* **AG-0:** Update READMEs ([d689c15](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/d689c15f6c709f84ff25aec1e8972622a258c0f2))
+* **UP-1767:** Make iam.serviceAccounts.actAs Option for Snapshotting ([36fa393](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/36fa393eaa0f6d0dd3b24dad73d703a7d83ff179))
+
 ## [3.2.2](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.2.1...v3.2.2) (2026-05-12)
 
 ### Bug Fixes
