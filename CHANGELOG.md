@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [3.4.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.3.0...v3.4.0) (2026-06-30)
+
+### Features
+
+* **UP-2741:** support user-managed secret replication regions ([5f0e83a](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/5f0e83aba4c701c127b4ae551172dc4c0978dd55))
+
 ## [Unreleased]
 
 ### Changed
