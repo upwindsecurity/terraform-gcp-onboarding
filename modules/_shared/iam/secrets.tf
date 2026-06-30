@@ -4,7 +4,21 @@ resource "google_secret_manager_secret" "upwind_client_id" {
   secret_id = "upwind-client-id-${local.resource_suffix_hyphen}"
   project   = local.project
   replication {
-    auto {}
+    dynamic "auto" {
+      for_each = length(var.secret_replication_locations) == 0 ? [1] : []
+      content {}
+    }
+    dynamic "user_managed" {
+      for_each = length(var.secret_replication_locations) > 0 ? [1] : []
+      content {
+        dynamic "replicas" {
+          for_each = var.secret_replication_locations
+          content {
+            location = replicas.value
+          }
+        }
+      }
+    }
   }
 }
 
@@ -12,7 +26,21 @@ resource "google_secret_manager_secret" "upwind_client_secret" {
   secret_id = "upwind-client-secret-${local.resource_suffix_hyphen}"
   project   = local.project
   replication {
-    auto {}
+    dynamic "auto" {
+      for_each = length(var.secret_replication_locations) == 0 ? [1] : []
+      content {}
+    }
+    dynamic "user_managed" {
+      for_each = length(var.secret_replication_locations) > 0 ? [1] : []
+      content {
+        dynamic "replicas" {
+          for_each = var.secret_replication_locations
+          content {
+            location = replicas.value
+          }
+        }
+      }
+    }
   }
 }
 
@@ -21,7 +49,21 @@ resource "google_secret_manager_secret" "scanner_client_id" {
   secret_id = "upwind-scanner-client-id-${local.resource_suffix_hyphen}"
   project   = local.project
   replication {
-    auto {}
+    dynamic "auto" {
+      for_each = length(var.secret_replication_locations) == 0 ? [1] : []
+      content {}
+    }
+    dynamic "user_managed" {
+      for_each = length(var.secret_replication_locations) > 0 ? [1] : []
+      content {
+        dynamic "replicas" {
+          for_each = var.secret_replication_locations
+          content {
+            location = replicas.value
+          }
+        }
+      }
+    }
   }
 }
 
@@ -30,7 +72,21 @@ resource "google_secret_manager_secret" "scanner_client_secret" {
   secret_id = "upwind-scanner-client-secret-${local.resource_suffix_hyphen}"
   project   = local.project
   replication {
-    auto {}
+    dynamic "auto" {
+      for_each = length(var.secret_replication_locations) == 0 ? [1] : []
+      content {}
+    }
+    dynamic "user_managed" {
+      for_each = length(var.secret_replication_locations) > 0 ? [1] : []
+      content {
+        dynamic "replicas" {
+          for_each = var.secret_replication_locations
+          content {
+            location = replicas.value
+          }
+        }
+      }
+    }
   }
 }
 
@@ -40,7 +96,21 @@ resource "google_secret_manager_secret" "terraform_labels" {
   project   = local.project
 
   replication {
-    auto {}
+    dynamic "auto" {
+      for_each = length(var.secret_replication_locations) == 0 ? [1] : []
+      content {}
+    }
+    dynamic "user_managed" {
+      for_each = length(var.secret_replication_locations) > 0 ? [1] : []
+      content {
+        dynamic "replicas" {
+          for_each = var.secret_replication_locations
+          content {
+            location = replicas.value
+          }
+        }
+      }
+    }
   }
 }
 
