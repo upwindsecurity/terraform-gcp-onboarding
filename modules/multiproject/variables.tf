@@ -142,3 +142,9 @@ variable "labels" {
   type        = map(string)
   default     = {}
 }
+
+variable "secret_replication_locations" {
+  description = "Regions for user-managed Secret Manager replication of the Upwind credential secrets. Leave empty for automatic (global) replication. Set this only when the org policy constraints/gcp.resourceLocations blocks global secrets; replication is immutable, so set it at onboarding time."
+  type        = list(string)
+  default     = []
+}

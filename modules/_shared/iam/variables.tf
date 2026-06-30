@@ -48,6 +48,17 @@ variable "scanner_client_secret" {
   default     = ""
 }
 
+variable "secret_replication_locations" {
+  description = "Regions for user-managed Secret Manager replication of the Upwind credential secrets. Leave empty for automatic (global) replication. Set this only when the target org policy constraints/gcp.resourceLocations blocks global secrets; replication is immutable, so this must be set at onboarding time and cannot be changed on already-deployed secrets without destroying and recreating them."
+  type        = list(string)
+  default     = []
+
+  validation {
+    condition     = alltrue([for r in var.secret_replication_locations : can(regex("^[a-z]+-[a-z0-9]+$", r))])
+    error_message = "Each replication location must be a valid GCP region (e.g. us-central1, europe-west1)."
+  }
+}
+
 # endregion secrets
 
 # region workload identity federation
