@@ -8,6 +8,7 @@ resource "google_organization_iam_custom_role" "upwind_management_sa_operations_
   description = "Generic operations role for Upwind"
   permissions = concat(
     module.iam.storage_read_permissions,
+    module.iam.organization_iam_read_permissions,
     var.enable_cloudscanners ? module.iam.iam_read_role_permissions : [],
   )
 }
