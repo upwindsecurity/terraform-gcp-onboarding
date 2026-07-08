@@ -107,6 +107,11 @@ output "iam_read_role_permissions" {
   value       = var.iam_read_role_permissions
 }
 
+output "organization_iam_read_permissions" {
+  description = "List of IAM permissions for reading the organization IAM policy."
+  value       = var.organization_iam_read_permissions
+}
+
 output "snapshot_reader_permissions" {
   description = "List of IAM permissions for snapshot reader role."
   value       = var.snapshot_reader_permissions

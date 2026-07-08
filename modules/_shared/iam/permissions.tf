@@ -210,6 +210,14 @@ variable "iam_read_role_permissions" {
   ]
 }
 
+variable "organization_iam_read_permissions" {
+  description = "List of IAM permissions for reading the organization IAM policy (e.g. audit configs). Required regardless of CloudScanner deployment."
+  type        = list(string)
+  default = [
+    "resourcemanager.organizations.getIamPolicy",
+  ]
+}
+
 variable "snapshot_reader_permissions" {
   description = "List of IAM permissions for reading snapshots."
   type        = list(string)
