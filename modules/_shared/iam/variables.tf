@@ -14,8 +14,8 @@ variable "upwind_client_id" {
   type        = string
 
   validation {
-    condition     = var.upwind_client_id != null && var.upwind_client_id != "" && can(regex("^[a-zA-Z0-9]+$", var.upwind_client_id))
-    error_message = "The Upwind client ID must not be null or empty and must be alphanumeric."
+    condition     = var.upwind_client_id != null && var.upwind_client_id != ""
+    error_message = "The Upwind client ID must not be null or empty."
   }
 }
 
@@ -36,8 +36,8 @@ variable "scanner_client_id" {
   default     = ""
 
   validation {
-    condition     = var.scanner_client_id == "" || can(regex("^[a-zA-Z0-9]+$", var.scanner_client_id))
-    error_message = "The Upwind scanner client ID must be empty or alphanumeric."
+    condition     = !var.enable_cloudscanners || (var.scanner_client_id != null && var.scanner_client_id != "")
+    error_message = "The Upwind scanner client ID must be provided when cloudscanners are enabled."
   }
 }
 
@@ -46,6 +46,11 @@ variable "scanner_client_secret" {
   type        = string
   sensitive   = true
   default     = ""
+
+  validation {
+    condition     = !var.enable_cloudscanners || (var.scanner_client_secret != null && var.scanner_client_secret != "")
+    error_message = "The Upwind scanner client secret must be provided when cloudscanners are enabled."
+  }
 }
 
 variable "secret_replication_locations" {
