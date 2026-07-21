@@ -10,8 +10,8 @@ variable "upwind_client_id" {
   type        = string
 
   validation {
-    condition     = var.upwind_client_id != null && var.upwind_client_id != "" && can(regex("^[a-zA-Z0-9]+$", var.upwind_client_id))
-    error_message = "The Upwind client ID must not be null or empty and must be alphanumeric."
+    condition     = var.upwind_client_id != null && var.upwind_client_id != ""
+    error_message = "The Upwind client ID must not be null or empty."
   }
 }
 
