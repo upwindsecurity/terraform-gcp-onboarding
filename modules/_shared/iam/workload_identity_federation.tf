@@ -54,7 +54,7 @@ resource "google_iam_workload_identity_pool_provider" "aws" {
     }
     # Ignore changes after creation to prevent unintentional 
     # WIF credentials invalidations
-    ignore_changes = [ workload_identity_pool_provider_id ]
+    ignore_changes = [workload_identity_pool_provider_id]
   }
 }
 
