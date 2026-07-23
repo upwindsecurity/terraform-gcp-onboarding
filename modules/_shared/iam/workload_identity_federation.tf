@@ -52,6 +52,9 @@ resource "google_iam_workload_identity_pool_provider" "aws" {
       condition     = length(local.wif_provider_id) <= 32
       error_message = "Workload identity provider ID '${local.wif_provider_id}' exceeds the 32 character limit. The Upwind organization ID is too long for WIF provider naming."
     }
+    # Ignore changes after creation to prevent unintentional 
+    # WIF credentials invalidations
+    ignore_changes = [ workload_identity_pool_provider_id ]
   }
 }
 
