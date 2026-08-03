@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [3.5.3](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.5.2...v3.5.3) (2026-08-03)
+
+### Bug Fixes
+
+* **UP-4651:** ephemeral compatibility for secrets ([75ea7a7](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/75ea7a7cbee5d7dc933513874310de74b955849e))
+
 ## [Unreleased]
 
 ### Changed
