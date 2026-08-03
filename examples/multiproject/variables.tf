@@ -23,6 +23,7 @@ variable "upwind_client_secret" {
   description = "The client secret for authentication with the Upwind Authorization Service."
   type        = string
   sensitive   = true
+  ephemeral   = true
 
   validation {
     condition     = var.upwind_client_secret != null && var.upwind_client_secret != ""
@@ -45,6 +46,7 @@ variable "scanner_client_secret" {
   description = "The client secret for authentication with the Upwind Cloudscanner Service. Required when enable_cloudscanners is true."
   type        = string
   sensitive   = true
+  ephemeral   = true
   default     = ""
 }
 
