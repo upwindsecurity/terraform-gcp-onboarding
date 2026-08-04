@@ -5,11 +5,14 @@ module "iam" {
   upwind_orchestrator_project  = var.upwind_orchestrator_project
   upwind_client_id             = var.upwind_client_id
   upwind_client_secret         = var.upwind_client_secret
+  upwind_client_secret_id      = var.upwind_client_secret_id
   scanner_client_id            = var.scanner_client_id
   scanner_client_secret        = var.scanner_client_secret
+  scanner_client_secret_id     = var.scanner_client_secret_id
   resource_suffix              = var.resource_suffix
   secret_replication_locations = var.secret_replication_locations
   enable_cloudscanners         = var.enable_cloudscanners
+  enable_dspm_scanning         = var.enable_dspm_scanning
   enable_snapshot_act_as       = var.enable_snapshot_act_as
   labels                       = var.labels
 
