@@ -74,12 +74,13 @@ output "google_service_account_iam_binding" {
 ### Secrets
 
 output "google_secret_manager_secret" {
-  description = "The secrets created in Secret Manager."
+  description = "The secrets referenced in Secret Manager, whether created by this module or supplied by the customer as pre-existing secrets."
   value = {
     upwind_client_id      = google_secret_manager_secret.upwind_client_id
-    upwind_client_secret  = google_secret_manager_secret.upwind_client_secret
+    upwind_client_secret  = local.upwind_client_secret_ref
     scanner_client_id     = var.enable_cloudscanners ? google_secret_manager_secret.scanner_client_id : null
-    scanner_client_secret = var.enable_cloudscanners ? google_secret_manager_secret.scanner_client_secret : null
+    scanner_client_secret = local.scanner_client_secret_ref
+    upwind_configuration  = google_secret_manager_secret.upwind_configuration
   }
 }
 

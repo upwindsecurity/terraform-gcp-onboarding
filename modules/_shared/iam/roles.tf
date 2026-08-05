@@ -144,7 +144,7 @@ resource "google_project_iam_member" "upwind_management_sa_secret_access_role_me
   condition {
     # Limit secret access permissions to all versions of Upwind CloudScanner credentials only
     title      = "Upwind CloudScanner Credentials Access"
-    expression = "resource.name.startsWith('${google_secret_manager_secret.scanner_client_id[0].name}') || resource.name.startsWith('${google_secret_manager_secret.scanner_client_secret[0].name}')"
+    expression = "resource.name.startsWith('${google_secret_manager_secret.scanner_client_id[0].name}') || resource.name.startsWith('${local.scanner_client_secret_ref.name}')"
   }
 
   depends_on = [
@@ -163,7 +163,7 @@ resource "google_project_iam_member" "cloudscanner_secret_access_role_member" {
   condition {
     # Limit secret access permissions to all versions of Upwind CloudScanner credentials only
     title      = "Upwind CloudScanner Credentials Access"
-    expression = "resource.name.startsWith('${google_secret_manager_secret.scanner_client_id[0].name}') || resource.name.startsWith('${google_secret_manager_secret.scanner_client_secret[0].name}')"
+    expression = "resource.name.startsWith('${google_secret_manager_secret.scanner_client_id[0].name}') || resource.name.startsWith('${local.scanner_client_secret_ref.name}')"
   }
 
   depends_on = [
@@ -181,7 +181,7 @@ resource "google_project_iam_member" "cloudscanner_scaler_secret_access_scaler_r
   condition {
     # Limit secret access permissions to all versions of Upwind CloudScanner credentials only
     title      = "Upwind CloudScanner Credentials Access"
-    expression = "resource.name.startsWith('${google_secret_manager_secret.scanner_client_id[0].name}') || resource.name.startsWith('${google_secret_manager_secret.scanner_client_secret[0].name}')"
+    expression = "resource.name.startsWith('${google_secret_manager_secret.scanner_client_id[0].name}') || resource.name.startsWith('${local.scanner_client_secret_ref.name}')"
   }
 
   depends_on = [
@@ -321,6 +321,20 @@ resource "google_secret_manager_secret_iam_member" "terraform_labels_viewer" {
   depends_on = [
     google_service_account.upwind_management_sa,
     google_secret_manager_secret.terraform_labels
+  ]
+}
+
+# The management SA needs to read the payload (not just metadata) since this secret carries
+# the actual client IDs and secret-name pointers, not just labels.
+resource "google_secret_manager_secret_iam_member" "upwind_configuration_accessor" {
+  project   = local.project
+  secret_id = google_secret_manager_secret.upwind_configuration.secret_id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.upwind_management_sa.email}"
+
+  depends_on = [
+    google_service_account.upwind_management_sa,
+    google_secret_manager_secret.upwind_configuration
   ]
 }
 
