@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [3.5.1](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.5.0...v3.5.1) (2026-07-21)
+
+### Bug Fixes
+
+* **UP-3791:** remove Upwind client id and client secret regex validation ([22019d9](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/22019d977dde621d952e62670466e47d4c650707))
+
 ## [Unreleased]
 
 ### Changed
