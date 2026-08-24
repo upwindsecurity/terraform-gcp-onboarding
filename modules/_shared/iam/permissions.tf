@@ -215,6 +215,7 @@ variable "organization_iam_read_permissions" {
   type        = list(string)
   default = [
     "resourcemanager.organizations.getIamPolicy",
+    "iam.workloadIdentityPoolProviders.get",
   ]
 }
 
