@@ -51,7 +51,7 @@ variable "deployment_permissions" {
     "cloudscheduler.jobs.create",
     "cloudscheduler.jobs.get",
     "cloudscheduler.jobs.enable",
-    "cloudscheduler.jobs.update",
+    "cloudscheduler.jobs.update", # Required to update an existing scanner schedule in place
     "cloudscheduler.jobs.delete",
     # IAM permissions for setting up project bindings
     "resourcemanager.projects.getIamPolicy",
