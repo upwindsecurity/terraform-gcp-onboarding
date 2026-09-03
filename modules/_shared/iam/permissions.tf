@@ -51,6 +51,7 @@ variable "deployment_permissions" {
     "cloudscheduler.jobs.create",
     "cloudscheduler.jobs.get",
     "cloudscheduler.jobs.enable",
+    "cloudscheduler.jobs.update",
     "cloudscheduler.jobs.delete",
     # IAM permissions for setting up project bindings
     "resourcemanager.projects.getIamPolicy",
