@@ -41,7 +41,7 @@ variable "deployment_permissions" {
     # Cloud Run creation permissions
     "run.jobs.create",
     "run.jobs.get",
-    "run.jobs.update",
+    "run.jobs.update", # Required to update an existing scanner job in place
     "run.jobs.delete",
     "run.operations.get",
     "run.operations.list",
@@ -51,7 +51,7 @@ variable "deployment_permissions" {
     "cloudscheduler.jobs.create",
     "cloudscheduler.jobs.get",
     "cloudscheduler.jobs.enable",
-    "cloudscheduler.jobs.update",
+    "cloudscheduler.jobs.update", # Required to update an existing scanner schedule in place
     "cloudscheduler.jobs.delete",
     # IAM permissions for setting up project bindings
     "resourcemanager.projects.getIamPolicy",
