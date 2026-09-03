@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [3.6.1](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.6.0...v3.6.1) (2026-09-03)
+
+### Bug Fixes
+
+* **UP-5082:** add cloudscheduler.jobs.update permissions ([c78bcd2](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/c78bcd249890473ab67254c8c032a7f1b7fb633b))
+* **UP-5082:** tidy ([d282a4b](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/d282a4b1ac0999a3f6631701e49bfef0032c5592))
+
 ## [Unreleased]
 
 ### Changed
