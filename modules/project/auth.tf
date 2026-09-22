@@ -12,6 +12,7 @@ data "http" "upwind_get_access_token_request" {
     var.upwind_region == "eu" ? replace(var.upwind_auth_endpoint, ".upwind.", ".eu.upwind.") :
     var.upwind_region == "me" ? replace(var.upwind_auth_endpoint, ".upwind.", ".me.upwind.") :
     var.upwind_region == "ap" ? replace(var.upwind_auth_endpoint, ".upwind.", ".ap.upwind.") :
+    var.upwind_region == "pdc02" ? replace(var.upwind_auth_endpoint, ".upwind.", ".pdc02.upwind.") :
     var.upwind_auth_endpoint
   )
 
@@ -27,6 +28,7 @@ data "http" "upwind_get_access_token_request" {
       var.upwind_region == "eu" ? replace(var.upwind_integration_endpoint, ".upwind.", ".eu.upwind.") :
       var.upwind_region == "me" ? replace(var.upwind_integration_endpoint, ".upwind.", ".me.upwind.") :
       var.upwind_region == "ap" ? replace(var.upwind_integration_endpoint, ".upwind.", ".ap.upwind.") :
+      var.upwind_region == "pdc02" ? replace(var.upwind_integration_endpoint, ".upwind.", ".pdc02.upwind.") :
       var.upwind_integration_endpoint
     ),
     "client_id=${var.upwind_client_id}",
