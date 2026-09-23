@@ -39,9 +39,12 @@ resource "google_iam_workload_identity_pool_provider" "aws" {
   attribute_mapping = {
     "google.subject"        = "assertion.arn"
     "attribute.aws_account" = "assertion.account"
+    "attribute.session"     = "assertion.arn.extract('assumed-role/upwind-gcp/{session}')"
   }
 
-  attribute_condition = "assertion.account == '${var.workload_identity_trusted_account}'"
+  # Requires the caller to assume the 'upwind-gcp' role in the trusted account
+  # Session name must equal this org's ID
+  attribute_condition = "assertion.account == '${var.workload_identity_trusted_account}' && assertion.arn == 'arn:aws:sts::${var.workload_identity_trusted_account}:assumed-role/upwind-gcp/${var.upwind_organization_id}'"
 
   aws {
     account_id = var.workload_identity_trusted_account
@@ -52,8 +55,7 @@ resource "google_iam_workload_identity_pool_provider" "aws" {
       condition     = length(local.wif_provider_id) <= 32
       error_message = "Workload identity provider ID '${local.wif_provider_id}' exceeds the 32 character limit. The Upwind organization ID is too long for WIF provider naming."
     }
-    # Ignore changes after creation to prevent unintentional 
-    # WIF credentials invalidations
+    # Ignore changes after creation to prevent unintentional WIF credentials invalidations
     ignore_changes = [workload_identity_pool_provider_id]
   }
 }
