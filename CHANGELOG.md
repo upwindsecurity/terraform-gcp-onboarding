@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [3.7.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.6.1...v3.7.0) (2026-09-22)
+
+### Features
+
+* add support for the pdc02 Upwind region ([#37](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/37)) ([2b6373b](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/2b6373baef0080a1c2abe4bc16892129e4a2d452))
+
 ## [Unreleased]
 
 ### Changed
