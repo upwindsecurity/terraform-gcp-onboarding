@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [3.7.1](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.7.0...v3.7.1) (2026-09-23)
+
+### Bug Fixes
+
+* remove the unused local provider ([#36](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/36)) ([316cae1](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/316cae135a15ad61e0ac85635fa4a43e18181d57))
+
 ## [Unreleased]
 
 ### Changed
