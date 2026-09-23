@@ -47,3 +47,8 @@ output "folder_projects_map" {
     ]
   }
 }
+
+output "upwind_configuration_payload" {
+  description = "JSON written to the upwind-configuration secret. Add it as a version yourself when create_secret_versions is false."
+  value       = module.iam.upwind_configuration_payload
+}

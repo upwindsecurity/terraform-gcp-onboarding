@@ -55,6 +55,7 @@ These are only enabled if `enable_cloudscanners` is true.
 | [Cloud Resource Manager API](https://cloud.google.com/resource-manager/reference/rest)              | `cloudresourcemanager.googleapis.com` |
 
 <!-- BEGIN_TF_DOCS -->
+
 ## Requirements
 
 | Name | Version |
@@ -97,6 +98,7 @@ These are only enabled if `enable_cloudscanners` is true.
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_create_secret_versions"></a> [create\_secret\_versions](#input\_create\_secret\_versions) | Write secret versions for the client IDs, labels marker and configuration document. Set to false if the Terraform identity may not hold secretmanager.versions.add; then pass the client secrets via *\_secret\_id and add the remaining versions yourself (see output upwind\_configuration\_payload). | `bool` | `true` | no |
 | <a name="input_enable_cloudscanners"></a> [enable\_cloudscanners](#input\_enable\_cloudscanners) | Enable the creation of cloud scanners. | `bool` | `false` | no |
 | <a name="input_enable_dspm_scanning"></a> [enable\_dspm\_scanning](#input\_enable\_dspm\_scanning) | Enable DSPM scanning by cloud scanners | `bool` | `false` | no |
 | <a name="input_enable_snapshot_act_as"></a> [enable\_snapshot\_act\_as](#input\_enable\_snapshot\_act\_as) | Grant the CloudScanner operations role iam.serviceAccounts.actAs so it can act as target projects' default Compute Engine service account when creating snapshots. Applied at the operations role binding scope (organization-wide). Enabled by default; set to false to opt out. | `bool` | `true` | no |
@@ -106,10 +108,12 @@ These are only enabled if `enable_cloudscanners` is true.
 | <a name="input_labels"></a> [labels](#input\_labels) | A map of labels to apply to all resources | `map(string)` | `{}` | no |
 | <a name="input_resource_suffix"></a> [resource\_suffix](#input\_resource\_suffix) | The suffix to append to all resources created by this module. | `string` | `""` | no |
 | <a name="input_scanner_client_id"></a> [scanner\_client\_id](#input\_scanner\_client\_id) | The client ID used for authentication with the Upwind Cloudscanner Service. Required when enable\_cloudscanners is true. | `string` | `""` | no |
-| <a name="input_scanner_client_secret"></a> [scanner\_client\_secret](#input\_scanner\_client\_secret) | The client secret for authentication with the Upwind Cloudscanner Service. Required when enable\_cloudscanners is true. | `string` | `""` | no |
+| <a name="input_scanner_client_secret"></a> [scanner\_client\_secret](#input\_scanner\_client\_secret) | The client secret for authentication with the Upwind Cloudscanner Service. Required when enable\_cloudscanners is true, unless scanner\_client\_secret\_id references an existing secret. | `string` | `""` | no |
+| <a name="input_scanner_client_secret_id"></a> [scanner\_client\_secret\_id](#input\_scanner\_client\_secret\_id) | The ID of an existing Secret Manager secret that already contains the Upwind Cloudscanner client secret. When set, this module will not create or manage a secret or secret version for the scanner client secret (so the Terraform identity applying this module never needs secretmanager.versions.add) and will only reference the existing secret for IAM access grants. The secret must already exist and must follow this module's naming convention: 'upwind-scanner-client-secret-<resource\_suffix\_hyphen>' (derived from upwind\_organization\_id and resource\_suffix). Only relevant when enable\_cloudscanners is true. | `string` | `""` | no |
 | <a name="input_secret_replication_locations"></a> [secret\_replication\_locations](#input\_secret\_replication\_locations) | Regions for user-managed Secret Manager replication of the Upwind credential secrets. Leave empty for automatic (global) replication. Set this only when the org policy constraints/gcp.resourceLocations blocks global secrets; replication is immutable, so set it at onboarding time. | `list(string)` | `[]` | no |
 | <a name="input_upwind_client_id"></a> [upwind\_client\_id](#input\_upwind\_client\_id) | The client ID used for authentication with the Upwind Authorization Service. | `string` | n/a | yes |
-| <a name="input_upwind_client_secret"></a> [upwind\_client\_secret](#input\_upwind\_client\_secret) | The client secret for authentication with the Upwind Authorization Service. | `string` | n/a | yes |
+| <a name="input_upwind_client_secret"></a> [upwind\_client\_secret](#input\_upwind\_client\_secret) | The client secret for authentication with the Upwind Authorization Service. Not required when upwind\_client\_secret\_id references an existing secret. | `string` | `""` | no |
+| <a name="input_upwind_client_secret_id"></a> [upwind\_client\_secret\_id](#input\_upwind\_client\_secret\_id) | The ID of an existing Secret Manager secret that already contains the Upwind client secret. When set, this module will not create or manage a secret or secret version for the Upwind client secret (so the Terraform identity applying this module never needs secretmanager.versions.add) and will only reference the existing secret for IAM access grants. The secret must already exist and must follow this module's naming convention: 'upwind-client-secret-<resource\_suffix\_hyphen>' (derived from upwind\_organization\_id and resource\_suffix). | `string` | `""` | no |
 | <a name="input_upwind_orchestrator_project"></a> [upwind\_orchestrator\_project](#input\_upwind\_orchestrator\_project) | The orchestrator project where Upwind resources are created. | `string` | n/a | yes |
 | <a name="input_upwind_organization_id"></a> [upwind\_organization\_id](#input\_upwind\_organization\_id) | The identifier of the Upwind organization to integrate with. | `string` | n/a | yes |
 | <a name="input_workload_identity_pool_project"></a> [workload\_identity\_pool\_project](#input\_workload\_identity\_pool\_project) | The project where the workload identity pool is created. Defaults to the orchestrator project if not specified. | `string` | `""` | no |
@@ -119,6 +123,7 @@ These are only enabled if `enable_cloudscanners` is true.
 
 | Name | Description |
 | ---- | ----------- |
+| <a name="output_upwind_configuration_payload"></a> [upwind\_configuration\_payload](#output\_upwind\_configuration\_payload) | JSON written to the upwind-configuration secret. Add it as a version yourself when create\_secret\_versions is false. |
 | <a name="output_upwind_management_service_account_display_name"></a> [upwind\_management\_service\_account\_display\_name](#output\_upwind\_management\_service\_account\_display\_name) | The display name of the Upwind Management Service Account. |
 | <a name="output_upwind_management_service_account_email"></a> [upwind\_management\_service\_account\_email](#output\_upwind\_management\_service\_account\_email) | The email address of the Upwind Management Service Account. |
 | <a name="output_upwind_management_service_account_name"></a> [upwind\_management\_service\_account\_name](#output\_upwind\_management\_service\_account\_name) | The name of the Upwind Management Service Account. |

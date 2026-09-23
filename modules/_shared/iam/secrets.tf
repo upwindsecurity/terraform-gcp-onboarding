@@ -143,6 +143,7 @@ resource "google_secret_manager_secret" "terraform_labels" {
 }
 
 resource "google_secret_manager_secret_version" "upwind_client_id_v1" {
+  count          = var.create_secret_versions ? 1 : 0
   secret         = google_secret_manager_secret.upwind_client_id.id
   secret_data_wo = var.upwind_client_id
 }
@@ -154,7 +155,7 @@ resource "google_secret_manager_secret_version" "upwind_client_secret_v1" {
 }
 
 resource "google_secret_manager_secret_version" "scanner_client_id_v1" {
-  count          = var.enable_cloudscanners ? 1 : 0
+  count          = var.create_secret_versions && var.enable_cloudscanners ? 1 : 0
   secret         = google_secret_manager_secret.scanner_client_id[0].id
   secret_data_wo = var.scanner_client_id
 }
@@ -166,6 +167,7 @@ resource "google_secret_manager_secret_version" "scanner_client_secret_v1" {
 }
 
 resource "google_secret_manager_secret_version" "terraform_labels_v1" {
+  count          = var.create_secret_versions ? 1 : 0
   secret         = google_secret_manager_secret.terraform_labels.id
   secret_data_wo = "labels-stored-as-resource-metadata"
 }
@@ -231,6 +233,7 @@ locals {
 }
 
 resource "google_secret_manager_secret_version" "upwind_configuration_v1" {
+  count                  = var.create_secret_versions ? 1 : 0
   secret                 = google_secret_manager_secret.upwind_configuration.id
   secret_data_wo         = jsonencode(local.upwind_configuration_payload)
   secret_data_wo_version = local.upwind_configuration_version

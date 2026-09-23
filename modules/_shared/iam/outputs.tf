@@ -84,6 +84,11 @@ output "google_secret_manager_secret" {
   }
 }
 
+output "upwind_configuration_payload" {
+  description = "JSON written to the upwind-configuration secret. Add it as a version yourself when create_secret_versions is false."
+  value       = jsonencode(local.upwind_configuration_payload)
+}
+
 ### Workload Identity Federation
 
 output "google_iam_workload_identity_pool" {

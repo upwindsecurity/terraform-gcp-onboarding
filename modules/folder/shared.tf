@@ -11,6 +11,7 @@ module "iam" {
   scanner_client_secret_id     = var.scanner_client_secret_id
   resource_suffix              = var.resource_suffix
   secret_replication_locations = var.secret_replication_locations
+  create_secret_versions       = var.create_secret_versions
   enable_cloudscanners         = var.enable_cloudscanners
   enable_dspm_scanning         = var.enable_dspm_scanning
   enable_snapshot_act_as       = var.enable_snapshot_act_as

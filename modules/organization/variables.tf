@@ -41,6 +41,11 @@ variable "upwind_client_secret" {
     condition     = var.upwind_client_secret_id != "" || (var.upwind_client_secret != null && var.upwind_client_secret != "")
     error_message = "The Upwind client secret must not be null or empty, unless upwind_client_secret_id is set to reference an existing secret."
   }
+  validation {
+    condition     = var.create_secret_versions || var.upwind_client_secret == ""
+    error_message = "Use upwind_client_secret_id instead of upwind_client_secret when create_secret_versions is false."
+  }
+
 }
 
 variable "upwind_client_secret_id" {
@@ -76,6 +81,11 @@ variable "scanner_client_secret" {
     condition     = !var.enable_cloudscanners || var.scanner_client_secret_id != "" || (var.scanner_client_secret != null && var.scanner_client_secret != "")
     error_message = "The Upwind scanner client secret must be provided when cloudscanners are enabled, unless scanner_client_secret_id is set to reference an existing secret."
   }
+  validation {
+    condition     = var.create_secret_versions || var.scanner_client_secret == ""
+    error_message = "Use scanner_client_secret_id instead of scanner_client_secret when create_secret_versions is false."
+  }
+
 }
 
 variable "scanner_client_secret_id" {
@@ -87,6 +97,12 @@ variable "scanner_client_secret_id" {
     condition     = var.scanner_client_secret_id == "" || var.scanner_client_secret_id == "upwind-scanner-client-secret-${local.resource_suffix_hyphen}"
     error_message = "scanner_client_secret_id must follow the naming convention 'upwind-scanner-client-secret-${local.resource_suffix_hyphen}' (derived from upwind_organization_id and resource_suffix). Expected 'upwind-scanner-client-secret-${local.resource_suffix_hyphen}', got '${var.scanner_client_secret_id}'."
   }
+}
+
+variable "create_secret_versions" {
+  description = "Write secret versions for the client IDs, labels marker and configuration document. Set to false if the Terraform identity may not hold secretmanager.versions.add; then pass the client secrets via *_secret_id and add the remaining versions yourself (see output upwind_configuration_payload)."
+  type        = bool
+  default     = true
 }
 
 variable "is_dev" {

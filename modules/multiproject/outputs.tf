@@ -32,3 +32,8 @@ output "workload_identity_provider_name" {
   description = "Full path name of the workload identity pool provider"
   value       = "projects/${data.google_project.current.number}/locations/global/workloadIdentityPools/${module.iam.google_iam_workload_identity_pool.workload_identity_pool_id}/providers/${module.iam.google_iam_workload_identity_pool_provider.workload_identity_pool_provider_id}"
 }
+
+output "upwind_configuration_payload" {
+  description = "JSON written to the upwind-configuration secret. Add it as a version yourself when create_secret_versions is false."
+  value       = module.iam.upwind_configuration_payload
+}
