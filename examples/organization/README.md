@@ -10,7 +10,6 @@ organization-level setup and multiple project onboarding scenarios with conditio
 | ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11.0 |
 | <a name="requirement_google"></a> [google](#requirement\_google) | >= 6.23.0, <= 6.35.0 |
-| <a name="requirement_local"></a> [local](#requirement\_local) | ~> 2.0 |
 | <a name="requirement_null"></a> [null](#requirement\_null) | ~> 3.2.0 |
 
 ## Providers
