@@ -11,7 +11,6 @@ resource "google_organization_iam_custom_role" "upwind_cloudscanner_operations_r
     module.iam.snapshot_creator_permissions,
     module.iam.cloud_run_permissions,
     module.iam.storage_read_permissions,
-    var.enable_dspm_scanning ? module.iam.storage_object_reader_permissions : [],
   )
 }
 
@@ -24,6 +23,17 @@ resource "google_organization_iam_custom_role" "upwind_cloudscanner_snapshot_del
   description = "Delete operations restricted to Upwind-managed resources"
 
   permissions = module.iam.snapshot_deleter_permissions
+}
+
+# Object read role for DSPM scanning
+resource "google_organization_iam_custom_role" "upwind_cloudscanner_object_reader_role" {
+  count       = var.enable_cloudscanners && var.enable_dspm_scanning ? 1 : 0
+  org_id      = data.google_organization.org.org_id
+  role_id     = "CloudScannerObjectReader_${local.resource_suffix_underscore}"
+  title       = "upwind-role-${local.resource_suffix_hyphen}-cloudscanner-object-reader"
+  description = "Object read access for DSPM scanning"
+
+  permissions = module.iam.storage_object_reader_permissions
 }
 
 # Required to get instances across projects
@@ -74,5 +84,20 @@ resource "google_organization_iam_binding" "upwind_cloudscanner_snapshot_deleter
     module.iam.cloudscanner_sa,
     module.iam.cloudscanner_scaler_sa,
     module.iam.upwind_cloudscanner_snapshot_deleter_role
+  ]
+}
+
+# Grant the object read role to the CloudScanner SA across the organization
+resource "google_organization_iam_binding" "upwind_cloudscanner_object_reader_role_binding" {
+  count  = var.enable_cloudscanners && var.enable_dspm_scanning ? 1 : 0
+  org_id = data.google_organization.org.org_id
+  role   = google_organization_iam_custom_role.upwind_cloudscanner_object_reader_role[0].name
+  members = [
+    "serviceAccount:${module.iam.cloudscanner_sa.email}"
+  ]
+
+  depends_on = [
+    module.iam.cloudscanner_sa,
+    google_organization_iam_custom_role.upwind_cloudscanner_object_reader_role
   ]
 }
