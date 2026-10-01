@@ -242,6 +242,34 @@ moved {
   to   = module.iam.google_service_account_iam_member.cloudscanner_token_creator
 }
 
+# Organization role resources gained count so skip_organization_roles_creation can skip them.
+# Existing states move to index 0. No GCP change while the flag stays false.
+
+moved {
+  from = google_organization_iam_custom_role.upwind_management_sa_operations_role
+  to   = google_organization_iam_custom_role.upwind_management_sa_operations_role[0]
+}
+
+moved {
+  from = google_organization_iam_member.upwind_management_sa_org_viewer_role_member
+  to   = google_organization_iam_member.upwind_management_sa_org_viewer_role_member[0]
+}
+
+moved {
+  from = google_organization_iam_member.upwind_management_sa_folder_viewer_role_member
+  to   = google_organization_iam_member.upwind_management_sa_folder_viewer_role_member[0]
+}
+
+moved {
+  from = google_organization_iam_member.upwind_management_sa_operations_role_member
+  to   = google_organization_iam_member.upwind_management_sa_operations_role_member[0]
+}
+
+moved {
+  from = google_organization_iam_member.upwind_management_sa_asset_viewer_role_member
+  to   = google_organization_iam_member.upwind_management_sa_asset_viewer_role_member[0]
+}
+
 # Secret Related
 
 moved {

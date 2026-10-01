@@ -105,45 +105,45 @@ output "google_iam_workload_identity_pool_provider" {
 
 output "storage_read_permissions" {
   description = "List of IAM permissions for storage read access."
-  value       = var.storage_read_permissions
+  value       = local.storage_read_permissions
 }
 
 output "iam_read_role_permissions" {
   description = "List of IAM permissions for read-only access role."
-  value       = var.iam_read_role_permissions
+  value       = local.iam_read_role_permissions
 }
 
 output "organization_iam_read_permissions" {
   description = "List of IAM permissions for reading the organization IAM policy."
-  value       = var.organization_iam_read_permissions
+  value       = local.organization_iam_read_permissions
 }
 
 output "snapshot_reader_permissions" {
   description = "List of IAM permissions for snapshot reader role."
-  value       = var.snapshot_reader_permissions
+  value       = local.snapshot_reader_permissions
 }
 
 output "snapshot_creator_permissions" {
   description = "List of IAM permissions for snapshot creator role."
   value = concat(
-    var.snapshot_creator_permissions,
+    local.snapshot_creator_permissions,
     var.enable_snapshot_act_as ? ["iam.serviceAccounts.actAs"] : [],
   )
 }
 
 output "snapshot_deleter_permissions" {
   description = "List of IAM permissions for snapshot deleter role."
-  value       = var.snapshot_deleter_permissions
+  value       = local.snapshot_deleter_permissions
 }
 
 output "storage_object_reader_permissions" {
   description = "List of IAM permissions for storage object reader role."
-  value       = var.storage_object_reader_permissions
+  value       = local.storage_object_reader_permissions
 }
 
 output "cloud_run_permissions" {
   description = "List of IAM permissions for Cloud Run role."
-  value       = var.cloud_run_permissions
+  value       = local.cloud_run_permissions
 }
 
 ### Labels
