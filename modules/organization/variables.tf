@@ -162,6 +162,12 @@ variable "enable_cloudscanners" {
   default     = false
 }
 
+variable "manage_organization_iam" {
+  description = "Create the organization custom roles and organization IAM bindings in this module. Set to false when a separate pipeline applies modules/organization-iam. Leave true unless organization IAM must be split out. Setting false drops these resources from this state; import them into the companion module and remove them from this state before applying, otherwise Terraform destroys the grants."
+  type        = bool
+  default     = true
+}
+
 variable "enable_dspm_scanning" {
   description = "Enable DSPM scanning by cloud scanners"
   type        = bool

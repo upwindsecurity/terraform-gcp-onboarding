@@ -3,6 +3,10 @@
 This Terraform module handles the onboarding of Google Cloud organizations to the Upwind platform, enabling users to
 seamlessly connect their entire organization for comprehensive monitoring and security analysis.
 
+## Splitting organization IAM
+
+By default this module creates the organization custom roles and binds them to the Upwind service accounts. Set `manage_organization_iam = false` when that has to run in a separate pipeline. This module still creates the service accounts, Workload Identity, secrets, and orchestrator-project IAM. Apply [`modules/organization-iam`](../organization-iam) from the pipeline that can set organization IAM, using the same organization ID, Upwind organization ID, and `resource_suffix`, plus the service account emails from this module's outputs.
+
 ## APIs
 
 The following APIs are required for Upwind operations. Please verify that they are enabled across the desired projects using the script available at <https://docs.upwind.io/getting-started/connect-cloud-account/google/integration>
@@ -59,27 +63,27 @@ These are only enabled if `enable_cloudscanners` is true.
 ## Requirements
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11.0 |
 | <a name="requirement_google"></a> [google](#requirement\_google) | >= 6.23.0, < 9.0.0 |
 
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
-| <a name="provider_google"></a> [google](#provider\_google) | 7.36.0 |
+|------|---------|
+| <a name="provider_google"></a> [google](#provider\_google) | >= 6.23.0, < 9.0.0 |
 | <a name="provider_terraform"></a> [terraform](#provider\_terraform) | n/a |
 
 ## Modules
 
 | Name | Source | Version |
-| ---- | ------ | ------- |
+|------|--------|---------|
 | <a name="module_iam"></a> [iam](#module\_iam) | ../_shared/iam | n/a |
 
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [google_organization_iam_binding.upwind_cloudscanner_object_reader_role_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_binding) | resource |
 | [google_organization_iam_binding.upwind_cloudscanner_operations_role_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_binding) | resource |
 | [google_organization_iam_binding.upwind_cloudscanner_snapshot_deleter_role_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_binding) | resource |
@@ -99,7 +103,7 @@ These are only enabled if `enable_cloudscanners` is true.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_create_secret_versions"></a> [create\_secret\_versions](#input\_create\_secret\_versions) | Write secret versions for the client IDs, labels marker and configuration document. Set to false if the Terraform identity may not hold secretmanager.versions.add; then pass the client secrets via *\_secret\_id and add the remaining versions yourself (see output upwind\_configuration\_payload). | `bool` | `true` | no |
 | <a name="input_enable_cloudscanners"></a> [enable\_cloudscanners](#input\_enable\_cloudscanners) | Enable the creation of cloud scanners. | `bool` | `false` | no |
 | <a name="input_enable_dspm_scanning"></a> [enable\_dspm\_scanning](#input\_enable\_dspm\_scanning) | Enable DSPM scanning by cloud scanners | `bool` | `false` | no |
@@ -108,6 +112,7 @@ These are only enabled if `enable_cloudscanners` is true.
 | <a name="input_google_service_account_display_name"></a> [google\_service\_account\_display\_name](#input\_google\_service\_account\_display\_name) | The display name for the service account. | `string` | `"Upwind Security Service Account"` | no |
 | <a name="input_is_dev"></a> [is\_dev](#input\_is\_dev) | Flag to indicate if the environment is a development environment. | `bool` | `false` | no |
 | <a name="input_labels"></a> [labels](#input\_labels) | A map of labels to apply to all resources | `map(string)` | `{}` | no |
+| <a name="input_manage_organization_iam"></a> [manage\_organization\_iam](#input\_manage\_organization\_iam) | Create the organization custom roles and organization IAM bindings in this module. Set to false when a separate pipeline applies modules/organization-iam. Leave true unless organization IAM must be split out. Setting false drops these resources from this state; import them into the companion module and remove them from this state before applying, otherwise Terraform destroys the grants. | `bool` | `true` | no |
 | <a name="input_resource_suffix"></a> [resource\_suffix](#input\_resource\_suffix) | The suffix to append to all resources created by this module. | `string` | `""` | no |
 | <a name="input_scanner_client_id"></a> [scanner\_client\_id](#input\_scanner\_client\_id) | The client ID used for authentication with the Upwind Cloudscanner Service. Required when enable\_cloudscanners is true. | `string` | `""` | no |
 | <a name="input_scanner_client_secret"></a> [scanner\_client\_secret](#input\_scanner\_client\_secret) | The client secret for authentication with the Upwind Cloudscanner Service. Required when enable\_cloudscanners is true, unless scanner\_client\_secret\_id references an existing secret. | `string` | `""` | no |
@@ -124,7 +129,10 @@ These are only enabled if `enable_cloudscanners` is true.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
+| <a name="output_organization_iam"></a> [organization\_iam](#output\_organization\_iam) | Organization IAM this integration requires. When manage\_organization\_iam is true, this module creates it. When false, pass these values to modules/organization-iam. |
+| <a name="output_upwind_cloudscanner_scaler_service_account_email"></a> [upwind\_cloudscanner\_scaler\_service\_account\_email](#output\_upwind\_cloudscanner\_scaler\_service\_account\_email) | Email of the CloudScanner scaler service account. Null when cloud scanners are disabled. |
+| <a name="output_upwind_cloudscanner_service_account_email"></a> [upwind\_cloudscanner\_service\_account\_email](#output\_upwind\_cloudscanner\_service\_account\_email) | Email of the CloudScanner service account. Null when cloud scanners are disabled. |
 | <a name="output_upwind_configuration_payload"></a> [upwind\_configuration\_payload](#output\_upwind\_configuration\_payload) | JSON written to the upwind-configuration secret. Add it as a version yourself when create\_secret\_versions is false. |
 | <a name="output_upwind_management_service_account_display_name"></a> [upwind\_management\_service\_account\_display\_name](#output\_upwind\_management\_service\_account\_display\_name) | The display name of the Upwind Management Service Account. |
 | <a name="output_upwind_management_service_account_email"></a> [upwind\_management\_service\_account\_email](#output\_upwind\_management\_service\_account\_email) | The email address of the Upwind Management Service Account. |

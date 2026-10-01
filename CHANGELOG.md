@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* **manage_organization_iam:** optional split of organization custom roles and organization IAM bindings into `modules/organization-iam`, for pipelines that cannot set organization IAM from the onboarding apply. Defaults to `true`, so existing applies keep creating those grants.
+
 ### Changed
 
 * **BREAKING:** WIF pool and provider IDs now use the full sanitized Upwind organization ID instead of the last five characters:
