@@ -38,7 +38,6 @@ output "google_project_iam_member" {
   value = {
     upwind_management_sa_cloudscanner_deployment_role_member = var.enable_cloudscanners ? google_project_iam_member.upwind_management_sa_cloudscanner_deployment_role_member[0] : null
     upwind_management_sa_secret_access_role_member           = var.enable_cloudscanners ? google_project_iam_member.upwind_management_sa_secret_access_role_member[0] : null
-    cloudrun_service_agent                                   = var.enable_cloudscanners ? google_project_iam_member.cloudrun_service_agent[0] : null
     compute_service_agent_minimal                            = var.enable_cloudscanners ? google_project_iam_member.compute_service_agent_minimal[0] : null
     cloudscanner_instance_template_mgmt_member               = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_instance_template_mgmt_member[0] : null
     cloudscanner_instance_template_test_creation_member      = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_instance_template_test_creation_member[0] : null
