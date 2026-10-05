@@ -286,19 +286,6 @@ resource "google_project_iam_member" "cloudscanner_scaler_sa_disk_writer_role_me
   ]
 }
 
-# Allows the Google Cloud Run service agent to manage Cloud Run jobs
-resource "google_project_iam_member" "cloudrun_service_agent" {
-  count   = var.enable_cloudscanners ? 1 : 0
-  project = local.project
-  role    = "roles/run.serviceAgent"
-  member  = "serviceAccount:service-${data.google_project.current.number}@serverless-robot-prod.iam.gserviceaccount.com"
-
-  depends_on = [
-    google_service_account.cloudscanner_sa,
-    google_service_account.cloudscanner_scaler_sa
-  ]
-}
-
 resource "google_project_iam_member" "compute_service_agent_minimal" {
   count   = var.enable_cloudscanners ? 1 : 0
   project = local.project
