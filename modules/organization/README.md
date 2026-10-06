@@ -3,6 +3,10 @@
 This Terraform module handles the onboarding of Google Cloud organizations to the Upwind platform, enabling users to
 seamlessly connect their entire organization for comprehensive monitoring and security analysis.
 
+## Splitting organization roles
+
+By default this module creates the organization custom roles and binds them to the Upwind service accounts. Set `skip_organization_roles_creation = true` when that has to run in a separate pipeline. This module still creates the service accounts, Workload Identity, secrets, and orchestrator-project IAM. Apply [`modules/organization-roles`](../organization-roles) from the pipeline that can create organization roles, using the same organization ID, Upwind organization ID, and `resource_suffix`, plus the service account emails from this module's outputs.
+
 ## APIs
 
 The following APIs are required for Upwind operations. Please verify that they are enabled across the desired projects using the script available at <https://docs.upwind.io/getting-started/connect-cloud-account/google/integration>
@@ -59,27 +63,27 @@ These are only enabled if `enable_cloudscanners` is true.
 ## Requirements
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11.0 |
 | <a name="requirement_google"></a> [google](#requirement\_google) | >= 6.23.0, < 9.0.0 |
 
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
-| <a name="provider_google"></a> [google](#provider\_google) | 7.36.0 |
+|------|---------|
+| <a name="provider_google"></a> [google](#provider\_google) | 7.46.1 |
 | <a name="provider_terraform"></a> [terraform](#provider\_terraform) | n/a |
 
 ## Modules
 
 | Name | Source | Version |
-| ---- | ------ | ------- |
+|------|--------|---------|
 | <a name="module_iam"></a> [iam](#module\_iam) | ../_shared/iam | n/a |
 
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [google_organization_iam_binding.upwind_cloudscanner_object_reader_role_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_binding) | resource |
 | [google_organization_iam_binding.upwind_cloudscanner_operations_role_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_binding) | resource |
 | [google_organization_iam_binding.upwind_cloudscanner_snapshot_deleter_role_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_binding) | resource |
@@ -99,7 +103,7 @@ These are only enabled if `enable_cloudscanners` is true.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_create_secret_versions"></a> [create\_secret\_versions](#input\_create\_secret\_versions) | Write secret versions for the client IDs, labels marker and configuration document. Set to false if the Terraform identity may not hold secretmanager.versions.add; then pass the client secrets via *\_secret\_id and add the remaining versions yourself (see output upwind\_configuration\_payload). | `bool` | `true` | no |
 | <a name="input_enable_cloudscanners"></a> [enable\_cloudscanners](#input\_enable\_cloudscanners) | Enable the creation of cloud scanners. | `bool` | `false` | no |
 | <a name="input_enable_dspm_scanning"></a> [enable\_dspm\_scanning](#input\_enable\_dspm\_scanning) | Enable DSPM scanning by cloud scanners | `bool` | `false` | no |
@@ -113,6 +117,7 @@ These are only enabled if `enable_cloudscanners` is true.
 | <a name="input_scanner_client_secret"></a> [scanner\_client\_secret](#input\_scanner\_client\_secret) | The client secret for authentication with the Upwind Cloudscanner Service. Required when enable\_cloudscanners is true, unless scanner\_client\_secret\_id references an existing secret. | `string` | `""` | no |
 | <a name="input_scanner_client_secret_id"></a> [scanner\_client\_secret\_id](#input\_scanner\_client\_secret\_id) | The ID of an existing Secret Manager secret that already contains the Upwind Cloudscanner client secret. When set, this module will not create or manage a secret or secret version for the scanner client secret (so the Terraform identity applying this module never needs secretmanager.versions.add) and will only reference the existing secret for IAM access grants. The secret must already exist and must follow this module's naming convention: 'upwind-scanner-client-secret-<resource\_suffix\_hyphen>' (derived from upwind\_organization\_id and resource\_suffix). Only relevant when enable\_cloudscanners is true. | `string` | `""` | no |
 | <a name="input_secret_replication_locations"></a> [secret\_replication\_locations](#input\_secret\_replication\_locations) | Regions for user-managed Secret Manager replication of the Upwind credential secrets. Leave empty for automatic (global) replication. Set this only when the org policy constraints/gcp.resourceLocations blocks global secrets; replication is immutable, so set it at onboarding time. | `list(string)` | `[]` | no |
+| <a name="input_skip_organization_roles_creation"></a> [skip\_organization\_roles\_creation](#input\_skip\_organization\_roles\_creation) | Skip creating organization custom roles and their organization IAM bindings in this module. Set to true when a separate pipeline applies modules/organization-roles. Leave false unless organization roles must be split out. Setting true drops these resources from this state; import them into the companion module and remove them from this state before applying, otherwise Terraform destroys the grants. | `bool` | `false` | no |
 | <a name="input_upwind_client_id"></a> [upwind\_client\_id](#input\_upwind\_client\_id) | The client ID used for authentication with the Upwind Authorization Service. | `string` | n/a | yes |
 | <a name="input_upwind_client_secret"></a> [upwind\_client\_secret](#input\_upwind\_client\_secret) | The client secret for authentication with the Upwind Authorization Service. Not required when upwind\_client\_secret\_id references an existing secret. | `string` | `""` | no |
 | <a name="input_upwind_client_secret_id"></a> [upwind\_client\_secret\_id](#input\_upwind\_client\_secret\_id) | The ID of an existing Secret Manager secret that already contains the Upwind client secret. When set, this module will not create or manage a secret or secret version for the Upwind client secret (so the Terraform identity applying this module never needs secretmanager.versions.add) and will only reference the existing secret for IAM access grants. The secret must already exist and must follow this module's naming convention: 'upwind-client-secret-<resource\_suffix\_hyphen>' (derived from upwind\_organization\_id and resource\_suffix). | `string` | `""` | no |
@@ -124,7 +129,10 @@ These are only enabled if `enable_cloudscanners` is true.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
+| <a name="output_organization_iam"></a> [organization\_iam](#output\_organization\_iam) | Organization roles this integration requires. When skip\_organization\_roles\_creation is false, this module creates them. When true, pass these values to modules/organization-roles. |
+| <a name="output_upwind_cloudscanner_scaler_service_account_email"></a> [upwind\_cloudscanner\_scaler\_service\_account\_email](#output\_upwind\_cloudscanner\_scaler\_service\_account\_email) | Email of the CloudScanner scaler service account. Null when cloud scanners are disabled. |
+| <a name="output_upwind_cloudscanner_service_account_email"></a> [upwind\_cloudscanner\_service\_account\_email](#output\_upwind\_cloudscanner\_service\_account\_email) | Email of the CloudScanner service account. Null when cloud scanners are disabled. |
 | <a name="output_upwind_configuration_payload"></a> [upwind\_configuration\_payload](#output\_upwind\_configuration\_payload) | JSON written to the upwind-configuration secret. Add it as a version yourself when create\_secret\_versions is false. |
 | <a name="output_upwind_management_service_account_display_name"></a> [upwind\_management\_service\_account\_display\_name](#output\_upwind\_management\_service\_account\_display\_name) | The display name of the Upwind Management Service Account. |
 | <a name="output_upwind_management_service_account_email"></a> [upwind\_management\_service\_account\_email](#output\_upwind\_management\_service\_account\_email) | The email address of the Upwind Management Service Account. |

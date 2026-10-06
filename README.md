@@ -16,6 +16,8 @@ This repository contains the following Terraform modules for Google Cloud onboar
   projects to the Upwind platform
 - [modules/organization/](./modules/organization/) - Organization-level onboarding module for comprehensive monitoring
   and security analysis across entire Google Cloud organizations
+- [modules/organization-roles/](./modules/organization-roles/) - Organization custom roles and their bindings, for pipelines that
+  cannot create organization roles from the onboarding apply
 
 ## Examples
 

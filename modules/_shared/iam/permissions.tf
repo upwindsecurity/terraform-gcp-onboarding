@@ -174,82 +174,33 @@ variable "compute_service_agent_minimal_permissions" {
 }
 
 variable "storage_read_permissions" {
-  description = "List of IAM permissions for storage read access."
+  description = "Override for storage read permissions included in Upwind custom roles. Null uses modules/_shared/permissions."
   type        = list(string)
-  default = [
-    "storage.buckets.get",
-    "storage.buckets.getIamPolicy",
-    "storage.buckets.getIpFilter",
-    "storage.buckets.list",
-    "storage.buckets.listEffectiveTags",
-    "storage.buckets.listTagBindings",
-    "storage.bucketOperations.get",
-    "storage.bucketOperations.list",
-    "storage.folders.get",
-    "storage.folders.list",
-    "storage.managedFolders.get",
-    "storage.managedFolders.getIamPolicy",
-    "storage.managedFolders.list",
-    "storage.objects.getIamPolicy",
-    "storage.objects.list",
-  ]
+  default     = null
 }
 
 variable "iam_read_role_permissions" {
-  description = "List of IAM permissions for read-only access across GCP services."
+  description = "Override for read-only IAM permissions included in Upwind custom roles. Null uses modules/_shared/permissions."
   type        = list(string)
-  default = [
-    # Service account and key read permissions
-    "iam.serviceAccounts.get",
-    "iam.serviceAccounts.list",
-    "iam.serviceAccountKeys.get",
-    "iam.serviceAccountKeys.list",
-    # Role read permissions
-    "resourcemanager.projects.getIamPolicy",
-    "iam.roles.get",
-    "iam.roles.list"
-  ]
+  default     = null
 }
 
 variable "organization_iam_read_permissions" {
-  description = "List of IAM permissions for reading the organization IAM policy (e.g. audit configs). Required regardless of CloudScanner deployment."
+  description = "Override for organization IAM read permissions included in the Upwind operations role. Null uses modules/_shared/permissions."
   type        = list(string)
-  default = [
-    "resourcemanager.organizations.getIamPolicy",
-    "iam.workloadIdentityPoolProviders.get",
-  ]
+  default     = null
 }
 
 variable "snapshot_reader_permissions" {
-  description = "List of IAM permissions for reading snapshots."
+  description = "Override for snapshot reader permissions included in the CloudScanner operations role. Null uses modules/_shared/permissions."
   type        = list(string)
-  default = [
-    # Read-only permissions for discovery
-    "compute.disks.get",
-    "compute.disks.list",
-    "compute.disks.createSnapshot", # Cannot be restricted, we don't know target disk names
-    "compute.snapshots.get",
-    "compute.snapshots.list",
-    "compute.instances.get",
-    "compute.instances.list",
-    "compute.diskTypes.get",
-    "compute.diskTypes.list",
-    "compute.projects.get",
-    "resourcemanager.projects.get",
-    "compute.zoneOperations.get",
-    "compute.globalOperations.get",
-    "compute.regionOperations.get",
-  ]
+  default     = null
 }
 
 variable "snapshot_creator_permissions" {
-  description = "List of IAM permissions for creating snapshots and scan resources in target projects."
+  description = "Override for snapshot creator permissions included in the CloudScanner operations role. Null uses modules/_shared/permissions. iam.serviceAccounts.actAs is still appended when enable_snapshot_act_as is true."
   type        = list(string)
-  default = [
-    "compute.snapshots.create",
-    "compute.snapshots.setLabels",
-    "compute.snapshots.useReadOnly",
-  ]
+  default     = null
 }
 
 variable "enable_snapshot_act_as" {
@@ -270,28 +221,19 @@ variable "enable_snapshot_act_as" {
 }
 
 variable "snapshot_deleter_permissions" {
-  description = "List of IAM permissions for deleting snapshots."
+  description = "Override for snapshot deleter permissions. Null uses modules/_shared/permissions."
   type        = list(string)
-  default = [
-    "compute.snapshots.delete",
-  ]
+  default     = null
 }
 
 variable "storage_object_reader_permissions" {
-  description = "List of IAM permissions for storage object reader role."
+  description = "Override for storage object reader permissions included when DSPM scanning is enabled. Null uses modules/_shared/permissions."
   type        = list(string)
-  default = [
-    "storage.objects.get",
-    "storage.buckets.get",
-    "storage.buckets.list",
-  ]
+  default     = null
 }
 
 variable "cloud_run_permissions" {
-  description = "List of IAM permissions for Cloud Run roles."
+  description = "Override for Cloud Run permissions included in the CloudScanner operations role. Null uses modules/_shared/permissions."
   type        = list(string)
-  default = [
-    "artifactregistry.repositories.downloadArtifacts",
-    "artifactregistry.dockerimages.get",
-  ]
+  default     = null
 }
