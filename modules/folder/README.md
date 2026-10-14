@@ -43,6 +43,7 @@ The following APIs are required for Upwind operations. Please verify that they a
 ### Required for Upwind Cloud Scanners
 
 These are only enabled if `enable_cloudscanners` is true.
+With `is_saas`, Upwind hosts the scanners, so the Cloud Run Admin and Cloud Scheduler APIs are not needed.
 
 | API Name                                                                                            | Endpoint                              |
 | --------------------------------------------------------------------------------------------------- | ------------------------------------- |
