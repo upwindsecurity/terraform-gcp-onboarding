@@ -177,6 +177,18 @@ variable "enable_dspm_scanning" {
   default     = false
 }
 
+variable "is_saas" {
+  description = "Run CloudScanners in SaaS mode: Upwind hosts the scanners and deploys nothing in the orchestrator project. Requires enable_cloudscanners."
+  type        = bool
+  default     = false
+}
+
+variable "workload_identity_saas_subject" {
+  description = "The numeric unique ID of the Upwind-hosted CloudScanner service account, provided by Upwind. Required when is_saas is true."
+  type        = string
+  default     = ""
+}
+
 variable "enable_snapshot_act_as" {
   description = "Grant the CloudScanner operations role iam.serviceAccounts.actAs so it can act as target projects' default Compute Engine service account when creating snapshots. Applied at the operations role binding scope (folder-wide). Enabled by default; set to false to opt out."
   type        = bool

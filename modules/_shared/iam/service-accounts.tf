@@ -41,7 +41,7 @@ resource "google_service_account" "cloudscanner_sa" {
 # The service account which will be used to run the scaler function
 # This service account will be used to scale the CloudScanner Instance Groups via Cloud Run
 resource "google_service_account" "cloudscanner_scaler_sa" {
-  count        = var.enable_cloudscanners ? 1 : 0
+  count        = local.deploy_cloudscanners ? 1 : 0
   project      = var.upwind_orchestrator_project
   account_id   = format("upwind-scaler-%s", local.resource_suffix_hyphen)
   display_name = "Upwind CloudScanner Scaler Service Account"
@@ -57,7 +57,7 @@ resource "google_service_account" "cloudscanner_scaler_sa" {
 
 # Allow scaler to impersonate scanner SA AND allow Compute Engine service to use scanner SA for VM operations
 resource "google_service_account_iam_binding" "scaler_and_compute_can_use_cloudscanner" {
-  count              = var.enable_cloudscanners ? 1 : 0
+  count              = local.deploy_cloudscanners ? 1 : 0
   service_account_id = google_service_account.cloudscanner_sa[0].id
   role               = "roles/iam.serviceAccountUser"
   members = [
@@ -76,7 +76,7 @@ resource "google_service_account_iam_member" "management_can_impersonate_scanner
 
 # Allow management SA to create tokens for scaler SA
 resource "google_service_account_iam_member" "management_can_impersonate_scaler" {
-  count              = var.enable_cloudscanners ? 1 : 0
+  count              = local.deploy_cloudscanners ? 1 : 0
   service_account_id = google_service_account.cloudscanner_scaler_sa[0].id
   role               = "roles/iam.serviceAccountTokenCreator"
   member             = "serviceAccount:${google_service_account.upwind_management_sa.email}"
@@ -84,7 +84,7 @@ resource "google_service_account_iam_member" "management_can_impersonate_scaler"
 
 # Allow scanner SA to create tokens for scaler SA
 resource "google_service_account_iam_member" "scanner_can_impersonate_scaler" {
-  count              = var.enable_cloudscanners ? 1 : 0
+  count              = local.deploy_cloudscanners ? 1 : 0
   service_account_id = google_service_account.cloudscanner_scaler_sa[0].id
   role               = "roles/iam.serviceAccountTokenCreator"
   member             = "serviceAccount:${google_service_account.cloudscanner_sa[0].email}"
@@ -92,7 +92,7 @@ resource "google_service_account_iam_member" "scanner_can_impersonate_scaler" {
 
 # Allow scaler SA to create tokens for scanner SA
 resource "google_service_account_iam_member" "scaler_can_impersonate_scanner" {
-  count              = var.enable_cloudscanners ? 1 : 0
+  count              = local.deploy_cloudscanners ? 1 : 0
   service_account_id = google_service_account.cloudscanner_sa[0].id
   role               = "roles/iam.serviceAccountTokenCreator"
   member             = "serviceAccount:${google_service_account.cloudscanner_scaler_sa[0].email}"
@@ -100,7 +100,7 @@ resource "google_service_account_iam_member" "scaler_can_impersonate_scanner" {
 
 # Allow Cloud Scheduler to impersonate scaler SA
 resource "google_service_account_iam_member" "cloudscheduler_can_impersonate_scaler" {
-  count              = var.enable_cloudscanners ? 1 : 0
+  count              = local.deploy_cloudscanners ? 1 : 0
   service_account_id = google_service_account.cloudscanner_scaler_sa[0].id
   role               = "roles/iam.serviceAccountTokenCreator"
   member             = "serviceAccount:service-${data.google_project.current.number}@gcp-sa-cloudscheduler.iam.gserviceaccount.com"
