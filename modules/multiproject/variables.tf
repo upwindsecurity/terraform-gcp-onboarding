@@ -171,6 +171,18 @@ variable "enable_dspm_scanning" {
   default     = false
 }
 
+variable "is_saas" {
+  description = "Run CloudScanners in SaaS mode: Upwind hosts the scanners and deploys nothing in the orchestrator project. Requires enable_cloudscanners."
+  type        = bool
+  default     = false
+}
+
+variable "workload_identity_saas_subject" {
+  description = "The numeric unique ID of the Upwind-hosted CloudScanner service account, provided by Upwind. Required when is_saas is true."
+  type        = string
+  default     = ""
+}
+
 variable "google_service_account_display_name" {
   description = "The display name for the service account."
   type        = string
