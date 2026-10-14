@@ -246,7 +246,7 @@ locals {
 
     upwind_management_sa_email   = google_service_account.upwind_management_sa.email
     cloudscanner_sa_email        = var.enable_cloudscanners ? google_service_account.cloudscanner_sa[0].email : null
-    cloudscanner_scaler_sa_email = var.enable_cloudscanners ? google_service_account.cloudscanner_scaler_sa[0].email : null
+    cloudscanner_scaler_sa_email = local.deploy_cloudscanners ? google_service_account.cloudscanner_scaler_sa[0].email : null
 
     workload_identity_pool_project  = var.workload_identity_pool_project == "" ? local.project : var.workload_identity_pool_project
     workload_identity_provider_name = google_iam_workload_identity_pool_provider.aws.name

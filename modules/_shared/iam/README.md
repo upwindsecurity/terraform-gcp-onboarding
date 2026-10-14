@@ -25,6 +25,7 @@ No modules.
 | ---- | ---- |
 | [google_iam_workload_identity_pool.main](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/iam_workload_identity_pool) | resource |
 | [google_iam_workload_identity_pool_provider.aws](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/iam_workload_identity_pool_provider) | resource |
+| [google_iam_workload_identity_pool_provider.gcp](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/iam_workload_identity_pool_provider) | resource |
 | [google_project_iam_custom_role.cloudscanner_basic_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_custom_role) | resource |
 | [google_project_iam_custom_role.cloudscanner_instance_template_mgmt_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_custom_role) | resource |
 | [google_project_iam_custom_role.cloudscanner_instance_template_test_creation_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_custom_role) | resource |
@@ -33,7 +34,6 @@ No modules.
 | [google_project_iam_custom_role.compute_service_agent_minimal](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_custom_role) | resource |
 | [google_project_iam_custom_role.disk_writer](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_custom_role) | resource |
 | [google_project_iam_custom_role.upwind_management_sa_cloudscanner_deployment_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_custom_role) | resource |
-| [google_project_iam_member.cloudrun_service_agent](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.cloudscanner_instance_template_mgmt_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.cloudscanner_instance_template_test_creation_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.cloudscanner_sa_basic_role_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
@@ -65,6 +65,7 @@ No modules.
 | [google_service_account.cloudscanner_scaler_sa](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
 | [google_service_account.upwind_management_sa](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
 | [google_service_account_iam_binding.scaler_and_compute_can_use_cloudscanner](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_iam_binding) | resource |
+| [google_service_account_iam_member.cloudscanner_saas_workload_identity](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_iam_member) | resource |
 | [google_service_account_iam_member.cloudscanner_token_creator](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_iam_member) | resource |
 | [google_service_account_iam_member.cloudscanner_workload_identity](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_iam_member) | resource |
 | [google_service_account_iam_member.cloudscheduler_can_impersonate_scaler](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_iam_member) | resource |
@@ -99,8 +100,9 @@ No modules.
 | <a name="input_google_service_account_display_name"></a> [google\_service\_account\_display\_name](#input\_google\_service\_account\_display\_name) | Display name for the management service account | `string` | n/a | yes |
 | <a name="input_iam_read_role_permissions"></a> [iam\_read\_role\_permissions](#input\_iam\_read\_role\_permissions) | List of IAM permissions for read-only access across GCP services. | `list(string)` | <pre>[<br/>  "iam.serviceAccounts.get",<br/>  "iam.serviceAccounts.list",<br/>  "iam.serviceAccountKeys.get",<br/>  "iam.serviceAccountKeys.list",<br/>  "resourcemanager.projects.getIamPolicy",<br/>  "iam.roles.get",<br/>  "iam.roles.list"<br/>]</pre> | no |
 | <a name="input_is_dev"></a> [is\_dev](#input\_is\_dev) | Flag to indicate if the environment is a development environment. | `bool` | `false` | no |
+| <a name="input_is_saas"></a> [is\_saas](#input\_is\_saas) | Run CloudScanners in SaaS mode: Upwind hosts the scanners and deploys nothing in the orchestrator project. Omits the scaler service account and the deployment-only roles, and lets the Upwind-hosted scanner identity impersonate the CloudScanner service account. | `bool` | `false` | no |
 | <a name="input_labels"></a> [labels](#input\_labels) | A map of labels to apply to all resources | `map(string)` | `{}` | no |
-| <a name="input_organization_iam_read_permissions"></a> [organization\_iam\_read\_permissions](#input\_organization\_iam\_read\_permissions) | List of IAM permissions for reading the organization IAM policy (e.g. audit configs). Required regardless of CloudScanner deployment. | `list(string)` | <pre>[<br/>  "resourcemanager.organizations.getIamPolicy"<br/>]</pre> | no |
+| <a name="input_organization_iam_read_permissions"></a> [organization\_iam\_read\_permissions](#input\_organization\_iam\_read\_permissions) | List of IAM permissions for reading the organization IAM policy (e.g. audit configs). Required regardless of CloudScanner deployment. | `list(string)` | <pre>[<br/>  "resourcemanager.organizations.getIamPolicy",<br/>  "iam.workloadIdentityPoolProviders.get"<br/>]</pre> | no |
 | <a name="input_resource_suffix"></a> [resource\_suffix](#input\_resource\_suffix) | The suffix to append to all resources created by this module. | `string` | `""` | no |
 | <a name="input_scanner_client_id"></a> [scanner\_client\_id](#input\_scanner\_client\_id) | The client ID used for authentication with the Upwind Cloudscanner Service. Required when enable\_cloudscanners is true. | `string` | `""` | no |
 | <a name="input_scanner_client_secret"></a> [scanner\_client\_secret](#input\_scanner\_client\_secret) | The client secret for authentication with the Upwind Cloudscanner Service. Required when enable\_cloudscanners is true, unless scanner\_client\_secret\_id references an existing secret. | `string` | `""` | no |
@@ -117,6 +119,7 @@ No modules.
 | <a name="input_upwind_orchestrator_project"></a> [upwind\_orchestrator\_project](#input\_upwind\_orchestrator\_project) | The orchestrator project where Upwind resources are created. | `string` | n/a | yes |
 | <a name="input_upwind_organization_id"></a> [upwind\_organization\_id](#input\_upwind\_organization\_id) | The identifier of the Upwind organization to integrate with. | `string` | n/a | yes |
 | <a name="input_workload_identity_pool_project"></a> [workload\_identity\_pool\_project](#input\_workload\_identity\_pool\_project) | The project where the workload identity pool is created. Defaults to the orchestrator project if not specified. | `string` | `""` | no |
+| <a name="input_workload_identity_saas_subject"></a> [workload\_identity\_saas\_subject](#input\_workload\_identity\_saas\_subject) | The numeric unique ID of the Upwind-hosted CloudScanner service account allowed to impersonate the CloudScanner service account. Required when is\_saas is true. | `string` | `""` | no |
 | <a name="input_workload_identity_trusted_account"></a> [workload\_identity\_trusted\_account](#input\_workload\_identity\_trusted\_account) | The account ID of the trusted account for Workload Identity Federation. | `string` | n/a | yes |
 
 ## Outputs
@@ -129,6 +132,7 @@ No modules.
 | <a name="output_default_labels"></a> [default\_labels](#output\_default\_labels) | Default labels applied to all resources (can be overridden). |
 | <a name="output_google_iam_workload_identity_pool"></a> [google\_iam\_workload\_identity\_pool](#output\_google\_iam\_workload\_identity\_pool) | The Workload Identity Pool created. |
 | <a name="output_google_iam_workload_identity_pool_provider"></a> [google\_iam\_workload\_identity\_pool\_provider](#output\_google\_iam\_workload\_identity\_pool\_provider) | The Workload Identity Pool Provider created. |
+| <a name="output_google_iam_workload_identity_pool_provider_saas"></a> [google\_iam\_workload\_identity\_pool\_provider\_saas](#output\_google\_iam\_workload\_identity\_pool\_provider\_saas) | The Workload Identity Pool Provider for Upwind-hosted CloudScanners, when is\_saas is true. |
 | <a name="output_google_project_iam_custom_role"></a> [google\_project\_iam\_custom\_role](#output\_google\_project\_iam\_custom\_role) | The custom IAM roles created at the project level. |
 | <a name="output_google_project_iam_member"></a> [google\_project\_iam\_member](#output\_google\_project\_iam\_member) | The IAM role bindings at the project level. |
 | <a name="output_google_project_iam_member_disk_writer"></a> [google\_project\_iam\_member\_disk\_writer](#output\_google\_project\_iam\_member\_disk\_writer) | The IAM member bindings for disk writer role. |

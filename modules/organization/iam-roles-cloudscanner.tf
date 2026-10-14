@@ -53,10 +53,10 @@ resource "google_organization_iam_binding" "upwind_cloudscanner_operations_role_
   count  = var.enable_cloudscanners ? 1 : 0
   org_id = data.google_organization.org.org_id
   role   = google_organization_iam_custom_role.upwind_cloudscanner_operations_role[0].name
-  members = [
-    "serviceAccount:${module.iam.cloudscanner_sa.email}",
-    "serviceAccount:${module.iam.cloudscanner_scaler_sa.email}"
-  ]
+  members = concat(
+    ["serviceAccount:${module.iam.cloudscanner_sa.email}"],
+    var.is_saas ? [] : ["serviceAccount:${module.iam.cloudscanner_scaler_sa.email}"],
+  )
 
   depends_on = [
     module.iam.cloudscanner_sa,
@@ -70,10 +70,10 @@ resource "google_organization_iam_binding" "upwind_cloudscanner_snapshot_deleter
   count  = var.enable_cloudscanners ? 1 : 0
   org_id = data.google_organization.org.org_id
   role   = google_organization_iam_custom_role.upwind_cloudscanner_snapshot_deleter_role[0].name
-  members = [
-    "serviceAccount:${module.iam.cloudscanner_sa.email}",
-    "serviceAccount:${module.iam.cloudscanner_scaler_sa.email}"
-  ]
+  members = concat(
+    ["serviceAccount:${module.iam.cloudscanner_sa.email}"],
+    var.is_saas ? [] : ["serviceAccount:${module.iam.cloudscanner_scaler_sa.email}"],
+  )
   condition {
     # Limit storage deletion permissions to snapshots we generate only
     title      = "Upwind Cloud Scanner Snapshot Deleter"

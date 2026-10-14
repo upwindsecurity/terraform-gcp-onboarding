@@ -106,6 +106,7 @@ These are only enabled if `enable_cloudscanners` is true.
 | <a name="input_gcp_organization_id"></a> [gcp\_organization\_id](#input\_gcp\_organization\_id) | The GCP organization ID where resources will be created. | `string` | n/a | yes |
 | <a name="input_google_service_account_display_name"></a> [google\_service\_account\_display\_name](#input\_google\_service\_account\_display\_name) | The display name for the service account. | `string` | `"Upwind Security Service Account"` | no |
 | <a name="input_is_dev"></a> [is\_dev](#input\_is\_dev) | Flag to indicate if the environment is a development environment. | `bool` | `false` | no |
+| <a name="input_is_saas"></a> [is\_saas](#input\_is\_saas) | Run CloudScanners in SaaS mode: Upwind hosts the scanners and deploys nothing in the orchestrator project. Requires enable\_cloudscanners. | `bool` | `false` | no |
 | <a name="input_labels"></a> [labels](#input\_labels) | A map of labels to apply to all resources | `map(string)` | `{}` | no |
 | <a name="input_resource_suffix"></a> [resource\_suffix](#input\_resource\_suffix) | The suffix to append to all resources created by this module. | `string` | `""` | no |
 | <a name="input_scanner_client_id"></a> [scanner\_client\_id](#input\_scanner\_client\_id) | The client ID used for authentication with the Upwind Cloudscanner Service. Required when enable\_cloudscanners is true. | `string` | `""` | no |
@@ -119,6 +120,7 @@ These are only enabled if `enable_cloudscanners` is true.
 | <a name="input_upwind_orchestrator_project"></a> [upwind\_orchestrator\_project](#input\_upwind\_orchestrator\_project) | The orchestrator project where Upwind resources are created. | `string` | n/a | yes |
 | <a name="input_upwind_organization_id"></a> [upwind\_organization\_id](#input\_upwind\_organization\_id) | The identifier of the Upwind organization to integrate with. | `string` | n/a | yes |
 | <a name="input_workload_identity_pool_project"></a> [workload\_identity\_pool\_project](#input\_workload\_identity\_pool\_project) | The project where the workload identity pool is created. Defaults to the orchestrator project if not specified. | `string` | `""` | no |
+| <a name="input_workload_identity_saas_subject"></a> [workload\_identity\_saas\_subject](#input\_workload\_identity\_saas\_subject) | The numeric unique ID of the Upwind-hosted CloudScanner service account, provided by Upwind. Required when is\_saas is true. | `string` | `""` | no |
 | <a name="input_workload_identity_trusted_account"></a> [workload\_identity\_trusted\_account](#input\_workload\_identity\_trusted\_account) | The account ID of the trusted account for Workload Identity Federation. | `string` | n/a | yes |
 
 ## Outputs

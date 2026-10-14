@@ -76,7 +76,7 @@ resource "google_project_iam_member" "upwind_cloudscanner_sa_operations_role_mem
 }
 
 resource "google_project_iam_member" "upwind_cloudscanner_scaler_sa_operations_role_member" {
-  for_each = var.enable_cloudscanners ? toset(var.target_project_ids) : toset([])
+  for_each = var.enable_cloudscanners && !var.is_saas ? toset(var.target_project_ids) : toset([])
 
   project = each.value
   role    = google_project_iam_custom_role.upwind_cloudscanner_operations_role[each.key].id
@@ -110,7 +110,7 @@ resource "google_project_iam_member" "upwind_cloudscanner_sa_snapshot_deleter_ro
 }
 
 resource "google_project_iam_member" "upwind_cloudscanner_scaler_sa_snapshot_deleter_role_member" {
-  for_each = var.enable_cloudscanners ? toset(var.target_project_ids) : toset([])
+  for_each = var.enable_cloudscanners && !var.is_saas ? toset(var.target_project_ids) : toset([])
 
   project = each.value
   role    = google_project_iam_custom_role.upwind_cloudscanner_snapshot_deleter_role[each.key].id

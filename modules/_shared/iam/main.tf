@@ -13,6 +13,9 @@ locals {
   # resource_suffix = 10 chars with a hyphen
   resource_suffix_hyphen     = format("%s%s", local.org_id_truncated, var.resource_suffix == "" ? "" : "-${var.resource_suffix}")
   resource_suffix_underscore = format("%s%s", local.org_id_truncated, var.resource_suffix == "" ? "" : "_${var.resource_suffix}")
+  # In SaaS mode Upwind hosts the scanners, so nothing that only exists to deploy or run
+  # them in the orchestrator project is created
+  deploy_cloudscanners = var.enable_cloudscanners && !var.is_saas
   # Merge default labels with user-provided labels
   # User labels override defaults if keys conflict
   merged_labels = merge(var.default_labels, var.labels)
