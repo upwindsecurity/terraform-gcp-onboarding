@@ -28,17 +28,18 @@ override_resource {
 }
 
 variables {
-  upwind_organization_id = "org_test"
-  upwind_client_id       = "client"
-  scanner_client_id      = "scanner"
-  # Skip secret versions: Terraform 1.11's mock provider fills their write-only values at plan and fails
-  create_secret_versions            = false
-  upwind_client_secret_id           = "upwind-client-secret-test"
-  scanner_client_secret_id          = "upwind-scanner-client-secret-test"
+  upwind_organization_id            = "org_test"
+  upwind_client_id                  = "client"
+  scanner_client_id                 = "scanner"
   gcp_organization_id               = "123456789012"
   upwind_orchestrator_project       = "upwind-orchestrator"
   workload_identity_trusted_account = "111111111111"
   enable_cloudscanners              = true
+
+  # Skip secret versions: Terraform 1.11's mock provider fills their write-only values at plan and fails
+  create_secret_versions   = false
+  upwind_client_secret_id  = "upwind-client-secret-test"
+  scanner_client_secret_id = "upwind-scanner-client-secret-test"
 }
 
 run "outpost_deploys_scanner_infrastructure" {
