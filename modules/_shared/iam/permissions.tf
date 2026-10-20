@@ -53,14 +53,9 @@ variable "deployment_permissions" {
     "cloudscheduler.jobs.enable",
     "cloudscheduler.jobs.update", # Required to update an existing scanner schedule in place
     "cloudscheduler.jobs.delete",
-    # IAM permissions for setting up project bindings
-    "resourcemanager.projects.getIamPolicy",
-    "resourcemanager.projects.setIamPolicy",
     # Service Account reference permission
     "iam.serviceAccounts.get",
     "iam.serviceAccounts.actAs", # Required to assign a service account to instances
-    "iam.serviceAccounts.getIamPolicy",
-    "iam.serviceAccounts.setIamPolicy",
     # Required for Terraform to check operation status
     "compute.regionOperations.get",
     # Required basic service usage
