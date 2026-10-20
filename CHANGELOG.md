@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [3.11.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.10.0...v3.11.0) (2026-09-30)
+
+### Features
+
+* **UP-7861:** remove object read grant from scaler SA ([#43](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/43)) ([6e11f3d](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/6e11f3d19cd4cb603fe4a3180c7b065468daaeb1))
+
 ## [3.10.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.9.0...v3.10.0) (2026-09-30)
 
 ### Features
