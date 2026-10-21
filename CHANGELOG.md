@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* **skip_organization_roles_creation:** optional split of organization custom roles and their bindings into `modules/organization-roles`, for pipelines that cannot create organization roles from the onboarding apply. Defaults to `false`, so existing applies keep creating those grants.
+
 ### Changed
 
 * **BREAKING:** WIF pool and provider IDs now use the full sanitized Upwind organization ID instead of the last five characters:
