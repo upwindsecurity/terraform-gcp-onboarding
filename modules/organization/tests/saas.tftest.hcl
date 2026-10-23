@@ -73,6 +73,10 @@ run "saas_omits_scanner_infrastructure" {
   variables {
     is_saas                        = true
     workload_identity_saas_subject = "123456789012345678901"
+
+    # Upwind holds the hosted scanners' credentials, so SaaS mode takes none
+    scanner_client_id        = ""
+    scanner_client_secret_id = ""
   }
 
   assert {
@@ -84,11 +88,12 @@ run "saas_omits_scanner_infrastructure" {
     error_message = "SaaS mode should not create the scaler service account"
   }
   assert {
-    condition = alltrue([
-      for name, role in module.iam.google_project_iam_custom_role : role == null
-      if name != "cloudscanner_secret_access_role"
-    ])
-    error_message = "SaaS mode should only create the secret access project role"
+    condition     = alltrue([for role in values(module.iam.google_project_iam_custom_role) : role == null])
+    error_message = "SaaS mode should create no project roles"
+  }
+  assert {
+    condition     = module.iam.google_secret_manager_secret.scanner_client_id == null && module.iam.google_secret_manager_secret.scanner_client_secret == null
+    error_message = "SaaS mode should not create the scanner credential secrets"
   }
   assert {
     condition     = google_organization_iam_binding.upwind_cloudscanner_operations_role_binding[0].members == toset(["serviceAccount:upwind-mgmt@upwind-orchestrator.iam.gserviceaccount.com"])

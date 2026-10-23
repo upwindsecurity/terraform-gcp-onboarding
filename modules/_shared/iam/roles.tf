@@ -34,7 +34,7 @@ resource "google_project_iam_custom_role" "cloudscanner_scaler_role" {
 
 # Ability to access the Upwind Client ID and Secret
 resource "google_project_iam_custom_role" "cloudscanner_secret_access_role" {
-  count   = var.enable_cloudscanners ? 1 : 0
+  count   = local.deploy_cloudscanners ? 1 : 0
   project = local.project
   role_id = "CloudScannerSecretAccessRole_${local.resource_suffix_underscore}"
   title   = "upwind-role-${local.resource_suffix_hyphen}-secret-access"
@@ -136,7 +136,7 @@ resource "google_project_iam_member" "cloudscanner_scaler_sa_scaler_role_member"
 
 # Only grant access to the Upwind Client ID and Secret
 resource "google_project_iam_member" "upwind_management_sa_secret_access_role_member" {
-  count   = var.enable_cloudscanners ? 1 : 0
+  count   = local.deploy_cloudscanners ? 1 : 0
   project = local.project
   role    = google_project_iam_custom_role.cloudscanner_secret_access_role[0].name
   member  = "serviceAccount:${google_service_account.upwind_management_sa.email}"
