@@ -7,7 +7,12 @@ output "upwind_management_sa" {
 
 output "cloudscanner_sa" {
   description = "The Cloudscanner Service Account details."
-  value       = var.enable_cloudscanners ? google_service_account.cloudscanner_sa[0] : null
+  value       = local.deploy_cloudscanners ? google_service_account.cloudscanner_sa[0] : null
+}
+
+output "cloudscanner_identity_email" {
+  description = "The email of the account CloudScanners act as in the customer's organization: the management service account in SaaS mode, else the CloudScanner service account."
+  value       = local.cloudscanner_identity_email
 }
 
 output "cloudscanner_scaler_sa" {
@@ -46,7 +51,7 @@ output "google_project_iam_member" {
     cloudscanner_scaler_sa_run_invoker                       = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_scaler_sa_run_invoker[0] : null
     cloudscanner_scaler_sa_scaler_role_member                = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_scaler_sa_scaler_role_member[0] : null
     cloudscanner_scaler_secret_access_scaler_role_member     = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_scaler_secret_access_scaler_role_member[0] : null
-    cloudscanner_secret_access_role_member                   = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_secret_access_role_member[0] : null
+    cloudscanner_secret_access_role_member                   = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_secret_access_role_member[0] : null
   }
 }
 
@@ -62,7 +67,7 @@ output "google_service_account_iam_binding" {
   description = "The IAM bindings for service accounts."
   value = {
     scaler_and_compute_can_use_cloudscanner = local.deploy_cloudscanners ? google_service_account_iam_binding.scaler_and_compute_can_use_cloudscanner[0] : null
-    management_can_impersonate_scanner      = var.enable_cloudscanners ? google_service_account_iam_member.management_can_impersonate_scanner[0] : null
+    management_can_impersonate_scanner      = local.deploy_cloudscanners ? google_service_account_iam_member.management_can_impersonate_scanner[0] : null
     management_can_impersonate_scaler       = local.deploy_cloudscanners ? google_service_account_iam_member.management_can_impersonate_scaler[0] : null
     scanner_can_impersonate_scaler          = local.deploy_cloudscanners ? google_service_account_iam_member.scanner_can_impersonate_scaler[0] : null
     scaler_can_impersonate_scanner          = local.deploy_cloudscanners ? google_service_account_iam_member.scaler_can_impersonate_scanner[0] : null
@@ -131,7 +136,7 @@ output "snapshot_creator_permissions" {
   description = "List of IAM permissions for snapshot creator role."
   value = concat(
     var.snapshot_creator_permissions,
-    var.enable_snapshot_act_as ? ["iam.serviceAccounts.actAs"] : [],
+    var.enable_snapshot_act_as && !var.is_saas ? ["iam.serviceAccounts.actAs"] : [],
   )
 }
 

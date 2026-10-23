@@ -52,7 +52,7 @@ resource "google_project_iam_member" "upwind_cloudscanner_sa_compute_viewer_role
 
   project = each.value
   role    = "roles/compute.viewer"
-  member  = "serviceAccount:${module.iam.cloudscanner_sa.email}"
+  member  = "serviceAccount:${module.iam.cloudscanner_identity_email}"
 
   depends_on = [
     module.iam.cloudscanner_sa
@@ -67,7 +67,7 @@ resource "google_project_iam_member" "upwind_cloudscanner_sa_operations_role_mem
 
   project = each.value
   role    = google_project_iam_custom_role.upwind_cloudscanner_operations_role[each.key].id
-  member  = "serviceAccount:${module.iam.cloudscanner_sa.email}"
+  member  = "serviceAccount:${module.iam.cloudscanner_identity_email}"
 
   depends_on = [
     module.iam.cloudscanner_sa,
@@ -96,7 +96,7 @@ resource "google_project_iam_member" "upwind_cloudscanner_sa_snapshot_deleter_ro
 
   project = each.value
   role    = google_project_iam_custom_role.upwind_cloudscanner_snapshot_deleter_role[each.key].id
-  member  = "serviceAccount:${module.iam.cloudscanner_sa.email}"
+  member  = "serviceAccount:${module.iam.cloudscanner_identity_email}"
   condition {
     # Limit deletion permissions to snapshots we generate only
     title      = "Upwind Cloud Scanner Snapshot Deleter"
@@ -133,7 +133,7 @@ resource "google_project_iam_member" "upwind_cloudscanner_sa_object_reader_role_
 
   project = each.value
   role    = google_project_iam_custom_role.upwind_cloudscanner_object_reader_role[each.key].id
-  member  = "serviceAccount:${module.iam.cloudscanner_sa.email}"
+  member  = "serviceAccount:${module.iam.cloudscanner_identity_email}"
 
   depends_on = [
     module.iam.cloudscanner_sa,

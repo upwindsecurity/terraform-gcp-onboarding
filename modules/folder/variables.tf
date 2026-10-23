@@ -190,7 +190,7 @@ variable "workload_identity_saas_subject" {
 }
 
 variable "enable_snapshot_act_as" {
-  description = "Grant the CloudScanner operations role iam.serviceAccounts.actAs so it can act as target projects' default Compute Engine service account when creating snapshots. Applied at the operations role binding scope (folder-wide). Enabled by default; set to false to opt out."
+  description = "Grant the CloudScanner operations role iam.serviceAccounts.actAs so it can act as target projects' default Compute Engine service account when creating snapshots. Applied at the operations role binding scope (folder-wide). Enabled by default; set to false to opt out. Ignored when is_saas is true."
   type        = bool
   default     = true
 }

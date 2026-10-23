@@ -21,10 +21,18 @@ resource "google_service_account" "upwind_management_sa" {
 
 ### CloudScanner Service Accounts
 
+locals {
+  # The account CloudScanners act as in the customer's organization. In SaaS mode that is the
+  # management account, because the hosted worker impersonates the account its stored credential names.
+  cloudscanner_identity_email = !var.enable_cloudscanners ? null : (
+    var.is_saas ? google_service_account.upwind_management_sa.email : google_service_account.cloudscanner_sa[0].email
+  )
+}
+
 # The main service account for the CloudScanner to use across all projects
 # This service account will be attached to the CloudScanner Worker Instances
 resource "google_service_account" "cloudscanner_sa" {
-  count        = var.enable_cloudscanners ? 1 : 0
+  count        = local.deploy_cloudscanners ? 1 : 0
   project      = var.upwind_orchestrator_project
   account_id   = format("upwind-cs-%s", local.resource_suffix_hyphen)
   display_name = "Upwind CloudScanner Cross Account Service Account"
@@ -68,7 +76,7 @@ resource "google_service_account_iam_binding" "scaler_and_compute_can_use_clouds
 
 # Allow management SA to create tokens for scanner SA
 resource "google_service_account_iam_member" "management_can_impersonate_scanner" {
-  count              = var.enable_cloudscanners ? 1 : 0
+  count              = local.deploy_cloudscanners ? 1 : 0
   service_account_id = google_service_account.cloudscanner_sa[0].id
   role               = "roles/iam.serviceAccountTokenCreator"
   member             = "serviceAccount:${google_service_account.upwind_management_sa.email}"

@@ -78,7 +78,7 @@ resource "google_service_account_iam_member" "management_token_creator" {
 
 # Cloudscanner SA access
 resource "google_service_account_iam_member" "cloudscanner_workload_identity" {
-  count              = var.enable_cloudscanners ? 1 : 0
+  count              = local.deploy_cloudscanners ? 1 : 0
   service_account_id = google_service_account.cloudscanner_sa[0].id
   role               = "roles/iam.workloadIdentityUser"
   member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.main.name}/attribute.aws_account/${var.workload_identity_trusted_account}"
@@ -87,7 +87,7 @@ resource "google_service_account_iam_member" "cloudscanner_workload_identity" {
 
 # Service Account Token Creator for cloudscanner impersonation
 resource "google_service_account_iam_member" "cloudscanner_token_creator" {
-  count              = var.enable_cloudscanners ? 1 : 0
+  count              = local.deploy_cloudscanners ? 1 : 0
   service_account_id = google_service_account.cloudscanner_sa[0].id
   role               = "roles/iam.serviceAccountTokenCreator"
   member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.main.name}/attribute.aws_account/${var.workload_identity_trusted_account}"
@@ -119,10 +119,10 @@ resource "google_iam_workload_identity_pool_provider" "gcp" {
   }
 }
 
-# Cloudscanner SA access for the Upwind-hosted scanner, pinned to its subject
+# Management SA access for the Upwind-hosted scanner, pinned to its subject
 resource "google_service_account_iam_member" "cloudscanner_saas_workload_identity" {
   count              = var.is_saas ? 1 : 0
-  service_account_id = google_service_account.cloudscanner_sa[0].id
+  service_account_id = google_service_account.upwind_management_sa.id
   role               = "roles/iam.workloadIdentityUser"
   member             = "principal://iam.googleapis.com/${google_iam_workload_identity_pool.main.name}/subject/${var.workload_identity_saas_subject}"
 }

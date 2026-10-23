@@ -155,7 +155,7 @@ resource "google_project_iam_member" "upwind_management_sa_secret_access_role_me
 
 # Only grant access to the Upwind Scanner Client ID and Secret
 resource "google_project_iam_member" "cloudscanner_secret_access_role_member" {
-  count   = var.enable_cloudscanners ? 1 : 0
+  count   = local.deploy_cloudscanners ? 1 : 0
   project = local.project
   role    = google_project_iam_custom_role.cloudscanner_secret_access_role[0].name
   member  = "serviceAccount:${google_service_account.cloudscanner_sa[0].email}"

@@ -61,6 +61,10 @@ run "outpost_deploys_scanner_infrastructure" {
     condition     = length(google_organization_iam_binding.upwind_cloudscanner_operations_role_binding[0].members) == 2
     error_message = "outpost mode should grant operations to the scanner and scaler service accounts"
   }
+  assert {
+    condition     = module.iam.cloudscanner_identity_email == "upwind-cs@upwind-orchestrator.iam.gserviceaccount.com"
+    error_message = "outpost mode should publish the CloudScanner service account as the scanner identity"
+  }
 }
 
 run "saas_omits_scanner_infrastructure" {
@@ -72,8 +76,8 @@ run "saas_omits_scanner_infrastructure" {
   }
 
   assert {
-    condition     = module.iam.cloudscanner_sa != null
-    error_message = "SaaS mode should keep the CloudScanner service account"
+    condition     = module.iam.cloudscanner_sa == null
+    error_message = "SaaS mode should not create the CloudScanner service account"
   }
   assert {
     condition     = module.iam.cloudscanner_scaler_sa == null
@@ -87,12 +91,20 @@ run "saas_omits_scanner_infrastructure" {
     error_message = "SaaS mode should only create the secret access project role"
   }
   assert {
-    condition     = google_organization_iam_binding.upwind_cloudscanner_operations_role_binding[0].members == toset(["serviceAccount:${module.iam.cloudscanner_sa.email}"])
-    error_message = "SaaS mode should grant operations to the scanner service account only"
+    condition     = google_organization_iam_binding.upwind_cloudscanner_operations_role_binding[0].members == toset(["serviceAccount:upwind-mgmt@upwind-orchestrator.iam.gserviceaccount.com"])
+    error_message = "SaaS mode should grant operations to the management service account only"
   }
   assert {
-    condition     = google_organization_iam_binding.upwind_cloudscanner_snapshot_deleter_role_binding[0].members == toset(["serviceAccount:${module.iam.cloudscanner_sa.email}"])
-    error_message = "SaaS mode should grant snapshot deletion to the scanner service account only"
+    condition     = google_organization_iam_binding.upwind_cloudscanner_snapshot_deleter_role_binding[0].members == toset(["serviceAccount:upwind-mgmt@upwind-orchestrator.iam.gserviceaccount.com"])
+    error_message = "SaaS mode should grant snapshot deletion to the management service account only"
+  }
+  assert {
+    condition     = !contains(google_organization_iam_custom_role.upwind_cloudscanner_operations_role[0].permissions, "iam.serviceAccounts.actAs")
+    error_message = "SaaS mode should not grant actAs"
+  }
+  assert {
+    condition     = module.iam.cloudscanner_identity_email == "upwind-mgmt@upwind-orchestrator.iam.gserviceaccount.com"
+    error_message = "SaaS mode should publish the management service account as the scanner identity"
   }
   assert {
     condition     = module.iam.google_iam_workload_identity_pool_provider_saas.workload_identity_pool_provider_id == "upwind-saas-gcp"

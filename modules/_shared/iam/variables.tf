@@ -161,7 +161,7 @@ variable "enable_cloudscanners" {
 }
 
 variable "is_saas" {
-  description = "Run CloudScanners in SaaS mode: Upwind hosts the scanners and deploys nothing in the orchestrator project. Omits the scaler service account and the deployment-only roles, and lets the Upwind-hosted scanner identity impersonate the CloudScanner service account."
+  description = "Run CloudScanners in SaaS mode: Upwind hosts the scanners and deploys nothing in the orchestrator project. Omits the CloudScanner and scaler service accounts and the deployment-only roles. The Upwind-hosted scanner impersonates the management service account instead, which receives the CloudScanner roles."
   type        = bool
   default     = false
 
@@ -172,7 +172,7 @@ variable "is_saas" {
 }
 
 variable "workload_identity_saas_subject" {
-  description = "The numeric unique ID of the Upwind-hosted CloudScanner service account allowed to impersonate the CloudScanner service account. Required when is_saas is true."
+  description = "The numeric unique ID of the Upwind-hosted CloudScanner service account allowed to impersonate the management service account. Required when is_saas is true."
   type        = string
   default     = ""
 
