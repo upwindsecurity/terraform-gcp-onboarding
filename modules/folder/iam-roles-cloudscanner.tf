@@ -48,7 +48,7 @@ resource "google_folder_iam_member" "upwind_cloudscanner_sa_compute_viewer_role_
 
   folder = each.value
   role   = "roles/compute.viewer"
-  member = "serviceAccount:${module.iam.cloudscanner_sa.email}"
+  member = "serviceAccount:${module.iam.cloudscanner_identity_email}"
 
   depends_on = [
     module.iam.cloudscanner_sa
@@ -61,10 +61,10 @@ resource "google_folder_iam_binding" "upwind_cloudscanner_operations_role_bindin
 
   folder = each.value
   role   = google_organization_iam_custom_role.upwind_cloudscanner_operations_role[0].id
-  members = [
-    "serviceAccount:${module.iam.cloudscanner_sa.email}",
-    "serviceAccount:${module.iam.cloudscanner_scaler_sa.email}"
-  ]
+  members = concat(
+    ["serviceAccount:${module.iam.cloudscanner_identity_email}"],
+    var.is_saas ? [] : ["serviceAccount:${module.iam.cloudscanner_scaler_sa.email}"],
+  )
 
   depends_on = [
     module.iam.cloudscanner_sa,
@@ -79,10 +79,10 @@ resource "google_folder_iam_binding" "upwind_cloudscanner_snapshot_deleter_role_
 
   folder = each.value
   role   = google_organization_iam_custom_role.upwind_cloudscanner_snapshot_deleter_role[0].id
-  members = [
-    "serviceAccount:${module.iam.cloudscanner_sa.email}",
-    "serviceAccount:${module.iam.cloudscanner_scaler_sa.email}"
-  ]
+  members = concat(
+    ["serviceAccount:${module.iam.cloudscanner_identity_email}"],
+    var.is_saas ? [] : ["serviceAccount:${module.iam.cloudscanner_scaler_sa.email}"],
+  )
 
   condition {
     title      = "Upwind Cloud Scanner Snapshot Deleter"
@@ -103,7 +103,7 @@ resource "google_folder_iam_binding" "upwind_cloudscanner_object_reader_role_bin
   folder = each.value
   role   = google_organization_iam_custom_role.upwind_cloudscanner_object_reader_role[0].id
   members = [
-    "serviceAccount:${module.iam.cloudscanner_sa.email}"
+    "serviceAccount:${module.iam.cloudscanner_identity_email}"
   ]
 
   depends_on = [

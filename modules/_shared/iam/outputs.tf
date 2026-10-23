@@ -7,12 +7,17 @@ output "upwind_management_sa" {
 
 output "cloudscanner_sa" {
   description = "The Cloudscanner Service Account details."
-  value       = var.enable_cloudscanners ? google_service_account.cloudscanner_sa[0] : null
+  value       = local.deploy_cloudscanners ? google_service_account.cloudscanner_sa[0] : null
+}
+
+output "cloudscanner_identity_email" {
+  description = "The email of the account CloudScanners act as in the customer's organization: the management service account in SaaS mode, else the CloudScanner service account."
+  value       = local.cloudscanner_identity_email
 }
 
 output "cloudscanner_scaler_sa" {
   description = "The Cloudscanner Scaler Service Account details."
-  value       = var.enable_cloudscanners ? google_service_account.cloudscanner_scaler_sa[0] : null
+  value       = local.deploy_cloudscanners ? google_service_account.cloudscanner_scaler_sa[0] : null
 }
 
 ### IAM Custom Roles
@@ -20,14 +25,14 @@ output "cloudscanner_scaler_sa" {
 output "google_project_iam_custom_role" {
   description = "The custom IAM roles created at the project level."
   value = {
-    upwind_management_sa_cloudscanner_deployment_role = var.enable_cloudscanners ? google_project_iam_custom_role.upwind_management_sa_cloudscanner_deployment_role[0] : null
-    cloudscanner_basic_role                           = var.enable_cloudscanners ? google_project_iam_custom_role.cloudscanner_basic_role[0] : null
-    cloudscanner_scaler_role                          = var.enable_cloudscanners ? google_project_iam_custom_role.cloudscanner_scaler_role[0] : null
-    cloudscanner_secret_access_role                   = var.enable_cloudscanners ? google_project_iam_custom_role.cloudscanner_secret_access_role[0] : null
-    cloudscanner_instance_template_mgmt_role          = var.enable_cloudscanners ? google_project_iam_custom_role.cloudscanner_instance_template_mgmt_role[0] : null
-    cloudscanner_instance_template_test_creation_role = var.enable_cloudscanners ? google_project_iam_custom_role.cloudscanner_instance_template_test_creation_role[0] : null
-    compute_service_agent_minimal                     = var.enable_cloudscanners ? google_project_iam_custom_role.compute_service_agent_minimal[0] : null
-    disk_writer                                       = var.enable_cloudscanners ? google_project_iam_custom_role.disk_writer[0] : null
+    upwind_management_sa_cloudscanner_deployment_role = local.deploy_cloudscanners ? google_project_iam_custom_role.upwind_management_sa_cloudscanner_deployment_role[0] : null
+    cloudscanner_basic_role                           = local.deploy_cloudscanners ? google_project_iam_custom_role.cloudscanner_basic_role[0] : null
+    cloudscanner_scaler_role                          = local.deploy_cloudscanners ? google_project_iam_custom_role.cloudscanner_scaler_role[0] : null
+    cloudscanner_secret_access_role                   = local.deploy_cloudscanners ? google_project_iam_custom_role.cloudscanner_secret_access_role[0] : null
+    cloudscanner_instance_template_mgmt_role          = local.deploy_cloudscanners ? google_project_iam_custom_role.cloudscanner_instance_template_mgmt_role[0] : null
+    cloudscanner_instance_template_test_creation_role = local.deploy_cloudscanners ? google_project_iam_custom_role.cloudscanner_instance_template_test_creation_role[0] : null
+    compute_service_agent_minimal                     = local.deploy_cloudscanners ? google_project_iam_custom_role.compute_service_agent_minimal[0] : null
+    disk_writer                                       = local.deploy_cloudscanners ? google_project_iam_custom_role.disk_writer[0] : null
   }
 }
 
@@ -36,37 +41,37 @@ output "google_project_iam_custom_role" {
 output "google_project_iam_member" {
   description = "The IAM role bindings at the project level."
   value = {
-    upwind_management_sa_cloudscanner_deployment_role_member = var.enable_cloudscanners ? google_project_iam_member.upwind_management_sa_cloudscanner_deployment_role_member[0] : null
-    upwind_management_sa_secret_access_role_member           = var.enable_cloudscanners ? google_project_iam_member.upwind_management_sa_secret_access_role_member[0] : null
-    compute_service_agent_minimal                            = var.enable_cloudscanners ? google_project_iam_member.compute_service_agent_minimal[0] : null
-    cloudscanner_instance_template_mgmt_member               = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_instance_template_mgmt_member[0] : null
-    cloudscanner_instance_template_test_creation_member      = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_instance_template_test_creation_member[0] : null
-    cloudscanner_sa_basic_role_member                        = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_sa_basic_role_member[0] : null
-    cloudscanner_sa_scaler_role_member                       = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_sa_scaler_role_member[0] : null
-    cloudscanner_scaler_sa_run_invoker                       = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_scaler_sa_run_invoker[0] : null
-    cloudscanner_scaler_sa_scaler_role_member                = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_scaler_sa_scaler_role_member[0] : null
-    cloudscanner_scaler_secret_access_scaler_role_member     = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_scaler_secret_access_scaler_role_member[0] : null
-    cloudscanner_secret_access_role_member                   = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_secret_access_role_member[0] : null
+    upwind_management_sa_cloudscanner_deployment_role_member = local.deploy_cloudscanners ? google_project_iam_member.upwind_management_sa_cloudscanner_deployment_role_member[0] : null
+    upwind_management_sa_secret_access_role_member           = local.deploy_cloudscanners ? google_project_iam_member.upwind_management_sa_secret_access_role_member[0] : null
+    compute_service_agent_minimal                            = local.deploy_cloudscanners ? google_project_iam_member.compute_service_agent_minimal[0] : null
+    cloudscanner_instance_template_mgmt_member               = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_instance_template_mgmt_member[0] : null
+    cloudscanner_instance_template_test_creation_member      = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_instance_template_test_creation_member[0] : null
+    cloudscanner_sa_basic_role_member                        = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_sa_basic_role_member[0] : null
+    cloudscanner_sa_scaler_role_member                       = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_sa_scaler_role_member[0] : null
+    cloudscanner_scaler_sa_run_invoker                       = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_scaler_sa_run_invoker[0] : null
+    cloudscanner_scaler_sa_scaler_role_member                = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_scaler_sa_scaler_role_member[0] : null
+    cloudscanner_scaler_secret_access_scaler_role_member     = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_scaler_secret_access_scaler_role_member[0] : null
+    cloudscanner_secret_access_role_member                   = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_secret_access_role_member[0] : null
   }
 }
 
 output "google_project_iam_member_disk_writer" {
   description = "The IAM member bindings for disk writer role."
   value = {
-    cloudscanner_sa_disk_writer_role_member        = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_sa_disk_writer_role_member[0] : null
-    cloudscanner_scaler_sa_disk_writer_role_member = var.enable_cloudscanners ? google_project_iam_member.cloudscanner_scaler_sa_disk_writer_role_member[0] : null
+    cloudscanner_sa_disk_writer_role_member        = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_sa_disk_writer_role_member[0] : null
+    cloudscanner_scaler_sa_disk_writer_role_member = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_scaler_sa_disk_writer_role_member[0] : null
   }
 }
 
 output "google_service_account_iam_binding" {
   description = "The IAM bindings for service accounts."
   value = {
-    scaler_and_compute_can_use_cloudscanner = var.enable_cloudscanners ? google_service_account_iam_binding.scaler_and_compute_can_use_cloudscanner[0] : null
-    management_can_impersonate_scanner      = var.enable_cloudscanners ? google_service_account_iam_member.management_can_impersonate_scanner[0] : null
-    management_can_impersonate_scaler       = var.enable_cloudscanners ? google_service_account_iam_member.management_can_impersonate_scaler[0] : null
-    scanner_can_impersonate_scaler          = var.enable_cloudscanners ? google_service_account_iam_member.scanner_can_impersonate_scaler[0] : null
-    scaler_can_impersonate_scanner          = var.enable_cloudscanners ? google_service_account_iam_member.scaler_can_impersonate_scanner[0] : null
-    cloudscheduler_can_impersonate_scaler   = var.enable_cloudscanners ? google_service_account_iam_member.cloudscheduler_can_impersonate_scaler[0] : null
+    scaler_and_compute_can_use_cloudscanner = local.deploy_cloudscanners ? google_service_account_iam_binding.scaler_and_compute_can_use_cloudscanner[0] : null
+    management_can_impersonate_scanner      = local.deploy_cloudscanners ? google_service_account_iam_member.management_can_impersonate_scanner[0] : null
+    management_can_impersonate_scaler       = local.deploy_cloudscanners ? google_service_account_iam_member.management_can_impersonate_scaler[0] : null
+    scanner_can_impersonate_scaler          = local.deploy_cloudscanners ? google_service_account_iam_member.scanner_can_impersonate_scaler[0] : null
+    scaler_can_impersonate_scanner          = local.deploy_cloudscanners ? google_service_account_iam_member.scaler_can_impersonate_scanner[0] : null
+    cloudscheduler_can_impersonate_scaler   = local.deploy_cloudscanners ? google_service_account_iam_member.cloudscheduler_can_impersonate_scaler[0] : null
   }
 }
 
@@ -77,7 +82,7 @@ output "google_secret_manager_secret" {
   value = {
     upwind_client_id      = google_secret_manager_secret.upwind_client_id
     upwind_client_secret  = local.upwind_client_secret_ref
-    scanner_client_id     = var.enable_cloudscanners ? google_secret_manager_secret.scanner_client_id : null
+    scanner_client_id     = local.deploy_cloudscanners ? google_secret_manager_secret.scanner_client_id : null
     scanner_client_secret = local.scanner_client_secret_ref
     upwind_configuration  = google_secret_manager_secret.upwind_configuration
   }
@@ -98,6 +103,11 @@ output "google_iam_workload_identity_pool" {
 output "google_iam_workload_identity_pool_provider" {
   description = "The Workload Identity Pool Provider created."
   value       = google_iam_workload_identity_pool_provider.aws
+}
+
+output "google_iam_workload_identity_pool_provider_saas" {
+  description = "The Workload Identity Pool Provider for Upwind-hosted CloudScanners, when is_saas is true."
+  value       = var.is_saas ? google_iam_workload_identity_pool_provider.gcp[0] : null
 }
 
 ### Permissions
@@ -126,7 +136,7 @@ output "snapshot_creator_permissions" {
   description = "List of IAM permissions for snapshot creator role."
   value = concat(
     var.snapshot_creator_permissions,
-    var.enable_snapshot_act_as ? ["iam.serviceAccounts.actAs"] : [],
+    var.enable_snapshot_act_as && !var.is_saas ? ["iam.serviceAccounts.actAs"] : [],
   )
 }
 

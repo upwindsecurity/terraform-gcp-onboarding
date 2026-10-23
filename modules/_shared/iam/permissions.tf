@@ -53,14 +53,9 @@ variable "deployment_permissions" {
     "cloudscheduler.jobs.enable",
     "cloudscheduler.jobs.update", # Required to update an existing scanner schedule in place
     "cloudscheduler.jobs.delete",
-    # IAM permissions for setting up project bindings
-    "resourcemanager.projects.getIamPolicy",
-    "resourcemanager.projects.setIamPolicy",
     # Service Account reference permission
     "iam.serviceAccounts.get",
     "iam.serviceAccounts.actAs", # Required to assign a service account to instances
-    "iam.serviceAccounts.getIamPolicy",
-    "iam.serviceAccounts.setIamPolicy",
     # Required for Terraform to check operation status
     "compute.regionOperations.get",
     # Required basic service usage
@@ -263,7 +258,8 @@ variable "enable_snapshot_act_as" {
     Enabled by default so snapshotting works out of the box. The permission is
     applied at the cloudscanner-operations role's binding scope — org-wide for the
     organization module, folder-wide for folder, per-project for multiproject. Set
-    to false to opt out after reviewing that scope.
+    to false to opt out after reviewing that scope. Ignored when is_saas is true, since SaaS
+    mode creates nothing in target projects.
   EOT
   type        = bool
   default     = true

@@ -6,7 +6,7 @@ locals {
   # the upwind-configuration pointer secret don't need to care which case they're in.
   upwind_client_secret_ref = var.upwind_client_secret_id == "" ? google_secret_manager_secret.upwind_client_secret[0] : data.google_secret_manager_secret.upwind_client_secret_existing[0]
 
-  scanner_client_secret_ref = var.enable_cloudscanners ? (
+  scanner_client_secret_ref = local.deploy_cloudscanners ? (
     var.scanner_client_secret_id == "" ? google_secret_manager_secret.scanner_client_secret[0] : data.google_secret_manager_secret.scanner_client_secret_existing[0]
   ) : null
 }
@@ -65,7 +65,7 @@ data "google_secret_manager_secret" "upwind_client_secret_existing" {
 }
 
 resource "google_secret_manager_secret" "scanner_client_id" {
-  count     = var.enable_cloudscanners ? 1 : 0
+  count     = local.deploy_cloudscanners ? 1 : 0
   secret_id = "upwind-scanner-client-id-${local.resource_suffix_hyphen}"
   project   = local.project
   replication {
@@ -88,7 +88,7 @@ resource "google_secret_manager_secret" "scanner_client_id" {
 }
 
 resource "google_secret_manager_secret" "scanner_client_secret" {
-  count     = var.enable_cloudscanners && var.scanner_client_secret_id == "" ? 1 : 0
+  count     = local.deploy_cloudscanners && var.scanner_client_secret_id == "" ? 1 : 0
   secret_id = "upwind-scanner-client-secret-${local.resource_suffix_hyphen}"
   project   = local.project
   replication {
@@ -113,7 +113,7 @@ resource "google_secret_manager_secret" "scanner_client_secret" {
 # Referenced (not created/managed) when the customer already has this secret populated,
 # so the Terraform identity applying this module never needs secretmanager.versions.add on it.
 data "google_secret_manager_secret" "scanner_client_secret_existing" {
-  count     = var.enable_cloudscanners && var.scanner_client_secret_id != "" ? 1 : 0
+  count     = local.deploy_cloudscanners && var.scanner_client_secret_id != "" ? 1 : 0
   secret_id = var.scanner_client_secret_id
   project   = local.project
 }
@@ -167,7 +167,7 @@ resource "google_secret_manager_secret_version" "upwind_client_secret_v1" {
 }
 
 resource "google_secret_manager_secret_version" "scanner_client_id_v1" {
-  count                  = var.create_secret_versions && var.enable_cloudscanners ? 1 : 0
+  count                  = var.create_secret_versions && local.deploy_cloudscanners ? 1 : 0
   secret                 = google_secret_manager_secret.scanner_client_id[0].id
   secret_data_wo         = var.scanner_client_id
   secret_data_wo_version = 1
@@ -178,7 +178,7 @@ resource "google_secret_manager_secret_version" "scanner_client_id_v1" {
 }
 
 resource "google_secret_manager_secret_version" "scanner_client_secret_v1" {
-  count                  = var.enable_cloudscanners && var.scanner_client_secret_id == "" ? 1 : 0
+  count                  = local.deploy_cloudscanners && var.scanner_client_secret_id == "" ? 1 : 0
   secret                 = google_secret_manager_secret.scanner_client_secret[0].id
   secret_data_wo         = var.scanner_client_secret
   secret_data_wo_version = 1
@@ -241,12 +241,12 @@ locals {
 
     upwind_client_id           = var.upwind_client_id
     upwind_client_secret_name  = local.upwind_client_secret_ref.secret_id
-    scanner_client_id          = var.enable_cloudscanners ? var.scanner_client_id : null
-    scanner_client_secret_name = var.enable_cloudscanners ? local.scanner_client_secret_ref.secret_id : null
+    scanner_client_id          = local.deploy_cloudscanners ? var.scanner_client_id : null
+    scanner_client_secret_name = local.deploy_cloudscanners ? local.scanner_client_secret_ref.secret_id : null
 
     upwind_management_sa_email   = google_service_account.upwind_management_sa.email
-    cloudscanner_sa_email        = var.enable_cloudscanners ? google_service_account.cloudscanner_sa[0].email : null
-    cloudscanner_scaler_sa_email = var.enable_cloudscanners ? google_service_account.cloudscanner_scaler_sa[0].email : null
+    cloudscanner_sa_email        = local.cloudscanner_identity_email
+    cloudscanner_scaler_sa_email = local.deploy_cloudscanners ? google_service_account.cloudscanner_scaler_sa[0].email : null
 
     workload_identity_pool_project  = var.workload_identity_pool_project == "" ? local.project : var.workload_identity_pool_project
     workload_identity_provider_name = google_iam_workload_identity_pool_provider.aws.name
