@@ -1,9 +1,8 @@
 locals {
   # WIF pool/provider IDs are limited to 32 characters.
-  wif_pool_timestamp   = formatdate("YYYYMMDD-hhmm", timestamp())
-  wif_pool_id          = "${local.org_id_sanitized}-${local.wif_pool_timestamp}"
-  wif_provider_id      = "${local.org_id_sanitized}-aws"
-  wif_saas_provider_id = "${local.org_id_sanitized}-gcp"
+  wif_pool_timestamp = formatdate("YYYYMMDD-hhmm", timestamp())
+  wif_pool_id        = "${local.org_id_sanitized}-${local.wif_pool_timestamp}"
+  wif_provider_id    = "${local.org_id_sanitized}-aws"
 }
 
 # This pool needs a timestamp, as GCP uses soft-deletion for WIF pools
@@ -98,10 +97,11 @@ resource "google_service_account_iam_member" "cloudscanner_token_creator" {
 # SaaS mode: Upwind-hosted CloudScanners authenticate with a Google ID token for an Upwind service account.
 # They are granted access through this pool rather than directly, since domain-restricted sharing
 # (constraints/iam.allowedPolicyMemberDomains) rejects IAM grants to principals outside the customer's org.
+# The provider ID is fixed because the hosted CloudScanner worker derives it rather than reading it.
 resource "google_iam_workload_identity_pool_provider" "gcp" {
   count                              = var.is_saas ? 1 : 0
   workload_identity_pool_id          = google_iam_workload_identity_pool.main.workload_identity_pool_id
-  workload_identity_pool_provider_id = local.wif_saas_provider_id
+  workload_identity_pool_provider_id = "upwind-saas-gcp"
   project                            = google_iam_workload_identity_pool.main.project
   display_name                       = "Upwind GCP Provider"
   description                        = "Identity pool provider for Upwind-hosted CloudScanners"
@@ -116,15 +116,6 @@ resource "google_iam_workload_identity_pool_provider" "gcp" {
 
   oidc {
     issuer_uri = "https://accounts.google.com"
-  }
-
-  lifecycle {
-    precondition {
-      condition     = length(local.wif_saas_provider_id) <= 32
-      error_message = "Workload identity provider ID '${local.wif_saas_provider_id}' exceeds the 32 character limit. The Upwind organization ID is too long for WIF provider naming."
-    }
-    # Ignore changes after creation to prevent unintentional WIF credentials invalidations
-    ignore_changes = [workload_identity_pool_provider_id]
   }
 }
 

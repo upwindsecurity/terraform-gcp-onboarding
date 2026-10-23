@@ -95,6 +95,10 @@ run "saas_omits_scanner_infrastructure" {
     error_message = "SaaS mode should grant snapshot deletion to the scanner service account only"
   }
   assert {
+    condition     = module.iam.google_iam_workload_identity_pool_provider_saas.workload_identity_pool_provider_id == "upwind-saas-gcp"
+    error_message = "SaaS provider must use the name the hosted CloudScanner worker expects"
+  }
+  assert {
     condition     = module.iam.google_iam_workload_identity_pool_provider_saas.oidc[0].issuer_uri == "https://accounts.google.com"
     error_message = "SaaS provider should trust Google-issued ID tokens"
   }
