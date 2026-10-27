@@ -4,7 +4,9 @@ locals {
   # Resolves to whichever secret is actually in play for each credential - the one this
   # module created, or the customer's pre-existing secret - so downstream IAM grants and
   # the upwind-configuration pointer secret don't need to care which case they're in.
-  upwind_client_secret_ref = var.upwind_client_secret_id == "" ? google_secret_manager_secret.upwind_client_secret[0] : data.google_secret_manager_secret.upwind_client_secret_existing[0]
+  upwind_client_secret_ref = local.store_upwind_credentials ? (
+    var.upwind_client_secret_id == "" ? google_secret_manager_secret.upwind_client_secret[0] : data.google_secret_manager_secret.upwind_client_secret_existing[0]
+  ) : null
 
   scanner_client_secret_ref = local.deploy_cloudscanners ? (
     var.scanner_client_secret_id == "" ? google_secret_manager_secret.scanner_client_secret[0] : data.google_secret_manager_secret.scanner_client_secret_existing[0]
@@ -12,6 +14,7 @@ locals {
 }
 
 resource "google_secret_manager_secret" "upwind_client_id" {
+  count     = local.store_upwind_credentials ? 1 : 0
   secret_id = "upwind-client-id-${local.resource_suffix_hyphen}"
   project   = local.project
   replication {
@@ -34,7 +37,7 @@ resource "google_secret_manager_secret" "upwind_client_id" {
 }
 
 resource "google_secret_manager_secret" "upwind_client_secret" {
-  count     = var.upwind_client_secret_id == "" ? 1 : 0
+  count     = local.store_upwind_credentials && var.upwind_client_secret_id == "" ? 1 : 0
   secret_id = "upwind-client-secret-${local.resource_suffix_hyphen}"
   project   = local.project
   replication {
@@ -59,7 +62,7 @@ resource "google_secret_manager_secret" "upwind_client_secret" {
 # Referenced (not created/managed) when the customer already has this secret populated,
 # so the Terraform identity applying this module never needs secretmanager.versions.add on it.
 data "google_secret_manager_secret" "upwind_client_secret_existing" {
-  count     = var.upwind_client_secret_id != "" ? 1 : 0
+  count     = local.store_upwind_credentials && var.upwind_client_secret_id != "" ? 1 : 0
   secret_id = var.upwind_client_secret_id
   project   = local.project
 }
@@ -145,8 +148,8 @@ resource "google_secret_manager_secret" "terraform_labels" {
 # The _v1 versions ignore secret_data_wo_version so existing installs never replace (destroy) v1:
 # scalers deployed from older cloudscanner modules pin their secrets to version 1.
 resource "google_secret_manager_secret_version" "upwind_client_id_v1" {
-  count                  = var.create_secret_versions ? 1 : 0
-  secret                 = google_secret_manager_secret.upwind_client_id.id
+  count                  = var.create_secret_versions && local.store_upwind_credentials ? 1 : 0
+  secret                 = google_secret_manager_secret.upwind_client_id[0].id
   secret_data_wo         = var.upwind_client_id
   secret_data_wo_version = 1
 
@@ -156,7 +159,7 @@ resource "google_secret_manager_secret_version" "upwind_client_id_v1" {
 }
 
 resource "google_secret_manager_secret_version" "upwind_client_secret_v1" {
-  count                  = var.upwind_client_secret_id == "" ? 1 : 0
+  count                  = local.store_upwind_credentials && var.upwind_client_secret_id == "" ? 1 : 0
   secret                 = google_secret_manager_secret.upwind_client_secret[0].id
   secret_data_wo         = var.upwind_client_secret
   secret_data_wo_version = 1
@@ -239,8 +242,8 @@ locals {
     enable_cloudscanners = var.enable_cloudscanners
     enable_dspm_scanning = var.enable_dspm_scanning
 
-    upwind_client_id           = var.upwind_client_id
-    upwind_client_secret_name  = local.upwind_client_secret_ref.secret_id
+    upwind_client_id           = local.store_upwind_credentials ? var.upwind_client_id : null
+    upwind_client_secret_name  = local.store_upwind_credentials ? local.upwind_client_secret_ref.secret_id : null
     scanner_client_id          = local.deploy_cloudscanners ? var.scanner_client_id : null
     scanner_client_secret_name = local.deploy_cloudscanners ? local.scanner_client_secret_ref.secret_id : null
 

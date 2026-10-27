@@ -75,6 +75,8 @@ run "saas_omits_scanner_infrastructure" {
     workload_identity_saas_subject = "123456789012345678901"
 
     # Upwind holds the hosted scanners' credentials, so SaaS mode takes none
+    upwind_client_id         = ""
+    upwind_client_secret_id  = ""
     scanner_client_id        = ""
     scanner_client_secret_id = ""
   }
@@ -94,6 +96,10 @@ run "saas_omits_scanner_infrastructure" {
   assert {
     condition     = module.iam.google_secret_manager_secret.scanner_client_id == null && module.iam.google_secret_manager_secret.scanner_client_secret == null
     error_message = "SaaS mode should not create the scanner credential secrets"
+  }
+  assert {
+    condition     = module.iam.google_secret_manager_secret.upwind_client_id == null && module.iam.google_secret_manager_secret.upwind_client_secret == null
+    error_message = "SaaS mode should not create the Upwind credential secrets"
   }
   assert {
     condition     = google_organization_iam_binding.upwind_cloudscanner_operations_role_binding[0].members == toset(["serviceAccount:upwind-mgmt@upwind-orchestrator.iam.gserviceaccount.com"])

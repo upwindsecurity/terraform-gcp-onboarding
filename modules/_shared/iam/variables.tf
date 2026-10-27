@@ -10,25 +10,26 @@ variable "google_service_account_display_name" {
 ### region secrets
 
 variable "upwind_client_id" {
-  description = "The client ID used for authentication with the Upwind Authorization Service."
+  description = "The client ID used for authentication with the Upwind Authorization Service. Required unless is_saas is true."
   type        = string
+  default     = ""
 
   validation {
-    condition     = var.upwind_client_id != null && var.upwind_client_id != ""
-    error_message = "The Upwind client ID must not be null or empty."
+    condition     = var.is_saas || (var.upwind_client_id != null && var.upwind_client_id != "")
+    error_message = "The Upwind client ID must not be null or empty, unless is_saas is true."
   }
 }
 
 variable "upwind_client_secret" {
-  description = "The client secret for authentication with the Upwind Authorization Service. Not required when upwind_client_secret_id references an existing secret."
+  description = "The client secret for authentication with the Upwind Authorization Service. Not required when is_saas is true or upwind_client_secret_id references an existing secret."
   type        = string
   sensitive   = true
   ephemeral   = true
   default     = ""
 
   validation {
-    condition     = var.upwind_client_secret_id != "" || (var.upwind_client_secret != null && var.upwind_client_secret != "")
-    error_message = "The Upwind client secret must not be null or empty, unless upwind_client_secret_id is set to reference an existing secret."
+    condition     = var.is_saas || var.upwind_client_secret_id != "" || (var.upwind_client_secret != null && var.upwind_client_secret != "")
+    error_message = "The Upwind client secret must not be null or empty, unless is_saas is true or upwind_client_secret_id is set to reference an existing secret."
   }
   validation {
     condition     = var.create_secret_versions || var.upwind_client_secret == ""
@@ -38,7 +39,7 @@ variable "upwind_client_secret" {
 }
 
 variable "upwind_client_secret_id" {
-  description = "The ID of an existing Secret Manager secret that already contains the Upwind client secret. When set, this module will not create or manage a secret or secret version for the Upwind client secret (so the Terraform identity applying this module never needs secretmanager.versions.add) and will only reference the existing secret for IAM access grants. The secret must already exist and must follow this module's naming convention: 'upwind-client-secret-<resource_suffix_hyphen>' (derived from upwind_organization_id and resource_suffix)."
+  description = "The ID of an existing Secret Manager secret that already contains the Upwind client secret. When set, this module will not create or manage a secret or secret version for the Upwind client secret (so the Terraform identity applying this module never needs secretmanager.versions.add) and will only reference the existing secret for IAM access grants. The secret must already exist and must follow this module's naming convention: 'upwind-client-secret-<resource_suffix_hyphen>' (derived from upwind_organization_id and resource_suffix). Ignored when is_saas is true."
   type        = string
   default     = ""
 
@@ -161,7 +162,7 @@ variable "enable_cloudscanners" {
 }
 
 variable "is_saas" {
-  description = "Run CloudScanners in SaaS mode: Upwind hosts the scanners and deploys nothing in the orchestrator project. Omits the CloudScanner and scaler service accounts and the deployment-only roles. The Upwind-hosted scanner impersonates the management service account instead, which receives the CloudScanner roles."
+  description = "Run CloudScanners in SaaS mode: Upwind hosts the scanners and deploys nothing in the orchestrator project. Omits the CloudScanner and scaler service accounts, the deployment-only roles and the Upwind and scanner credential secrets. The Upwind-hosted scanner impersonates the management service account instead, which receives the CloudScanner roles."
   type        = bool
   default     = false
 

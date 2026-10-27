@@ -13,3 +13,11 @@ removed {
     destroy = false
   }
 }
+
+# upwind_client_id gained a count for SaaS mode. Without this block the explicit moved block in the
+# organization module suppresses Terraform's implicit move to [0], so upgrading would replace the
+# secret and delete its versions.
+moved {
+  from = google_secret_manager_secret.upwind_client_id
+  to   = google_secret_manager_secret.upwind_client_id[0]
+}
