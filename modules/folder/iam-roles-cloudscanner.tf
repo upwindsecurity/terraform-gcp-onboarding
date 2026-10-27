@@ -42,9 +42,9 @@ resource "google_organization_iam_custom_role" "upwind_cloudscanner_object_reade
 
 ### Folder-Level IAM Bindings (inherited by all projects in folder)
 
-# Grant compute viewer role to CloudScanner SA on each target folder
+# Grant compute viewer role to CloudScanner SA on each target folder. In SaaS mode the management SA already holds roles/viewer
 resource "google_folder_iam_member" "upwind_cloudscanner_sa_compute_viewer_role_member" {
-  for_each = var.enable_cloudscanners ? toset(var.target_folder_ids) : toset([])
+  for_each = var.enable_cloudscanners && !var.is_saas ? toset(var.target_folder_ids) : toset([])
 
   folder = each.value
   role   = "roles/compute.viewer"

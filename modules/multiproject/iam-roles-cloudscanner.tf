@@ -46,9 +46,9 @@ resource "google_project_iam_custom_role" "upwind_cloudscanner_object_reader_rol
 
 ### Project-Level IAM Bindings
 
-# Grant compute viewer role to CloudScanner SA on each target project
+# Grant compute viewer role to CloudScanner SA on each target project. In SaaS mode the management SA already holds roles/viewer
 resource "google_project_iam_member" "upwind_cloudscanner_sa_compute_viewer_role_member" {
-  for_each = var.enable_cloudscanners ? toset(var.target_project_ids) : toset([])
+  for_each = var.enable_cloudscanners && !var.is_saas ? toset(var.target_project_ids) : toset([])
 
   project = each.value
   role    = "roles/compute.viewer"

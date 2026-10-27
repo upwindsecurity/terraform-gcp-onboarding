@@ -114,6 +114,10 @@ run "saas_omits_scanner_infrastructure" {
     error_message = "SaaS mode should not grant actAs"
   }
   assert {
+    condition     = length(google_organization_iam_member.upwind_cloudscanner_sa_compute_viewer_role_member) == 0
+    error_message = "SaaS mode should not grant compute.viewer, which roles/viewer already covers"
+  }
+  assert {
     condition     = module.iam.cloudscanner_identity_email == "upwind-mgmt@upwind-orchestrator.iam.gserviceaccount.com"
     error_message = "SaaS mode should publish the management service account as the scanner identity"
   }

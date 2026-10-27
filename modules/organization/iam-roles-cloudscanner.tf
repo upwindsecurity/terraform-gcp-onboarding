@@ -36,9 +36,9 @@ resource "google_organization_iam_custom_role" "upwind_cloudscanner_object_reade
   permissions = module.iam.storage_object_reader_permissions
 }
 
-# Required to get instances across projects
+# Required to get instances across projects. In SaaS mode the management SA already holds roles/viewer
 resource "google_organization_iam_member" "upwind_cloudscanner_sa_compute_viewer_role_member" {
-  count  = var.enable_cloudscanners ? 1 : 0
+  count  = var.enable_cloudscanners && !var.is_saas ? 1 : 0
   org_id = data.google_organization.org.org_id
   role   = "roles/compute.viewer"
   member = "serviceAccount:${module.iam.cloudscanner_identity_email}"
