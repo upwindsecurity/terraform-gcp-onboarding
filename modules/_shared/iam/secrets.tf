@@ -14,6 +14,7 @@ locals {
 resource "google_secret_manager_secret" "upwind_client_id" {
   secret_id = "upwind-client-id-${local.resource_suffix_hyphen}"
   project   = local.project
+  labels    = local.validated_labels
   replication {
     dynamic "auto" {
       for_each = length(var.secret_replication_locations) == 0 ? [1] : []
@@ -37,6 +38,7 @@ resource "google_secret_manager_secret" "upwind_client_secret" {
   count     = var.upwind_client_secret_id == "" ? 1 : 0
   secret_id = "upwind-client-secret-${local.resource_suffix_hyphen}"
   project   = local.project
+  labels    = local.validated_labels
   replication {
     dynamic "auto" {
       for_each = length(var.secret_replication_locations) == 0 ? [1] : []
@@ -68,6 +70,7 @@ resource "google_secret_manager_secret" "scanner_client_id" {
   count     = var.enable_cloudscanners ? 1 : 0
   secret_id = "upwind-scanner-client-id-${local.resource_suffix_hyphen}"
   project   = local.project
+  labels    = local.validated_labels
   replication {
     dynamic "auto" {
       for_each = length(var.secret_replication_locations) == 0 ? [1] : []
@@ -91,6 +94,7 @@ resource "google_secret_manager_secret" "scanner_client_secret" {
   count     = var.enable_cloudscanners && var.scanner_client_secret_id == "" ? 1 : 0
   secret_id = "upwind-scanner-client-secret-${local.resource_suffix_hyphen}"
   project   = local.project
+  labels    = local.validated_labels
   replication {
     dynamic "auto" {
       for_each = length(var.secret_replication_locations) == 0 ? [1] : []
@@ -118,10 +122,11 @@ data "google_secret_manager_secret" "scanner_client_secret_existing" {
   project   = local.project
 }
 
-# Create an empty secret but apply the user-defined labels to the resource
+# Placeholder secret whose labels onboarding-service reads and applies to deployed scanner resources
 resource "google_secret_manager_secret" "terraform_labels" {
   secret_id = "upwind-default-labels-${local.resource_suffix_hyphen}"
   project   = local.project
+  labels    = local.validated_labels
 
   replication {
     dynamic "auto" {
@@ -207,6 +212,7 @@ resource "google_secret_manager_secret_version" "terraform_labels_v1" {
 resource "google_secret_manager_secret" "upwind_configuration" {
   secret_id = "upwind-configuration-${local.resource_suffix_hyphen}"
   project   = local.project
+  labels    = local.validated_labels
 
   replication {
     dynamic "auto" {
