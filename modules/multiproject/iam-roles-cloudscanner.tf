@@ -8,7 +8,7 @@ resource "google_project_iam_custom_role" "upwind_cloudscanner_operations_role" 
   for_each = var.enable_cloudscanners ? toset(var.target_project_ids) : toset([])
 
   project     = each.value
-  role_id     = "CloudScannerOperationsRole_${local.resource_suffix_underscore}"
+  role_id     = "CloudScannerOperationsRole_${local.role_id_suffix}"
   title       = "upwind-role-${local.resource_suffix_hyphen}-cloudscanner-operations"
   description = "Generic Operations role for CloudScanner"
   permissions = concat(
@@ -25,7 +25,7 @@ resource "google_project_iam_custom_role" "upwind_cloudscanner_snapshot_deleter_
   for_each = var.enable_cloudscanners ? toset(var.target_project_ids) : toset([])
 
   project     = each.value
-  role_id     = "CloudScannerSnapshotDeleter_${local.resource_suffix_underscore}"
+  role_id     = "CloudScannerSnapshotDeleter_${local.role_id_suffix}"
   title       = "upwind-role-${local.resource_suffix_hyphen}-snapshot-deleter"
   description = "Delete operations restricted to Upwind-managed resources"
 
@@ -37,7 +37,7 @@ resource "google_project_iam_custom_role" "upwind_cloudscanner_object_reader_rol
   for_each = var.enable_cloudscanners && var.enable_dspm_scanning ? toset(var.target_project_ids) : toset([])
 
   project     = each.value
-  role_id     = "CloudScannerObjectReader_${local.resource_suffix_underscore}"
+  role_id     = "CloudScannerObjectReader_${local.role_id_suffix}"
   title       = "upwind-role-${local.resource_suffix_hyphen}-cloudscanner-object-reader"
   description = "Object read access for DSPM scanning"
 

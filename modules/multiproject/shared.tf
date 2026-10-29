@@ -21,4 +21,5 @@ module "iam" {
   workload_identity_pool_project      = var.workload_identity_pool_project
   workload_identity_trusted_account   = var.workload_identity_trusted_account
   is_dev                              = var.is_dev
+  role_id_suffix                      = var.role_id_suffix
 }

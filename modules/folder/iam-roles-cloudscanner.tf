@@ -4,7 +4,7 @@
 resource "google_organization_iam_custom_role" "upwind_cloudscanner_operations_role" {
   count       = var.enable_cloudscanners ? 1 : 0
   org_id      = var.gcp_organization_id
-  role_id     = "CloudScannerOperationsRole_${local.resource_suffix_underscore}"
+  role_id     = "CloudScannerOperationsRole_${local.role_id_suffix}"
   title       = "upwind-role-${local.resource_suffix_hyphen}-cloudscanner-operations"
   description = "Generic Operations role for CloudScanner"
   permissions = concat(
@@ -21,7 +21,7 @@ resource "google_organization_iam_custom_role" "upwind_cloudscanner_snapshot_del
   count = var.enable_cloudscanners ? 1 : 0
 
   org_id      = var.gcp_organization_id
-  role_id     = "CloudScannerSnapshotDeleter_${local.resource_suffix_underscore}"
+  role_id     = "CloudScannerSnapshotDeleter_${local.role_id_suffix}"
   title       = "upwind-role-${local.resource_suffix_hyphen}-snapshot-deleter"
   description = "Delete operations restricted to Upwind-managed resources"
 
@@ -33,7 +33,7 @@ resource "google_organization_iam_custom_role" "upwind_cloudscanner_object_reade
   count = var.enable_cloudscanners && var.enable_dspm_scanning ? 1 : 0
 
   org_id      = var.gcp_organization_id
-  role_id     = "CloudScannerObjectReader_${local.resource_suffix_underscore}"
+  role_id     = "CloudScannerObjectReader_${local.role_id_suffix}"
   title       = "upwind-role-${local.resource_suffix_hyphen}-cloudscanner-object-reader"
   description = "Object read access for DSPM scanning"
 

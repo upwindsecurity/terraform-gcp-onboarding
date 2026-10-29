@@ -3,7 +3,7 @@
 # Custom role for Storage reader and IAM management with minimal required permissions
 resource "google_organization_iam_custom_role" "upwind_management_sa_operations_role" {
   org_id      = var.gcp_organization_id
-  role_id     = "UpwindOperations_${local.resource_suffix_underscore}"
+  role_id     = "UpwindOperations_${local.role_id_suffix}"
   title       = "upwind-role-${local.resource_suffix_hyphen}-operations"
   description = "Generic operations role for Upwind"
   permissions = concat(

@@ -13,6 +13,11 @@ locals {
   # resource_suffix = 10 chars with a hyphen
   resource_suffix_hyphen     = format("%s%s", local.org_id_truncated, var.resource_suffix == "" ? "" : "-${var.resource_suffix}")
   resource_suffix_underscore = format("%s%s", local.org_id_truncated, var.resource_suffix == "" ? "" : "_${var.resource_suffix}")
+  # Dev role IDs are keyed on the Upwind org alone, so re-onboarding within 7 days undeletes the
+  # soft-deleted roles instead of consuming new role quota (300 per org/project). Past that, GCP
+  # blocks the deleted IDs for up to ~44 days; var.role_id_suffix moves to fresh IDs meanwhile.
+  # Prod keeps resource_suffix in role IDs.
+  role_id_suffix = var.is_dev ? join("_", compact([local.org_id_truncated, var.role_id_suffix])) : local.resource_suffix_underscore
 
   all_folder_projects = flatten([
     for folder_id in var.target_folder_ids : [

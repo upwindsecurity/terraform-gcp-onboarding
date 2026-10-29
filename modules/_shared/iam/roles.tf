@@ -4,7 +4,7 @@
 resource "google_project_iam_custom_role" "upwind_management_sa_cloudscanner_deployment_role" {
   count       = var.enable_cloudscanners ? 1 : 0
   project     = local.project
-  role_id     = "CloudScannerDeploymentRole_${local.resource_suffix_underscore}"
+  role_id     = "CloudScannerDeploymentRole_${local.role_id_suffix}"
   title       = "upwind-role-${local.resource_suffix_hyphen}-cs-deployment"
   description = "Minimum permissions required to deploy the Cloudscanner resources"
   permissions = var.deployment_permissions
@@ -14,7 +14,7 @@ resource "google_project_iam_custom_role" "upwind_management_sa_cloudscanner_dep
 resource "google_project_iam_custom_role" "cloudscanner_basic_role" {
   count       = var.enable_cloudscanners ? 1 : 0
   project     = local.project
-  role_id     = "CloudScannerBasicRole_${local.resource_suffix_underscore}"
+  role_id     = "CloudScannerBasicRole_${local.role_id_suffix}"
   title       = "upwind-role-${local.resource_suffix_hyphen}-basic"
   description = "Minimum permissions required for Cloudscanner operations"
 
@@ -24,7 +24,7 @@ resource "google_project_iam_custom_role" "cloudscanner_basic_role" {
 # Used by the CloudScanner Scaler to scale the CloudScanner Instance Groups
 resource "google_project_iam_custom_role" "cloudscanner_scaler_role" {
   count       = var.enable_cloudscanners ? 1 : 0
-  role_id     = "CloudScannerScalerRole_${local.resource_suffix_underscore}"
+  role_id     = "CloudScannerScalerRole_${local.role_id_suffix}"
   project     = local.project
   title       = "upwind-role-${local.resource_suffix_hyphen}-scaler-base"
   description = "Minimum permissions required for Cloudscanner Scaler operations"
@@ -36,7 +36,7 @@ resource "google_project_iam_custom_role" "cloudscanner_scaler_role" {
 resource "google_project_iam_custom_role" "cloudscanner_secret_access_role" {
   count   = var.enable_cloudscanners ? 1 : 0
   project = local.project
-  role_id = "CloudScannerSecretAccessRole_${local.resource_suffix_underscore}"
+  role_id = "CloudScannerSecretAccessRole_${local.role_id_suffix}"
   title   = "upwind-role-${local.resource_suffix_hyphen}-secret-access"
 
   permissions = var.cloudscanner_secret_access_permissions
@@ -45,7 +45,7 @@ resource "google_project_iam_custom_role" "cloudscanner_secret_access_role" {
 # Grants permission for Cloudscanners to manage their own instance templates
 resource "google_project_iam_custom_role" "cloudscanner_instance_template_mgmt_role" {
   count   = var.enable_cloudscanners ? 1 : 0
-  role_id = "CloudScannerInstTmplMgmtRole_${local.resource_suffix_underscore}"
+  role_id = "CloudScannerInstTmplMgmtRole_${local.role_id_suffix}"
   project = local.project
   title   = "upwind-role-${local.resource_suffix_hyphen}-instance-template-mgmt"
 
@@ -55,7 +55,7 @@ resource "google_project_iam_custom_role" "cloudscanner_instance_template_mgmt_r
 # Grants permission for Cloudscanners to test create their own instance templates when updating the template
 resource "google_project_iam_custom_role" "cloudscanner_instance_template_test_creation_role" {
   count   = var.enable_cloudscanners ? 1 : 0
-  role_id = "CloudScannerInstTmplTestCreationRole_${local.resource_suffix_underscore}"
+  role_id = "CloudScannerInstTmplTestCreationRole_${local.role_id_suffix}"
   project = local.project
   title   = "upwind-role-${local.resource_suffix_hyphen}-instance-template-mgmt-test-creation"
 
@@ -65,7 +65,7 @@ resource "google_project_iam_custom_role" "cloudscanner_instance_template_test_c
 resource "google_project_iam_custom_role" "disk_writer" {
   count       = var.enable_cloudscanners ? 1 : 0
   project     = local.project
-  role_id     = "CloudScannerDiskWriter_${local.resource_suffix_underscore}"
+  role_id     = "CloudScannerDiskWriter_${local.role_id_suffix}"
   title       = "upwind-role-${local.resource_suffix_hyphen}-disk-writer"
   description = "Disk Write operations in orchestrator project"
 
@@ -77,7 +77,7 @@ resource "google_project_iam_custom_role" "disk_writer" {
 resource "google_project_iam_custom_role" "compute_service_agent_minimal" {
   count   = var.enable_cloudscanners ? 1 : 0
   project = local.project
-  role_id = "ComputeServiceAgentMinimal_${local.resource_suffix_underscore}"
+  role_id = "ComputeServiceAgentMinimal_${local.role_id_suffix}"
   title   = "upwind-role-${local.resource_suffix_hyphen}-compute-service-agent-minimal"
 
   permissions = var.compute_service_agent_minimal_permissions

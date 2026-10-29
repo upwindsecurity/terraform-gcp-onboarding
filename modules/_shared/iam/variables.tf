@@ -172,6 +172,17 @@ variable "is_dev" {
   default     = false
 }
 
+variable "role_id_suffix" {
+  description = "Dev only (is_dev = true). Custom role IDs in dev carry only the Upwind org; set this to append a suffix when re-onboarding an Upwind org whose previous onboarding was destroyed more than 7 days ago, while GCP still blocks the deleted role IDs (up to ~44 days after deletion). Ignored outside dev."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9]{0,10}$", var.role_id_suffix))
+    error_message = "The role ID suffix must be alphanumeric and cannot exceed 10 characters."
+  }
+}
+
 variable "workload_identity_trusted_account" {
   type        = string
   description = "The account ID of the trusted account for Workload Identity Federation."

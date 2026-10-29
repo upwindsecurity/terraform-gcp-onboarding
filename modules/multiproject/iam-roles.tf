@@ -7,7 +7,7 @@ resource "google_project_iam_custom_role" "upwind_management_sa_operations_role"
   for_each = toset(var.target_project_ids)
 
   project     = each.value
-  role_id     = "UpwindOperations_${local.resource_suffix_underscore}"
+  role_id     = "UpwindOperations_${local.role_id_suffix}"
   title       = "upwind-role-${local.resource_suffix_hyphen}-operations"
   description = "Generic operations role for Upwind"
   permissions = concat(
