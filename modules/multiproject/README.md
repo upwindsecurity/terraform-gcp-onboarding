@@ -55,6 +55,15 @@ With `is_saas`, Upwind hosts the scanners, so the Cloud Run Admin and Cloud Sche
 | [Cloud Scheduler API](https://cloud.google.com/scheduler/docs/reference/rest)                       | `cloudscheduler.googleapis.com`       |
 | [Cloud Resource Manager API](https://cloud.google.com/resource-manager/reference/rest)              | `cloudresourcemanager.googleapis.com` |
 
+### Deploying the Cloud Scanners yourself
+
+Set `enable_cloudscanner_deployment_role = false` to deploy the scanners yourself with the
+[terraform-google-cloudscanner](https://registry.terraform.io/modules/upwindsecurity/cloudscanner/google) module
+instead of Upwind deploying them. Only the `CloudScannerDeploymentRole` and its grant to the management service account
+are skipped: the scanner and scaler service accounts, their roles and the scanner secrets are still created, and the
+APIs above are still required. Upwind then reports the organization's scanners as self-managed. Set the CloudScanner
+deployment mode to manual in Upwind as well, so Upwind waits for your deployment rather than attempting its own.
+
 <!-- BEGIN_TF_DOCS -->
 
 ## Requirements
@@ -102,6 +111,7 @@ With `is_saas`, Upwind hosts the scanners, so the Cloud Run Admin and Cloud Sche
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_create_secret_versions"></a> [create\_secret\_versions](#input\_create\_secret\_versions) | Write secret versions for the client IDs, labels marker and configuration document. Set to false if the Terraform identity may not hold secretmanager.versions.add; then pass the client secrets via *\_secret\_id and add the remaining versions yourself (see output upwind\_configuration\_payload). | `bool` | `true` | no |
+| <a name="input_enable_cloudscanner_deployment_role"></a> [enable\_cloudscanner\_deployment\_role](#input\_enable\_cloudscanner\_deployment\_role) | Create the CloudScannerDeploymentRole and grant it to the management service account, so Upwind deploys the CloudScanners. Set to false to deploy them yourself with the terraform-google-cloudscanner module: every other CloudScanner IAM resource is still created, and Upwind reports the organization as self-managed. Only relevant when enable\_cloudscanners is true and is\_saas is false. | `bool` | `true` | no |
 | <a name="input_enable_cloudscanners"></a> [enable\_cloudscanners](#input\_enable\_cloudscanners) | Enable the creation of cloud scanners. | `bool` | `false` | no |
 | <a name="input_enable_dspm_scanning"></a> [enable\_dspm\_scanning](#input\_enable\_dspm\_scanning) | Enable DSPM scanning by cloud scanners | `bool` | `false` | no |
 | <a name="input_google_service_account_display_name"></a> [google\_service\_account\_display\_name](#input\_google\_service\_account\_display\_name) | The display name for the service account. | `string` | `"Upwind Security Service Account"` | no |

@@ -25,7 +25,7 @@ output "cloudscanner_scaler_sa" {
 output "google_project_iam_custom_role" {
   description = "The custom IAM roles created at the project level."
   value = {
-    upwind_management_sa_cloudscanner_deployment_role = local.deploy_cloudscanners ? google_project_iam_custom_role.upwind_management_sa_cloudscanner_deployment_role[0] : null
+    upwind_management_sa_cloudscanner_deployment_role = local.grant_deployment_role ? google_project_iam_custom_role.upwind_management_sa_cloudscanner_deployment_role[0] : null
     cloudscanner_basic_role                           = local.deploy_cloudscanners ? google_project_iam_custom_role.cloudscanner_basic_role[0] : null
     cloudscanner_scaler_role                          = local.deploy_cloudscanners ? google_project_iam_custom_role.cloudscanner_scaler_role[0] : null
     cloudscanner_secret_access_role                   = local.deploy_cloudscanners ? google_project_iam_custom_role.cloudscanner_secret_access_role[0] : null
@@ -41,7 +41,7 @@ output "google_project_iam_custom_role" {
 output "google_project_iam_member" {
   description = "The IAM role bindings at the project level."
   value = {
-    upwind_management_sa_cloudscanner_deployment_role_member = local.deploy_cloudscanners ? google_project_iam_member.upwind_management_sa_cloudscanner_deployment_role_member[0] : null
+    upwind_management_sa_cloudscanner_deployment_role_member = local.grant_deployment_role ? google_project_iam_member.upwind_management_sa_cloudscanner_deployment_role_member[0] : null
     upwind_management_sa_secret_access_role_member           = local.deploy_cloudscanners ? google_project_iam_member.upwind_management_sa_secret_access_role_member[0] : null
     compute_service_agent_minimal                            = local.deploy_cloudscanners ? google_project_iam_member.compute_service_agent_minimal[0] : null
     cloudscanner_instance_template_mgmt_member               = local.deploy_cloudscanners ? google_project_iam_member.cloudscanner_instance_template_mgmt_member[0] : null

@@ -23,6 +23,9 @@ module "upwind_organization_onboarding" {
   scanner_client_secret               = "your-scanner-client-secret-here"
   google_service_account_display_name = "Upwind Security Service Account - Org"
   resource_suffix                     = "abcdef1234"
+
+  # Deploy the scanners yourself with terraform-google-cloudscanner instead of Upwind deploying them
+  # enable_cloudscanner_deployment_role = false
 }
 
 # Example of post-onboarding setup
