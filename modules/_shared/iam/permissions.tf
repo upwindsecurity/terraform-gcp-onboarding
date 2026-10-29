@@ -258,7 +258,8 @@ variable "enable_snapshot_act_as" {
     Enabled by default so snapshotting works out of the box. The permission is
     applied at the cloudscanner-operations role's binding scope — org-wide for the
     organization module, folder-wide for folder, per-project for multiproject. Set
-    to false to opt out after reviewing that scope.
+    to false to opt out after reviewing that scope. Ignored when is_saas is true, since SaaS
+    mode creates nothing in target projects.
   EOT
   type        = bool
   default     = true

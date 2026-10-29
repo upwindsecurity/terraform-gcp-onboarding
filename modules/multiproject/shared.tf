@@ -14,11 +14,13 @@ module "iam" {
   create_secret_versions       = var.create_secret_versions
   enable_cloudscanners         = var.enable_cloudscanners
   enable_dspm_scanning         = var.enable_dspm_scanning
+  is_saas                      = var.is_saas
   enable_snapshot_act_as       = false
   labels                       = var.labels
 
   google_service_account_display_name = var.google_service_account_display_name
   workload_identity_pool_project      = var.workload_identity_pool_project
   workload_identity_trusted_account   = var.workload_identity_trusted_account
+  workload_identity_saas_subject      = var.workload_identity_saas_subject
   is_dev                              = var.is_dev
 }
