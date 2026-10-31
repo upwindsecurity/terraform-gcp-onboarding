@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [4.0.3](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.0.2...v4.0.3) (2026-10-29)
+
+### Bug Fixes
+
+* **UP-11953:** apply the labels input to the Upwind secrets ([#58](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/58)) ([1b1051a](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/1b1051a6b55879210ea8c017b923e1fe349d93b5)), closes [#71](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/71)
+
 ## [3.10.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.9.0...v3.10.0) (2026-09-30)
 
 ### Features
