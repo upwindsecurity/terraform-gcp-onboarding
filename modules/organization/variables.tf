@@ -163,6 +163,12 @@ variable "enable_cloudscanners" {
   default     = false
 }
 
+variable "enable_cloudscanner_deployment_role" {
+  description = "Create the CloudScannerDeploymentRole and grant it to the management service account, so Upwind deploys the CloudScanners. Set to false to deploy them yourself with the terraform-google-cloudscanner module: every other CloudScanner IAM resource is still created, and Upwind reports the organization as self-managed. Only relevant when enable_cloudscanners is true and is_saas is false."
+  type        = bool
+  default     = true
+}
+
 variable "enable_dspm_scanning" {
   description = "Enable DSPM scanning by cloud scanners"
   type        = bool

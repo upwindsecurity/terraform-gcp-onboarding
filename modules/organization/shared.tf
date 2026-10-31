@@ -18,6 +18,7 @@ module "iam" {
   enable_snapshot_act_as       = var.enable_snapshot_act_as
   labels                       = var.labels
 
+  enable_cloudscanner_deployment_role = var.enable_cloudscanner_deployment_role
   google_service_account_display_name = var.google_service_account_display_name
   workload_identity_pool_project      = var.workload_identity_pool_project
   workload_identity_trusted_account   = var.workload_identity_trusted_account

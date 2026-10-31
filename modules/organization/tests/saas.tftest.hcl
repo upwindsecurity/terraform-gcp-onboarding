@@ -134,3 +134,32 @@ run "saas_omits_scanner_infrastructure" {
     error_message = "SaaS provider should only accept the Upwind scanner subject"
   }
 }
+
+run "self_managed_omits_only_the_deployment_role" {
+  command = plan
+
+  variables {
+    enable_cloudscanner_deployment_role = false
+  }
+
+  assert {
+    condition     = module.iam.google_project_iam_custom_role.upwind_management_sa_cloudscanner_deployment_role == null
+    error_message = "a self-managed deployment should not create the deployment role"
+  }
+  assert {
+    condition     = module.iam.google_project_iam_member.upwind_management_sa_cloudscanner_deployment_role_member == null
+    error_message = "a self-managed deployment should not grant the deployment role"
+  }
+  assert {
+    condition     = module.iam.google_project_iam_custom_role.cloudscanner_basic_role != null && module.iam.google_project_iam_member.cloudscanner_sa_basic_role_member != null
+    error_message = "a self-managed deployment should keep the scanner's own roles"
+  }
+  assert {
+    condition     = module.iam.cloudscanner_scaler_sa != null && module.iam.cloudscanner_identity_email == "upwind-cs@upwind-orchestrator.iam.gserviceaccount.com"
+    error_message = "a self-managed deployment should keep the scanner and scaler service accounts"
+  }
+  assert {
+    condition     = length(google_organization_iam_binding.upwind_cloudscanner_operations_role_binding[0].members) == 2
+    error_message = "a self-managed deployment should still grant operations to the scanner and scaler service accounts"
+  }
+}

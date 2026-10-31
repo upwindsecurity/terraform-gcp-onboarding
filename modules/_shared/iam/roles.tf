@@ -2,7 +2,7 @@
 
 # Used by the management service account to deploy the cloudscanner resources
 resource "google_project_iam_custom_role" "upwind_management_sa_cloudscanner_deployment_role" {
-  count       = local.deploy_cloudscanners ? 1 : 0
+  count       = local.grant_deployment_role ? 1 : 0
   project     = local.project
   role_id     = "CloudScannerDeploymentRole_${local.resource_suffix_underscore}"
   title       = "upwind-role-${local.resource_suffix_hyphen}-cs-deployment"
@@ -87,7 +87,7 @@ resource "google_project_iam_custom_role" "compute_service_agent_minimal" {
 
 # Required for the management service account to deploy the CloudScanner resources
 resource "google_project_iam_member" "upwind_management_sa_cloudscanner_deployment_role_member" {
-  count   = local.deploy_cloudscanners ? 1 : 0
+  count   = local.grant_deployment_role ? 1 : 0
   project = local.project
   role    = google_project_iam_custom_role.upwind_management_sa_cloudscanner_deployment_role[0].name
   member  = "serviceAccount:${google_service_account.upwind_management_sa.email}"
