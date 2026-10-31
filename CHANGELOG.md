@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [4.0.1](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.0.0...v4.0.1) (2026-10-05)
+
+### Bug Fixes
+
+* **UP-9052:** stop managing the Cloud Run service agent grant ([#52](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/52)) ([2294bd2](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/2294bd2b71e2b2a3f246559821aa1f0d1e8ea3de))
+
 ## [3.10.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.9.0...v3.10.0) (2026-09-30)
 
 ### Features
