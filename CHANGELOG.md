@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [4.3.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.2.0...v4.3.0) (2026-11-03)
+
+### Features
+
+* **UP-12254:** restrict gcp snapshot deleter to upwind snapshot names ([#64](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/64)) ([66fb7f1](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/66fb7f109f91fbbef9c7b70ed840837f51d71e9f))
+
 ## [3.10.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.9.0...v3.10.0) (2026-09-30)
 
 ### Features
