@@ -77,7 +77,7 @@ resource "google_organization_iam_binding" "upwind_cloudscanner_snapshot_deleter
   condition {
     # Limit storage deletion permissions to snapshots we generate only
     title      = "Upwind Cloud Scanner Snapshot Deleter"
-    expression = "resource.name.extract('snapshots/{snapshot}').startsWith('snap-')"
+    expression = "resource.name.extract('snapshots/{snapshot}').startsWith('snap-') && resource.name.extract('snapshots/snap-{rest}-ucsc-') != ''"
   }
 
   depends_on = [

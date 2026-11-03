@@ -86,7 +86,7 @@ resource "google_folder_iam_binding" "upwind_cloudscanner_snapshot_deleter_role_
 
   condition {
     title      = "Upwind Cloud Scanner Snapshot Deleter"
-    expression = "resource.name.extract('snapshots/{snapshot}').startsWith('snap-')"
+    expression = "resource.name.extract('snapshots/{snapshot}').startsWith('snap-') && resource.name.extract('snapshots/snap-{rest}-ucsc-') != ''"
   }
 
   depends_on = [

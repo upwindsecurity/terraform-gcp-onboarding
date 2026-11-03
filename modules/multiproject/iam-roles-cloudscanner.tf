@@ -100,7 +100,7 @@ resource "google_project_iam_member" "upwind_cloudscanner_sa_snapshot_deleter_ro
   condition {
     # Limit deletion permissions to snapshots we generate only
     title      = "Upwind Cloud Scanner Snapshot Deleter"
-    expression = "resource.name.extract('snapshots/{snapshot}').startsWith('snap-')"
+    expression = "resource.name.extract('snapshots/{snapshot}').startsWith('snap-') && resource.name.extract('snapshots/snap-{rest}-ucsc-') != ''"
   }
 
   depends_on = [
@@ -118,7 +118,7 @@ resource "google_project_iam_member" "upwind_cloudscanner_scaler_sa_snapshot_del
   condition {
     # Limit deletion permissions to snapshots we generate only
     title      = "Upwind Cloud Scanner Snapshot Deleter"
-    expression = "resource.name.extract('snapshots/{snapshot}').startsWith('snap-')"
+    expression = "resource.name.extract('snapshots/{snapshot}').startsWith('snap-') && resource.name.extract('snapshots/snap-{rest}-ucsc-') != ''"
   }
 
   depends_on = [
