@@ -5,6 +5,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.3.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.2.0...v4.3.0) (2026-11-03)
+
+### Features
+
+* **UP-12254:** restrict gcp snapshot deleter to upwind snapshot names ([#64](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/64)) ([66fb7f1](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/66fb7f109f91fbbef9c7b70ed840837f51d71e9f))
+
+## [4.2.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.1.0...v4.2.0) (2026-10-31)
+
+### Features
+
+* **UP-11822:** option to omit the CloudScanner deployment role ([#62](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/62)) ([2aa7819](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/2aa7819917fcf98c89a0bee63304b094183629bd))
+
+## [4.1.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.0.3...v4.1.0) (2026-10-29)
+
+### Features
+
+* **UP-6866:** add SaaS mode for Upwind-hosted CloudScanners ([#54](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/54)) ([faecca7](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/faecca7661bf86551abae470424d2f0eed53995b))
+
+## [4.0.3](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.0.2...v4.0.3) (2026-10-29)
+
+### Bug Fixes
+
+* **UP-11953:** apply the labels input to the Upwind secrets ([#58](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/58)) ([1b1051a](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/1b1051a6b55879210ea8c017b923e1fe349d93b5)), closes [#71](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/71)
+
+## [4.0.2](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.0.1...v4.0.2) (2026-10-20)
+
+### Bug Fixes
+
+* **UP-10719:** remove vestigial permissions ([#55](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/55)) ([4f29b0b](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/4f29b0b60c9d0bfe6fa99aa493c998ea93920301))
+
+## [4.0.1](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.0.0...v4.0.1) (2026-10-05)
+
+### Bug Fixes
+
+* **UP-9052:** stop managing the Cloud Run service agent grant ([#52](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/52)) ([2294bd2](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/2294bd2b71e2b2a3f246559821aa1f0d1e8ea3de))
+
+## [4.0.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.11.1...v4.0.0) (2026-09-30)
+
+### ⚠ BREAKING CHANGES
+
+* this changes the targeted AWS account and includes
+the Upwind Organization ID in the session name. Existing deployments
+can upgrade, which will temporarily sever connectivity until the
+Upwind backend self-heals.
+
+* feat!(UP-5796): workload identity federation ARN assertion ([#32](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/32)) ([64c3705](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/64c3705141f9f9b6ff05449bf0d9e48296e41386))
+
+## [3.11.1](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.11.0...v3.11.1) (2026-09-30)
+
+### Bug Fixes
+
+* **UP-8225:** keep existing v1 secret versions on upgrade ([#48](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/48)) ([1458cd6](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/1458cd6d9918d3a0a92ff956c9d2820bff72766f))
+
+## [3.11.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.10.0...v3.11.0) (2026-09-30)
+
+### Features
+
+* **UP-7861:** remove object read grant from scaler SA ([#43](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/43)) ([6e11f3d](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/6e11f3d19cd4cb603fe4a3180c7b065468daaeb1))
 
 ## [3.10.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.9.0...v3.10.0) (2026-09-30)
 
@@ -12,7 +70,78 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * **UP-8114:** support pdcXX Upwind regions and add unit tests ([#42](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/42)) ([618fc2c](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/618fc2cbc1eeda3ba606cb1dd080dccd4d083721))
 
-## [Unreleased]
+## [3.9.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.8.0...v3.9.0) (2026-09-30)
+
+### Features
+
+* **UP-8225:** support google provider v8 ([#44](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/44)) ([fb420c6](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/fb420c6011cfbfb45ed5970cf25d5efcb89847d4))
+
+## [3.8.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.7.1...v3.8.0) (2026-09-23)
+
+### Features
+
+* allow skipping secret version creation ([#39](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/39)) ([858dad0](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/858dad03a887e911f57fe86d9fd73407da6d3e8c))
+
+## [3.7.1](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.7.0...v3.7.1) (2026-09-23)
+
+### Bug Fixes
+
+* remove the unused local provider ([#36](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/36)) ([316cae1](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/316cae135a15ad61e0ac85635fa4a43e18181d57))
+
+## [3.7.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.6.1...v3.7.0) (2026-09-22)
+
+### Features
+
+* add support for the pdc02 Upwind region ([#37](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/37)) ([2b6373b](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/2b6373baef0080a1c2abe4bc16892129e4a2d452))
+
+## [3.6.1](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.6.0...v3.6.1) (2026-09-03)
+
+### Bug Fixes
+
+* **UP-5082:** add cloudscheduler.jobs.update permissions ([c78bcd2](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/c78bcd249890473ab67254c8c032a7f1b7fb633b))
+* **UP-5082:** tidy ([d282a4b](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/d282a4b1ac0999a3f6631701e49bfef0032c5592))
+
+## [3.6.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.5.3...v3.6.0) (2026-08-05)
+
+### Features
+
+* **UP-4749:** provide existing secrets by name ([31ea65e](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/31ea65e0bca88f48786edd258104038d75451bff))
+
+## [3.5.3](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.5.2...v3.5.3) (2026-08-03)
+
+### Bug Fixes
+
+* **UP-4651:** ephemeral compatibility for secrets ([75ea7a7](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/75ea7a7cbee5d7dc933513874310de74b955849e))
+
+## [3.5.2](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.5.1...v3.5.2) (2026-07-23)
+
+### Bug Fixes
+
+* ignore changes for workload identity pool provider ID ([a45d6db](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/a45d6db9536eafee9ef640e1f640bddd7aba1352))
+
+## [3.5.1](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.5.0...v3.5.1) (2026-07-21)
+
+### Bug Fixes
+
+* **UP-3791:** remove Upwind client id and client secret regex validation ([22019d9](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/22019d977dde621d952e62670466e47d4c650707))
+
+## [3.5.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.4.0...v3.5.0) (2026-07-08)
+
+### Features
+
+* **UP-3106:** add resourcemanager.organizations.getIamPolicy for Audit Logs functionality ([0dd5d2a](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/0dd5d2adec103eb5ea6fa3dd834e2c0d29dddc0c))
+
+## [3.4.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.3.0...v3.4.0) (2026-06-30)
+
+### Features
+
+* **UP-2741:** support user-managed secret replication regions ([5f0e83a](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/5f0e83aba4c701c127b4ae551172dc4c0978dd55))
+
+## [3.3.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.2.5...v3.3.0) (2026-06-24)
+
+### Features
+
+* **UP-2468:** Renaming WIF pool and provider to include full org IDs ([43b3b58](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/43b3b589957e919f32b798f1663e0311f9ed4401))
 
 ### Changed
 
@@ -21,6 +150,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Provider: `{org_id}-aws` (was `upwind-{org_id_truncated}-aws-provider`)
   * `{org_id}` is the `upwind_organization_id` with the `org_` prefix removed and lowercased.
   * Existing pools are not renamed (`workload_identity_pool_id` is ignored after creation); new applies create a provider with the updated ID.
+
+## [3.2.5](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.2.4...v3.2.5) (2026-06-22)
+
+### Bug Fixes
+
+* **UP-2419:** adding the ap region descriptions and validation ([c73a53f](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/c73a53f2138d60907bae47297a6c55cf3d23aaa4))
+* **UP-2419:** adding the ap region descriptions and validation ([991ce4e](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/991ce4eedbc2dc170a4842b92c75f92cefe13c07))
+
+## [3.2.4](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v3.2.3...v3.2.4) (2026-06-11)
+
+### Bug Fixes
+
+* **UP-2113:** Update iamServiceAccounts.actAs to true and add validation ([17a2f5e](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/17a2f5e1d9f30144305e5a26ef1737e6002dcf04))
 
 ## [3.2.3](https://github.com/upwindsecurity/terraform-google-onboarding/compare/v3.2.2...v3.2.3) (2026-06-10)
 
