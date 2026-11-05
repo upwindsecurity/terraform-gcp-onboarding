@@ -82,6 +82,7 @@ variable "cloudscanner_basic_permissions" {
     "compute.globalOperations.get",
     "iam.serviceAccounts.actAs",
     "run.executions.list",
+    "serviceusage.services.use",
   ]
 }
 
