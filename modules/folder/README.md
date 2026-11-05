@@ -65,7 +65,6 @@ APIs above are still required. Upwind then reports the organization's scanners a
 deployment mode to manual in Upwind as well, so Upwind waits for your deployment rather than attempting its own.
 
 <!-- BEGIN_TF_DOCS -->
-
 ## Requirements
 
 | Name | Version |
@@ -77,7 +76,7 @@ deployment mode to manual in Upwind as well, so Upwind waits for your deployment
 
 | Name | Version |
 | ---- | ------- |
-| <a name="provider_google"></a> [google](#provider\_google) | 7.36.0 |
+| <a name="provider_google"></a> [google](#provider\_google) | >= 6.23.0 |
 | <a name="provider_terraform"></a> [terraform](#provider\_terraform) | n/a |
 
 ## Modules

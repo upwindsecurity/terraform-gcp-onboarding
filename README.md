@@ -55,3 +55,30 @@ Please see the [Actions Page](https://github.com/upwindsecurity/terraform-gcp-on
 - [Documentation](https://docs.upwind.io)
 - [Issues](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues)
 - [Contributing Guide](./CONTRIBUTING.md)
+
+<!-- BEGIN_TF_DOCS -->
+
+## Requirements
+
+No requirements.
+
+## Providers
+
+No providers.
+
+## Modules
+
+No modules.
+
+## Resources
+
+No resources.
+
+## Inputs
+
+No inputs.
+
+## Outputs
+
+No outputs.
+<!-- END_TF_DOCS -->

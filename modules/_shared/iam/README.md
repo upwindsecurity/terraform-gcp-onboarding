@@ -1,7 +1,6 @@
 # Shared IAM Module
 
 <!-- BEGIN_TF_DOCS -->
-
 ## Requirements
 
 | Name | Version |
@@ -13,7 +12,7 @@
 
 | Name | Version |
 | ---- | ------- |
-| <a name="provider_google"></a> [google](#provider\_google) | 7.35.0 |
+| <a name="provider_google"></a> [google](#provider\_google) | >= 6.23.0, < 9.0.0 |
 
 ## Modules
 
