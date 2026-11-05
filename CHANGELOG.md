@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [4.3.1](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.3.0...v4.3.1) (2026-11-05)
+
+### Bug Fixes
+
+* **UP-9379:** Add AU Region to GCP Projects ([#67](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/67)) ([6aeb520](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/6aeb52021427140b6a702e4b42f352134746feca))
+
 ## [4.3.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.2.0...v4.3.0) (2026-11-03)
 
 ### Features
