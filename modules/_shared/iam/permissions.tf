@@ -283,6 +283,15 @@ variable "storage_object_reader_permissions" {
   ]
 }
 
+variable "dataevents_reader_permissions" {
+  description = "List of IAM permissions the management service account needs to read data-events sources, such as Databricks audit logs delivered to Cloud Storage with Pub/Sub notifications."
+  type        = list(string)
+  default = [
+    "pubsub.subscriptions.consume",
+    "storage.objects.get",
+  ]
+}
+
 variable "cloud_run_permissions" {
   description = "List of IAM permissions for Cloud Run roles."
   type        = list(string)

@@ -26,6 +26,9 @@ module "upwind_organization_onboarding" {
 
   # Deploy the scanners yourself with terraform-google-cloudscanner instead of Upwind deploying them
   # enable_cloudscanner_deployment_role = false
+
+  # Let Upwind read data-events sources, such as Databricks audit logs in Cloud Storage with Pub/Sub
+  # enable_dataevents = true
 }
 
 # Example of post-onboarding setup
