@@ -150,6 +150,11 @@ output "storage_object_reader_permissions" {
   value       = var.storage_object_reader_permissions
 }
 
+output "dataevents_reader_permissions" {
+  description = "List of IAM permissions the management service account needs to read data-events sources."
+  value       = var.dataevents_reader_permissions
+}
+
 output "cloud_run_permissions" {
   description = "List of IAM permissions for Cloud Run role."
   value       = var.cloud_run_permissions

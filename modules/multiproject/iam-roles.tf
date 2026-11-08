@@ -58,3 +58,28 @@ resource "google_project_iam_member" "upwind_management_sa_asset_viewer_role_mem
     module.iam.upwind_management_sa
   ]
 }
+
+### Data events
+
+# Read access to data-events sources (e.g. Databricks audit logs in Cloud Storage with Pub/Sub notifications)
+resource "google_project_iam_custom_role" "upwind_management_sa_dataevents_role" {
+  for_each = var.enable_dataevents ? toset(var.target_project_ids) : toset([])
+
+  project     = each.value
+  role_id     = "UpwindDataEvents_${local.resource_suffix_underscore}"
+  title       = "upwind-role-${local.resource_suffix_hyphen}-dataevents"
+  description = "Read data-events sources for Upwind"
+  permissions = module.iam.dataevents_reader_permissions
+}
+
+resource "google_project_iam_member" "upwind_management_sa_dataevents_role_member" {
+  for_each = var.enable_dataevents ? toset(var.target_project_ids) : toset([])
+
+  project = each.value
+  role    = google_project_iam_custom_role.upwind_management_sa_dataevents_role[each.key].id
+  member  = "serviceAccount:${module.iam.upwind_management_sa.email}"
+
+  depends_on = [
+    module.iam.upwind_management_sa
+  ]
+}

@@ -184,6 +184,12 @@ variable "enable_dspm_scanning" {
   default     = false
 }
 
+variable "enable_dataevents" {
+  description = "Grant the management service account read access to data-events sources, such as Databricks audit logs delivered to Cloud Storage with Pub/Sub notifications: the UpwindDataEvents role (pubsub.subscriptions.consume and storage.objects.get) on the onboarded scope."
+  type        = bool
+  default     = false
+}
+
 variable "is_saas" {
   description = "Run CloudScanners in SaaS mode: Upwind hosts the scanners and deploys nothing in the orchestrator project. Requires enable_cloudscanners."
   type        = bool
