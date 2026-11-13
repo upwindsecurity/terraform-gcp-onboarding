@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [4.4.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.3.1...v4.4.0) (2026-11-13)
+
+### Features
+
+* **UP-12453:** manage_organization_iam variable to toggle org read a… ([#71](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/71)) ([70c767c](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/70c767c2857aca34709d80efb594c23c654ff58c))
+
 ## [4.3.1](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.3.0...v4.3.1) (2026-11-05)
 
 ### Bug Fixes
