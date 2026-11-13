@@ -37,3 +37,8 @@ output "upwind_configuration_payload" {
   description = "JSON written to the upwind-configuration secret. Add it as a version yourself when create_secret_versions is false."
   value       = module.iam.upwind_configuration_payload
 }
+
+output "organization_iam_requirements" {
+  description = "The organization-level custom roles and grants this deployment needs, created by the module unless manage_organization_iam is false. custom_roles is keyed by role ID; bindings is keyed by a stable name, one additive grant per role and member, and is the source of truth (conditions appear only there); by_service_account is a per-member summary for review."
+  value       = local.organization_iam_requirements
+}

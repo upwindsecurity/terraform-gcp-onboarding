@@ -175,6 +175,12 @@ variable "enable_dspm_scanning" {
   default     = false
 }
 
+variable "manage_organization_iam" {
+  description = "Create the organization-level custom roles and grants. Set to false when another tool (for example Cloud Foundation Fabric FAST) owns organization IAM: nothing is created at organization level, and organization_iam_requirements lists what must be created there instead. Apply that before finishing onboarding in the Upwind console."
+  type        = bool
+  default     = true
+}
+
 variable "is_saas" {
   description = "Run CloudScanners in SaaS mode: Upwind hosts the scanners and deploys nothing in the orchestrator project. Requires enable_cloudscanners."
   type        = bool
