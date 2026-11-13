@@ -131,7 +131,7 @@ variable "gcp_organization_id" {
   type        = string
 
   validation {
-    condition     = can(regex("^[0-9]{1,}", var.gcp_organization_id))
+    condition     = can(regex("^[0-9]+$", var.gcp_organization_id))
     error_message = "The GCP organization ID must be numeric."
   }
 }
@@ -173,6 +173,12 @@ variable "enable_dspm_scanning" {
   description = "Enable DSPM scanning by cloud scanners"
   type        = bool
   default     = false
+}
+
+variable "manage_organization_iam" {
+  description = "Create the organization-level custom roles and grants. Set to false when another tool (for example Cloud Foundation Fabric FAST) owns organization IAM: nothing is created at organization level, and organization_iam_requirements lists what must be created there instead. Apply that before finishing onboarding in the Upwind console."
+  type        = bool
+  default     = true
 }
 
 variable "is_saas" {

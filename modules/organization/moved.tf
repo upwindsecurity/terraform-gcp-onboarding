@@ -283,3 +283,30 @@ moved {
   from = google_secret_manager_secret_version.scanner_client_secret_v1
   to   = module.iam.google_secret_manager_secret_version.scanner_client_secret_v1
 }
+
+### Organization IAM (count added for manage_organization_iam)
+
+moved {
+  from = google_organization_iam_custom_role.upwind_management_sa_operations_role
+  to   = google_organization_iam_custom_role.upwind_management_sa_operations_role[0]
+}
+
+moved {
+  from = google_organization_iam_member.upwind_management_sa_org_viewer_role_member
+  to   = google_organization_iam_member.upwind_management_sa_org_viewer_role_member[0]
+}
+
+moved {
+  from = google_organization_iam_member.upwind_management_sa_folder_viewer_role_member
+  to   = google_organization_iam_member.upwind_management_sa_folder_viewer_role_member[0]
+}
+
+moved {
+  from = google_organization_iam_member.upwind_management_sa_operations_role_member
+  to   = google_organization_iam_member.upwind_management_sa_operations_role_member[0]
+}
+
+moved {
+  from = google_organization_iam_member.upwind_management_sa_asset_viewer_role_member
+  to   = google_organization_iam_member.upwind_management_sa_asset_viewer_role_member[0]
+}

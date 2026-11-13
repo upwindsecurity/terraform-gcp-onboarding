@@ -64,6 +64,54 @@ are skipped: the scanner and scaler service accounts, their roles and the scanne
 APIs above are still required. Upwind then reports the organization's scanners as self-managed. Set the CloudScanner
 deployment mode to manual in Upwind as well, so Upwind waits for your deployment rather than attempting its own.
 
+### Managing organization IAM yourself
+
+Set `manage_organization_iam = false` when another tool owns organization IAM, for example
+[Cloud Foundation Fabric FAST](https://github.com/GoogleCloudPlatform/cloud-foundation-fabric/tree/master/fast) with
+authoritative organization bindings. The module then creates nothing at organization level and does not read the
+organization, so the deployer needs access to the orchestrator project only. Everything in the orchestrator project is
+still created.
+
+The `organization_iam_requirements` output lists what must be created at organization level instead. It is emitted
+whatever the flag, so it can also be used to check for drift:
+
+- `custom_roles`, keyed by role ID: the full role `name`, `title`, `description` and sorted `permissions`.
+- `bindings`, keyed by a stable name: one additive grant per role and member, with `role`, `member` and `condition`
+  (`null` or an object with `title` and `expression`). Create grants from this map.
+- `by_service_account`: the roles each member holds, without conditions. For review only.
+
+Read it with `terraform output -json organization_iam_requirements`. Then:
+
+1. Apply this module. It creates the service accounts that the grants refer to.
+2. Create the custom roles and grants from the output. Keep the role IDs exactly as listed: Upwind detects DSPM
+   scanning from them. Recreate them from the output after each module upgrade, as permissions change between releases.
+3. Wait a few minutes for IAM to propagate, then finish onboarding in the Upwind console. Onboarding checks the
+   organization-level permissions and fails if they are missing.
+
+A deleted custom role ID cannot be reused for about 37 days. If roles with these IDs were created and deleted before,
+set a different `resource_suffix` or undelete the role in question.
+
+#### Migrating an existing installation
+
+Switching an existing installation from `true` to `false` plans to destroy the organization roles and grants. That
+removes Upwind's organization access straight away, and the deleted role IDs then cannot be recreated for about 37
+days. Hand them over instead:
+
+1. Upgrade to this module version with `manage_organization_iam` still `true` and apply, so the resources move to
+   their new addresses.
+2. Remove them from state without deleting them, replacing `upwind` with the module name in your configuration:
+
+   ```bash
+   terraform state list | grep '^module\.upwind\.google_organization_iam_' | xargs -I{} terraform state rm '{}'
+   ```
+
+3. Set `manage_organization_iam = false`. The plan must not destroy anything.
+4. Bring the existing roles and grants under the other tool, by importing them, using the IDs in
+   `organization_iam_requirements`.
+
+To switch back from `false` to `true`, import the existing custom roles into the module first, as creating a role
+whose ID already exists fails.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -119,6 +167,7 @@ deployment mode to manual in Upwind as well, so Upwind waits for your deployment
 | <a name="input_is_dev"></a> [is\_dev](#input\_is\_dev) | Flag to indicate if the environment is a development environment. | `bool` | `false` | no |
 | <a name="input_is_saas"></a> [is\_saas](#input\_is\_saas) | Run CloudScanners in SaaS mode: Upwind hosts the scanners and deploys nothing in the orchestrator project. Requires enable\_cloudscanners. | `bool` | `false` | no |
 | <a name="input_labels"></a> [labels](#input\_labels) | A map of labels to apply to all resources | `map(string)` | `{}` | no |
+| <a name="input_manage_organization_iam"></a> [manage\_organization\_iam](#input\_manage\_organization\_iam) | Create the organization-level custom roles and grants. Set to false when another tool (for example Cloud Foundation Fabric FAST) owns organization IAM: nothing is created at organization level, and organization\_iam\_requirements lists what must be created there instead. Apply that before finishing onboarding in the Upwind console. | `bool` | `true` | no |
 | <a name="input_resource_suffix"></a> [resource\_suffix](#input\_resource\_suffix) | The suffix to append to all resources created by this module. | `string` | `""` | no |
 | <a name="input_scanner_client_id"></a> [scanner\_client\_id](#input\_scanner\_client\_id) | The client ID used for authentication with the Upwind Cloudscanner Service. Required when enable\_cloudscanners is true, unless is\_saas is true. | `string` | `""` | no |
 | <a name="input_scanner_client_secret"></a> [scanner\_client\_secret](#input\_scanner\_client\_secret) | The client secret for authentication with the Upwind Cloudscanner Service. Required when enable\_cloudscanners is true, unless is\_saas is true or scanner\_client\_secret\_id references an existing secret. | `string` | `""` | no |
@@ -137,6 +186,7 @@ deployment mode to manual in Upwind as well, so Upwind waits for your deployment
 
 | Name | Description |
 | ---- | ----------- |
+| <a name="output_organization_iam_requirements"></a> [organization\_iam\_requirements](#output\_organization\_iam\_requirements) | The organization-level custom roles and grants this deployment needs, created by the module unless manage\_organization\_iam is false. custom\_roles is keyed by role ID; bindings is keyed by a stable name, one additive grant per role and member, and is the source of truth (conditions appear only there); by\_service\_account is a per-member summary for review. |
 | <a name="output_upwind_configuration_payload"></a> [upwind\_configuration\_payload](#output\_upwind\_configuration\_payload) | JSON written to the upwind-configuration secret. Add it as a version yourself when create\_secret\_versions is false. |
 | <a name="output_upwind_management_service_account_display_name"></a> [upwind\_management\_service\_account\_display\_name](#output\_upwind\_management\_service\_account\_display\_name) | The display name of the Upwind Management Service Account. |
 | <a name="output_upwind_management_service_account_email"></a> [upwind\_management\_service\_account\_email](#output\_upwind\_management\_service\_account\_email) | The email address of the Upwind Management Service Account. |

@@ -15,7 +15,9 @@ locals {
   resource_suffix_underscore = format("%s%s", local.org_id_truncated, var.resource_suffix == "" ? "" : "_${var.resource_suffix}")
 }
 
+# Only read when the module manages org IAM, so deployers without org access can run it otherwise
 data "google_organization" "org" {
+  count        = var.manage_organization_iam ? 1 : 0
   organization = var.gcp_organization_id
 }
 
