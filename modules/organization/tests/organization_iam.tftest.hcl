@@ -195,3 +195,14 @@ run "unmanaged_without_scanners_lists_management_only" {
     error_message = "only the 4 management grants are needed without scanners"
   }
 }
+
+run "rejects_non_numeric_organization_id" {
+  command = plan
+
+  variables {
+    manage_organization_iam = false
+    gcp_organization_id     = "123456789012 "
+  }
+
+  expect_failures = [var.gcp_organization_id]
+}

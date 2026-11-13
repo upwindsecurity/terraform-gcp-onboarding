@@ -91,6 +91,27 @@ Read it with `terraform output -json organization_iam_requirements`. Then:
 A deleted custom role ID cannot be reused for about 37 days. If roles with these IDs were created and deleted before,
 set a different `resource_suffix` or undelete the role in question.
 
+#### Migrating an existing installation
+
+Switching an existing installation from `true` to `false` plans to destroy the organization roles and grants. That
+removes Upwind's organization access straight away, and the deleted role IDs then cannot be recreated for about 37
+days. Hand them over instead:
+
+1. Upgrade to this module version with `manage_organization_iam` still `true` and apply, so the resources move to
+   their new addresses.
+2. Remove them from state without deleting them, replacing `upwind` with the module name in your configuration:
+
+   ```bash
+   terraform state list | grep '^module\.upwind\.google_organization_iam_' | xargs -I{} terraform state rm '{}'
+   ```
+
+3. Set `manage_organization_iam = false`. The plan must not destroy anything.
+4. Bring the existing roles and grants under the other tool, by importing them, using the IDs in
+   `organization_iam_requirements`.
+
+To switch back from `false` to `true`, import the existing custom roles into the module first, as creating a role
+whose ID already exists fails.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 

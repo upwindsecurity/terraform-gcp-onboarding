@@ -131,7 +131,7 @@ variable "gcp_organization_id" {
   type        = string
 
   validation {
-    condition     = can(regex("^[0-9]{1,}", var.gcp_organization_id))
+    condition     = can(regex("^[0-9]+$", var.gcp_organization_id))
     error_message = "The GCP organization ID must be numeric."
   }
 }
