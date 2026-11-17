@@ -127,6 +127,7 @@ data "google_secret_manager_secret" "scanner_client_secret_existing" {
 
 # Placeholder secret whose labels onboarding-service reads and applies to deployed scanner resources
 resource "google_secret_manager_secret" "terraform_labels" {
+  count     = local.store_labels_secret ? 1 : 0
   secret_id = "upwind-default-labels-${local.resource_suffix_hyphen}"
   project   = local.project
   labels    = local.validated_labels
@@ -197,8 +198,8 @@ resource "google_secret_manager_secret_version" "scanner_client_secret_v1" {
 }
 
 resource "google_secret_manager_secret_version" "terraform_labels_v1" {
-  count                  = var.create_secret_versions ? 1 : 0
-  secret                 = google_secret_manager_secret.terraform_labels.id
+  count                  = var.create_secret_versions && local.store_labels_secret ? 1 : 0
+  secret                 = google_secret_manager_secret.terraform_labels[0].id
   secret_data_wo         = "labels-stored-as-resource-metadata"
   secret_data_wo_version = 1
 

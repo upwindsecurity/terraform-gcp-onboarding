@@ -21,3 +21,15 @@ moved {
   from = google_secret_manager_secret.upwind_client_id
   to   = google_secret_manager_secret.upwind_client_id[0]
 }
+
+# The labels secret gained a count for SaaS mode. Explicit, like the block above, so upgrading
+# never replaces the secret or its viewer grant.
+moved {
+  from = google_secret_manager_secret.terraform_labels
+  to   = google_secret_manager_secret.terraform_labels[0]
+}
+
+moved {
+  from = google_secret_manager_secret_iam_member.terraform_labels_viewer
+  to   = google_secret_manager_secret_iam_member.terraform_labels_viewer[0]
+}

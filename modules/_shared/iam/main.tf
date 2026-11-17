@@ -21,6 +21,8 @@ locals {
   grant_deployment_role = local.deploy_cloudscanners && var.enable_cloudscanner_deployment_role
   # Nothing reads the Upwind client credentials from the customer's project in SaaS mode, so none are stored
   store_upwind_credentials = !var.is_saas
+  # The labels secret only labels scanners deployed in the orchestrator project, so SaaS mode omits it
+  store_labels_secret = !var.is_saas
   # Merge default labels with user-provided labels
   # User labels override defaults if keys conflict
   merged_labels = merge(var.default_labels, var.labels)
