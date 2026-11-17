@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [4.4.1](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.4.0...v4.4.1) (2026-11-17)
+
+### Bug Fixes
+
+* **UP-6866:** omit the default-labels secret in SaaS mode ([#74](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/74)) ([618b661](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/618b661ead4be98f8a6935b78be778bd952c252b))
+
 ## [4.4.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.3.1...v4.4.0) (2026-11-13)
 
 ### Features
