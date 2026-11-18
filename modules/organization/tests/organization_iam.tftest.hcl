@@ -88,8 +88,15 @@ run "managed_output_matches_created_resources" {
     error_message = "output snapshot-deleter condition must match the binding the module creates"
   }
   assert {
-    condition     = length(output.organization_iam_requirements.bindings) == 10
-    error_message = "outpost with DSPM needs 10 organization grants"
+    condition     = length(output.organization_iam_requirements.bindings) == 11
+    error_message = "outpost with DSPM needs 11 organization grants"
+  }
+  assert {
+    condition = (
+      google_organization_iam_member.upwind_management_sa_container_viewer_role_member[0].role == output.organization_iam_requirements.bindings["management-container-viewer"].role &&
+      google_organization_iam_member.upwind_management_sa_container_viewer_role_member[0].member == output.organization_iam_requirements.bindings["management-container-viewer"].member
+    )
+    error_message = "output container.viewer grant must match the member the module creates"
   }
 }
 
@@ -111,6 +118,7 @@ run "unmanaged_creates_nothing_at_organization_level" {
       length(google_organization_iam_member.upwind_management_sa_folder_viewer_role_member) == 0 &&
       length(google_organization_iam_member.upwind_management_sa_operations_role_member) == 0 &&
       length(google_organization_iam_member.upwind_management_sa_asset_viewer_role_member) == 0 &&
+      length(google_organization_iam_member.upwind_management_sa_container_viewer_role_member) == 0 &&
       length(google_organization_iam_member.upwind_cloudscanner_sa_compute_viewer_role_member) == 0 &&
       length(google_organization_iam_binding.upwind_cloudscanner_operations_role_binding) == 0 &&
       length(google_organization_iam_binding.upwind_cloudscanner_snapshot_deleter_role_binding) == 0 &&
@@ -146,6 +154,7 @@ run "unmanaged_creates_nothing_at_organization_level" {
     condition = output.organization_iam_requirements.by_service_account["serviceAccount:upwind-mgmt@upwind-orchestrator.iam.gserviceaccount.com"] == sort([
       "organizations/123456789012/roles/UpwindOperations_test",
       "roles/cloudasset.viewer",
+      "roles/container.viewer",
       "roles/resourcemanager.folderViewer",
       "roles/viewer",
     ])
@@ -168,7 +177,7 @@ run "unmanaged_saas_lists_no_scaler_grants" {
   }
 
   assert {
-    condition     = sort(keys(output.organization_iam_requirements.bindings)) == sort(["management-viewer", "management-folder-viewer", "management-asset-viewer", "management-operations", "cloudscanner-operations", "cloudscanner-snapshot-deleter"])
+    condition     = sort(keys(output.organization_iam_requirements.bindings)) == sort(["management-viewer", "management-folder-viewer", "management-asset-viewer", "management-container-viewer", "management-operations", "cloudscanner-operations", "cloudscanner-snapshot-deleter"])
     error_message = "SaaS needs no scaler, compute.viewer or object reader grants"
   }
   assert {
@@ -191,8 +200,21 @@ run "unmanaged_without_scanners_lists_management_only" {
     error_message = "only the management operations role is needed without scanners"
   }
   assert {
-    condition     = length(output.organization_iam_requirements.bindings) == 4
-    error_message = "only the 4 management grants are needed without scanners"
+    condition     = length(output.organization_iam_requirements.bindings) == 5
+    error_message = "only the 5 management grants are needed without scanners"
+  }
+}
+
+run "management_sa_gets_explicit_container_viewer" {
+  command = plan
+
+  assert {
+    condition     = google_organization_iam_member.upwind_management_sa_container_viewer_role_member[0].role == "roles/container.viewer"
+    error_message = "the management SA needs an explicit roles/container.viewer grant so GKE access survives replacing roles/viewer"
+  }
+  assert {
+    condition     = google_organization_iam_member.upwind_management_sa_container_viewer_role_member[0].member == "serviceAccount:upwind-mgmt@upwind-orchestrator.iam.gserviceaccount.com"
+    error_message = "the container.viewer grant must go to the management SA"
   }
 }
 

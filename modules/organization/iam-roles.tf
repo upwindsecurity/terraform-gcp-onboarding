@@ -37,6 +37,18 @@ resource "google_organization_iam_member" "upwind_management_sa_folder_viewer_ro
   ]
 }
 
+# Explicit GKE read access for agentless Kubernetes scanning, independent of roles/viewer
+resource "google_organization_iam_member" "upwind_management_sa_container_viewer_role_member" {
+  count  = var.manage_organization_iam ? 1 : 0
+  org_id = local.organization_id
+  role   = local.organization_iam_bindings["management-container-viewer"].role
+  member = local.organization_iam_bindings["management-container-viewer"].member
+
+  depends_on = [
+    module.iam.upwind_management_sa
+  ]
+}
+
 # Assign the operations role to the management service account (unconditional)
 resource "google_organization_iam_member" "upwind_management_sa_operations_role_member" {
   count  = var.manage_organization_iam ? 1 : 0
