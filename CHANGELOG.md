@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [4.4.2](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.4.1...v4.4.2) (2026-11-18)
+
+### Bug Fixes
+
+* **UP-14729:** grant the management SA an explicit roles/container.viewer ([#77](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/77)) ([e67c007](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/e67c0079d4132a7239e048438ddc5a60e12d50e5))
+
 ## [4.4.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.3.1...v4.4.0) (2026-11-13)
 
 ### Features
