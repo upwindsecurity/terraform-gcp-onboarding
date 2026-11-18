@@ -86,6 +86,14 @@ locals {
       member    = local.management_sa_member
       condition = null
     }
+    # roles/viewer covers GKE today; the explicit grant keeps agentless GKE scanning working
+    # when a customer replaces roles/viewer with a custom role
+    management-container-viewer = {
+      enabled   = true
+      role      = "roles/container.viewer"
+      member    = local.management_sa_member
+      condition = null
+    }
     management-operations = {
       enabled   = true
       role      = local.organization_custom_role_names.management_operations

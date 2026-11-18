@@ -39,6 +39,19 @@ resource "google_folder_iam_member" "upwind_management_sa_operations_role_member
   ]
 }
 
+# Explicit GKE read access for agentless Kubernetes scanning on each target folder, independent of roles/viewer
+resource "google_folder_iam_member" "upwind_management_sa_container_viewer_role_member" {
+  for_each = toset(var.target_folder_ids)
+
+  folder = each.value
+  role   = "roles/container.viewer"
+  member = "serviceAccount:${module.iam.upwind_management_sa.email}"
+
+  depends_on = [
+    module.iam.upwind_management_sa
+  ]
+}
+
 # Grant Cloud Asset Inventory permissions on each target folder
 resource "google_folder_iam_member" "upwind_management_sa_asset_viewer_role_member" {
   for_each = toset(var.target_folder_ids)
