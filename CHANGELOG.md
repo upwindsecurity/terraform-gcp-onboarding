@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [4.4.3](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.4.2...v4.4.3) (2026-11-19)
+
+### Bug Fixes
+
+* **UP-14884:** grant resourcemanager.organizations.get at org level ([#76](https://github.com/upwindsecurity/terraform-gcp-onboarding/issues/76)) ([ab90176](https://github.com/upwindsecurity/terraform-gcp-onboarding/commit/ab9017630b65eb66615e822adf7cab022a994409))
+
 ## [4.4.0](https://github.com/upwindsecurity/terraform-gcp-onboarding/compare/v4.3.1...v4.4.0) (2026-11-13)
 
 ### Features
