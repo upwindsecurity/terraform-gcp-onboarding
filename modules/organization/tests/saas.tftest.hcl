@@ -114,6 +114,10 @@ run "saas_omits_scanner_infrastructure" {
     error_message = "SaaS mode should not grant actAs"
   }
   assert {
+    condition     = contains(google_organization_iam_custom_role.upwind_management_sa_operations_role[0].permissions, "resourcemanager.organizations.get")
+    error_message = "SaaS mode should let the management service account read the organization, which roles/viewer does not cover"
+  }
+  assert {
     condition     = length(google_organization_iam_member.upwind_cloudscanner_sa_compute_viewer_role_member) == 0
     error_message = "SaaS mode should not grant compute.viewer, which roles/viewer already covers"
   }
