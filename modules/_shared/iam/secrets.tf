@@ -248,6 +248,7 @@ locals {
 
     enable_cloudscanners = var.enable_cloudscanners
     enable_dspm_scanning = var.enable_dspm_scanning
+    enable_cloudlogs     = var.enable_cloudlogs
 
     upwind_client_id           = local.store_upwind_credentials ? var.upwind_client_id : null
     upwind_client_secret_name  = local.store_upwind_credentials ? local.upwind_client_secret_ref.secret_id : null
@@ -257,6 +258,7 @@ locals {
     upwind_management_sa_email   = google_service_account.upwind_management_sa.email
     cloudscanner_sa_email        = local.cloudscanner_identity_email
     cloudscanner_scaler_sa_email = local.deploy_cloudscanners ? google_service_account.cloudscanner_scaler_sa[0].email : null
+    cloudlogs_sa_email           = var.enable_cloudlogs ? google_service_account.cloudlogs_sa[0].email : null
 
     workload_identity_pool_project  = var.workload_identity_pool_project == "" ? local.project : var.workload_identity_pool_project
     workload_identity_provider_name = google_iam_workload_identity_pool_provider.aws.name
