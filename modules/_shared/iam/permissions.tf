@@ -292,3 +292,12 @@ variable "cloud_run_permissions" {
     "artifactregistry.dockerimages.get",
   ]
 }
+
+variable "cloudlogs_read_permissions" {
+  description = "List of IAM permissions the Cloud Logs service account needs across the onboarded scope to read cloud logs."
+  type        = list(string)
+  default = [
+    "logging.sinks.get",
+    "monitoring.timeSeries.list",
+  ]
+}

@@ -113,3 +113,31 @@ resource "google_service_account_iam_member" "cloudscheduler_can_impersonate_sca
   role               = "roles/iam.serviceAccountTokenCreator"
   member             = "serviceAccount:service-${data.google_project.current.number}@gcp-sa-cloudscheduler.iam.gserviceaccount.com"
 }
+
+### Cloud Logs Service Account
+
+# The account Upwind reads cloud logs as. Audit logs integrations grant it access to their own
+# Pub/Sub subscription and topic; Upwind reaches it by impersonating the management account.
+# Its email is the management account's with the upwind-mgmt- prefix replaced by upwind-logs-.
+resource "google_service_account" "cloudlogs_sa" {
+  count        = var.enable_cloudlogs ? 1 : 0
+  project      = var.upwind_orchestrator_project
+  account_id   = format("upwind-logs-%s", local.resource_suffix_hyphen)
+  display_name = "Upwind Cloud Logs Service Account"
+  description  = "Service account Upwind uses to read cloud logs (audit logs integrations)"
+
+  lifecycle {
+    precondition {
+      condition     = length(local.resource_suffix_hyphen) <= 16
+      error_message = "Service account ID cannot exceed 30 characters."
+    }
+  }
+}
+
+# Allow management SA to create tokens for the cloud logs SA
+resource "google_service_account_iam_member" "management_can_impersonate_cloudlogs" {
+  count              = var.enable_cloudlogs ? 1 : 0
+  service_account_id = google_service_account.cloudlogs_sa[0].id
+  role               = "roles/iam.serviceAccountTokenCreator"
+  member             = "serviceAccount:${google_service_account.upwind_management_sa.email}"
+}

@@ -64,6 +64,19 @@ are skipped: the scanner and scaler service accounts, their roles and the scanne
 APIs above are still required. Upwind then reports the organization's scanners as self-managed. Set the CloudScanner
 deployment mode to manual in Upwind as well, so Upwind waits for your deployment rather than attempting its own.
 
+### Cloud logs
+
+Set `enable_cloudlogs = true` to create one Upwind Cloud Logs service account for audit logs integrations. It is
+created in the orchestrator project as `upwind-logs-<suffix>`, with the same suffix as the management service account,
+so its email is the management service account's with `upwind-mgmt-` replaced by `upwind-logs-`. Upwind reaches it by
+impersonating it from the management service account, which is granted `roles/iam.serviceAccountTokenCreator` on it.
+
+It holds `logging.sinks.get` and `monitoring.timeSeries.list` on each target project through the
+`UpwindCloudLogsReader_<suffix>` project custom role, created and granted in each target project.
+Each audit logs integration then only grants this service account access to its own Pub/Sub subscription and topic.
+The email is exposed as the `upwind_cloudlogs_service_account_email` output. Off by default: nothing is created when
+`enable_cloudlogs` is false.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -89,10 +102,12 @@ deployment mode to manual in Upwind as well, so Upwind waits for your deployment
 
 | Name | Type |
 | ---- | ---- |
+| [google_project_iam_custom_role.upwind_cloudlogs_reader_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_custom_role) | resource |
 | [google_project_iam_custom_role.upwind_cloudscanner_object_reader_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_custom_role) | resource |
 | [google_project_iam_custom_role.upwind_cloudscanner_operations_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_custom_role) | resource |
 | [google_project_iam_custom_role.upwind_cloudscanner_snapshot_deleter_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_custom_role) | resource |
 | [google_project_iam_custom_role.upwind_management_sa_operations_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_custom_role) | resource |
+| [google_project_iam_member.upwind_cloudlogs_sa_reader_role_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.upwind_cloudscanner_sa_compute_viewer_role_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.upwind_cloudscanner_sa_object_reader_role_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.upwind_cloudscanner_sa_operations_role_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
@@ -111,6 +126,7 @@ deployment mode to manual in Upwind as well, so Upwind waits for your deployment
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_create_secret_versions"></a> [create\_secret\_versions](#input\_create\_secret\_versions) | Write secret versions for the client IDs, labels marker and configuration document. Set to false if the Terraform identity may not hold secretmanager.versions.add; then pass the client secrets via *\_secret\_id and add the remaining versions yourself (see output upwind\_configuration\_payload). | `bool` | `true` | no |
+| <a name="input_enable_cloudlogs"></a> [enable\_cloudlogs](#input\_enable\_cloudlogs) | Create the Upwind Cloud Logs service account and grant it read access to log sinks and monitoring time series, for audit logs integrations to grant access to their Pub/Sub subscription and topic. | `bool` | `false` | no |
 | <a name="input_enable_cloudscanner_deployment_role"></a> [enable\_cloudscanner\_deployment\_role](#input\_enable\_cloudscanner\_deployment\_role) | Create the CloudScannerDeploymentRole and grant it to the management service account, so Upwind deploys the CloudScanners. Set to false to deploy them yourself with the terraform-google-cloudscanner module: every other CloudScanner IAM resource is still created, and Upwind reports the organization as self-managed. Only relevant when enable\_cloudscanners is true and is\_saas is false. | `bool` | `true` | no |
 | <a name="input_enable_cloudscanners"></a> [enable\_cloudscanners](#input\_enable\_cloudscanners) | Enable the creation of cloud scanners. | `bool` | `false` | no |
 | <a name="input_enable_dspm_scanning"></a> [enable\_dspm\_scanning](#input\_enable\_dspm\_scanning) | Enable DSPM scanning by cloud scanners | `bool` | `false` | no |
@@ -137,6 +153,7 @@ deployment mode to manual in Upwind as well, so Upwind waits for your deployment
 
 | Name | Description |
 | ---- | ----------- |
+| <a name="output_upwind_cloudlogs_service_account_email"></a> [upwind\_cloudlogs\_service\_account\_email](#output\_upwind\_cloudlogs\_service\_account\_email) | The email address of the Upwind Cloud Logs Service Account, or null when enable\_cloudlogs is false. |
 | <a name="output_upwind_configuration_payload"></a> [upwind\_configuration\_payload](#output\_upwind\_configuration\_payload) | JSON written to the upwind-configuration secret. Add it as a version yourself when create\_secret\_versions is false. |
 | <a name="output_upwind_management_service_account_display_name"></a> [upwind\_management\_service\_account\_display\_name](#output\_upwind\_management\_service\_account\_display\_name) | The display name of the Upwind Management Service Account. |
 | <a name="output_upwind_management_service_account_email"></a> [upwind\_management\_service\_account\_email](#output\_upwind\_management\_service\_account\_email) | The email address of the Upwind Management Service Account. |

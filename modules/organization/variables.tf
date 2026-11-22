@@ -163,6 +163,12 @@ variable "enable_cloudscanners" {
   default     = false
 }
 
+variable "enable_cloudlogs" {
+  description = "Create the Upwind Cloud Logs service account and grant it read access to log sinks and monitoring time series, for audit logs integrations to grant access to their Pub/Sub subscription and topic."
+  type        = bool
+  default     = false
+}
+
 variable "enable_cloudscanner_deployment_role" {
   description = "Create the CloudScannerDeploymentRole and grant it to the management service account, so Upwind deploys the CloudScanners. Set to false to deploy them yourself with the terraform-google-cloudscanner module: every other CloudScanner IAM resource is still created, and Upwind reports the organization as self-managed. Only relevant when enable_cloudscanners is true and is_saas is false."
   type        = bool

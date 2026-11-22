@@ -13,6 +13,7 @@ module "iam" {
   secret_replication_locations = var.secret_replication_locations
   create_secret_versions       = var.create_secret_versions
   enable_cloudscanners         = var.enable_cloudscanners
+  enable_cloudlogs             = var.enable_cloudlogs
   enable_dspm_scanning         = var.enable_dspm_scanning
   is_saas                      = var.is_saas
   enable_snapshot_act_as       = false

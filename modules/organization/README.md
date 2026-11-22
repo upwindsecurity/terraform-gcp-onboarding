@@ -112,6 +112,21 @@ days. Hand them over instead:
 To switch back from `false` to `true`, import the existing custom roles into the module first, as creating a role
 whose ID already exists fails.
 
+### Cloud logs
+
+Set `enable_cloudlogs = true` to create one Upwind Cloud Logs service account for audit logs integrations. It is
+created in the orchestrator project as `upwind-logs-<suffix>`, with the same suffix as the management service account,
+so its email is the management service account's with `upwind-mgmt-` replaced by `upwind-logs-`. Upwind reaches it by
+impersonating it from the management service account, which is granted `roles/iam.serviceAccountTokenCreator` on it.
+
+It holds `logging.sinks.get` and `monitoring.timeSeries.list` on the organization through the
+`UpwindCloudLogsReader_<suffix>` organization custom role, granted at the organization. With
+`manage_organization_iam = false` the role and grant are listed in `organization_iam_requirements` (binding
+`cloudlogs-reader`) instead of created.
+Each audit logs integration then only grants this service account access to its own Pub/Sub subscription and topic.
+The email is exposed as the `upwind_cloudlogs_service_account_email` output. Off by default: nothing is created when
+`enable_cloudlogs` is false.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -140,10 +155,12 @@ whose ID already exists fails.
 | [google_organization_iam_binding.upwind_cloudscanner_object_reader_role_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_binding) | resource |
 | [google_organization_iam_binding.upwind_cloudscanner_operations_role_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_binding) | resource |
 | [google_organization_iam_binding.upwind_cloudscanner_snapshot_deleter_role_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_binding) | resource |
+| [google_organization_iam_custom_role.upwind_cloudlogs_reader_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_custom_role) | resource |
 | [google_organization_iam_custom_role.upwind_cloudscanner_object_reader_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_custom_role) | resource |
 | [google_organization_iam_custom_role.upwind_cloudscanner_operations_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_custom_role) | resource |
 | [google_organization_iam_custom_role.upwind_cloudscanner_snapshot_deleter_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_custom_role) | resource |
 | [google_organization_iam_custom_role.upwind_management_sa_operations_role](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_custom_role) | resource |
+| [google_organization_iam_member.upwind_cloudlogs_sa_reader_role_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_member) | resource |
 | [google_organization_iam_member.upwind_cloudscanner_sa_compute_viewer_role_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_member) | resource |
 | [google_organization_iam_member.upwind_management_sa_asset_viewer_role_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_member) | resource |
 | [google_organization_iam_member.upwind_management_sa_container_viewer_role_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_member) | resource |
@@ -159,6 +176,7 @@ whose ID already exists fails.
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_create_secret_versions"></a> [create\_secret\_versions](#input\_create\_secret\_versions) | Write secret versions for the client IDs, labels marker and configuration document. Set to false if the Terraform identity may not hold secretmanager.versions.add; then pass the client secrets via *\_secret\_id and add the remaining versions yourself (see output upwind\_configuration\_payload). | `bool` | `true` | no |
+| <a name="input_enable_cloudlogs"></a> [enable\_cloudlogs](#input\_enable\_cloudlogs) | Create the Upwind Cloud Logs service account and grant it read access to log sinks and monitoring time series, for audit logs integrations to grant access to their Pub/Sub subscription and topic. | `bool` | `false` | no |
 | <a name="input_enable_cloudscanner_deployment_role"></a> [enable\_cloudscanner\_deployment\_role](#input\_enable\_cloudscanner\_deployment\_role) | Create the CloudScannerDeploymentRole and grant it to the management service account, so Upwind deploys the CloudScanners. Set to false to deploy them yourself with the terraform-google-cloudscanner module: every other CloudScanner IAM resource is still created, and Upwind reports the organization as self-managed. Only relevant when enable\_cloudscanners is true and is\_saas is false. | `bool` | `true` | no |
 | <a name="input_enable_cloudscanners"></a> [enable\_cloudscanners](#input\_enable\_cloudscanners) | Enable the creation of cloud scanners. | `bool` | `false` | no |
 | <a name="input_enable_dspm_scanning"></a> [enable\_dspm\_scanning](#input\_enable\_dspm\_scanning) | Enable DSPM scanning by cloud scanners | `bool` | `false` | no |
@@ -188,6 +206,7 @@ whose ID already exists fails.
 | Name | Description |
 | ---- | ----------- |
 | <a name="output_organization_iam_requirements"></a> [organization\_iam\_requirements](#output\_organization\_iam\_requirements) | The organization-level custom roles and grants this deployment needs, created by the module unless manage\_organization\_iam is false. custom\_roles is keyed by role ID; bindings is keyed by a stable name, one additive grant per role and member, and is the source of truth (conditions appear only there); by\_service\_account is a per-member summary for review. |
+| <a name="output_upwind_cloudlogs_service_account_email"></a> [upwind\_cloudlogs\_service\_account\_email](#output\_upwind\_cloudlogs\_service\_account\_email) | The email address of the Upwind Cloud Logs Service Account, or null when enable\_cloudlogs is false. |
 | <a name="output_upwind_configuration_payload"></a> [upwind\_configuration\_payload](#output\_upwind\_configuration\_payload) | JSON written to the upwind-configuration secret. Add it as a version yourself when create\_secret\_versions is false. |
 | <a name="output_upwind_management_service_account_display_name"></a> [upwind\_management\_service\_account\_display\_name](#output\_upwind\_management\_service\_account\_display\_name) | The display name of the Upwind Management Service Account. |
 | <a name="output_upwind_management_service_account_email"></a> [upwind\_management\_service\_account\_email](#output\_upwind\_management\_service\_account\_email) | The email address of the Upwind Management Service Account. |

@@ -11,7 +11,8 @@ locals {
   management_sa_member = "serviceAccount:${module.iam.upwind_management_sa.email}"
   cloudscanner_member  = var.enable_cloudscanners ? "serviceAccount:${module.iam.cloudscanner_identity_email}" : null
   # The scaler SA only exists when scanners are deployed in the customer's project
-  scaler_member = var.enable_cloudscanners && !var.is_saas ? "serviceAccount:${module.iam.cloudscanner_scaler_sa.email}" : null
+  scaler_member    = var.enable_cloudscanners && !var.is_saas ? "serviceAccount:${module.iam.cloudscanner_scaler_sa.email}" : null
+  cloudlogs_member = var.enable_cloudlogs ? "serviceAccount:${module.iam.cloudlogs_sa_email}" : null
 
   snapshot_deleter_condition = {
     title      = "Upwind Cloud Scanner Snapshot Deleter"
@@ -58,6 +59,14 @@ locals {
         title       = "upwind-role-${local.resource_suffix_hyphen}-cloudscanner-object-reader"
         description = "Object read access for DSPM scanning"
         permissions = module.iam.storage_object_reader_permissions
+      }
+    } : {},
+    var.enable_cloudlogs ? {
+      cloudlogs_reader = {
+        role_id     = "UpwindCloudLogsReader_${local.resource_suffix_underscore}"
+        title       = "upwind-role-${local.resource_suffix_hyphen}-cloudlogs-reader"
+        description = "Read access to log sinks and monitoring time series for Upwind cloud logs"
+        permissions = module.iam.cloudlogs_read_permissions
       }
     } : {},
   )
@@ -136,6 +145,12 @@ locals {
       role      = try(local.organization_custom_role_names.cloudscanner_snapshot_deleter, null)
       member    = local.scaler_member
       condition = local.snapshot_deleter_condition
+    }
+    cloudlogs-reader = {
+      enabled   = var.enable_cloudlogs
+      role      = try(local.organization_custom_role_names.cloudlogs_reader, null)
+      member    = local.cloudlogs_member
+      condition = null
     }
   }
 

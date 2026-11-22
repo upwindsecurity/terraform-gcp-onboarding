@@ -23,6 +23,11 @@ output "upwind_management_service_account_project" {
   value       = module.iam.upwind_management_sa.project
 }
 
+output "upwind_cloudlogs_service_account_email" {
+  description = "The email address of the Upwind Cloud Logs Service Account, or null when enable_cloudlogs is false."
+  value       = module.iam.cloudlogs_sa_email
+}
+
 output "upwind_workload_identity_pool_id" {
   description = "The ID of the Upwind Workload Identity Pool."
   value       = module.iam.google_iam_workload_identity_pool.workload_identity_pool_id

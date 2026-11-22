@@ -15,6 +15,11 @@ output "cloudscanner_identity_email" {
   value       = local.cloudscanner_identity_email
 }
 
+output "cloudlogs_sa_email" {
+  description = "The email of the Cloud Logs Service Account, or null when enable_cloudlogs is false."
+  value       = var.enable_cloudlogs ? google_service_account.cloudlogs_sa[0].email : null
+}
+
 output "cloudscanner_scaler_sa" {
   description = "The Cloudscanner Scaler Service Account details."
   value       = local.deploy_cloudscanners ? google_service_account.cloudscanner_scaler_sa[0] : null
@@ -148,6 +153,11 @@ output "snapshot_deleter_permissions" {
 output "storage_object_reader_permissions" {
   description = "List of IAM permissions for storage object reader role."
   value       = var.storage_object_reader_permissions
+}
+
+output "cloudlogs_read_permissions" {
+  description = "List of IAM permissions for the cloud logs reader role."
+  value       = var.cloudlogs_read_permissions
 }
 
 output "cloud_run_permissions" {

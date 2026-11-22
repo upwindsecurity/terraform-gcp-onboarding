@@ -34,6 +34,15 @@ override_resource {
   }
 }
 
+override_resource {
+  target          = module.iam.google_service_account.cloudlogs_sa
+  override_during = plan
+  values = {
+    id    = "projects/upwind-orchestrator/serviceAccounts/upwind-logs@upwind-orchestrator.iam.gserviceaccount.com"
+    email = "upwind-logs@upwind-orchestrator.iam.gserviceaccount.com"
+  }
+}
+
 variables {
   upwind_organization_id            = "org_test"
   upwind_client_id                  = "client"
@@ -227,4 +236,94 @@ run "rejects_non_numeric_organization_id" {
   }
 
   expect_failures = [var.gcp_organization_id]
+}
+
+run "cloudlogs_disabled_creates_nothing" {
+  command = plan
+
+  assert {
+    condition = (
+      length(google_organization_iam_custom_role.upwind_cloudlogs_reader_role) == 0 &&
+      length(google_organization_iam_member.upwind_cloudlogs_sa_reader_role_member) == 0 &&
+      output.upwind_cloudlogs_service_account_email == null &&
+      !contains(keys(output.organization_iam_requirements.bindings), "cloudlogs-reader") &&
+      !contains(keys(output.organization_iam_requirements.custom_roles), "UpwindCloudLogsReader_test")
+    )
+    error_message = "nothing for cloud logs should be created or listed unless enable_cloudlogs is true"
+  }
+}
+
+run "cloudlogs_grants_reader_role_at_organization" {
+  command = plan
+
+  variables {
+    enable_cloudlogs = true
+  }
+
+  assert {
+    condition = (
+      google_organization_iam_custom_role.upwind_cloudlogs_reader_role[0].org_id == "123456789012" &&
+      google_organization_iam_custom_role.upwind_cloudlogs_reader_role[0].role_id == "UpwindCloudLogsReader_test" &&
+      google_organization_iam_custom_role.upwind_cloudlogs_reader_role[0].title == "upwind-role-test-cloudlogs-reader" &&
+      sort(google_organization_iam_custom_role.upwind_cloudlogs_reader_role[0].permissions) == tolist(["logging.sinks.get", "monitoring.timeSeries.list"])
+    )
+    error_message = "the cloud logs reader role must hold exactly logging.sinks.get and monitoring.timeSeries.list"
+  }
+  assert {
+    condition = (
+      google_organization_iam_member.upwind_cloudlogs_sa_reader_role_member[0].org_id == "123456789012" &&
+      google_organization_iam_member.upwind_cloudlogs_sa_reader_role_member[0].member == "serviceAccount:upwind-logs@upwind-orchestrator.iam.gserviceaccount.com"
+    )
+    error_message = "the cloud logs reader role must be granted to the cloud logs SA at the organization"
+  }
+  assert {
+    condition     = output.upwind_cloudlogs_service_account_email == "upwind-logs@upwind-orchestrator.iam.gserviceaccount.com"
+    error_message = "the module must output the cloud logs SA email"
+  }
+  assert {
+    condition = (
+      sort(google_organization_iam_custom_role.upwind_cloudlogs_reader_role[0].permissions) == output.organization_iam_requirements.custom_roles["UpwindCloudLogsReader_test"].permissions &&
+      google_organization_iam_member.upwind_cloudlogs_sa_reader_role_member[0].member == output.organization_iam_requirements.bindings["cloudlogs-reader"].member
+    )
+    error_message = "output cloud logs role and grant must match the resources the module creates"
+  }
+}
+
+run "unmanaged_cloudlogs_lists_reader_grant" {
+  command = plan
+
+  variables {
+    manage_organization_iam = false
+    enable_cloudlogs        = true
+  }
+
+  assert {
+    condition = (
+      length(google_organization_iam_custom_role.upwind_cloudlogs_reader_role) == 0 &&
+      length(google_organization_iam_member.upwind_cloudlogs_sa_reader_role_member) == 0
+    )
+    error_message = "no organization-level cloud logs resource should be created when manage_organization_iam is false"
+  }
+  assert {
+    condition = output.organization_iam_requirements.bindings["cloudlogs-reader"] == {
+      role      = "organizations/123456789012/roles/UpwindCloudLogsReader_test"
+      member    = "serviceAccount:upwind-logs@upwind-orchestrator.iam.gserviceaccount.com"
+      condition = null
+    }
+    error_message = "the cloud logs reader grant must be listed for customers who manage organization IAM"
+  }
+  assert {
+    condition = (
+      output.organization_iam_requirements.custom_roles["UpwindCloudLogsReader_test"].name == "organizations/123456789012/roles/UpwindCloudLogsReader_test" &&
+      output.organization_iam_requirements.custom_roles["UpwindCloudLogsReader_test"].title == "upwind-role-test-cloudlogs-reader" &&
+      output.organization_iam_requirements.custom_roles["UpwindCloudLogsReader_test"].permissions == tolist(["logging.sinks.get", "monitoring.timeSeries.list"])
+    )
+    error_message = "the cloud logs reader role must be listed for customers who manage organization IAM"
+  }
+  assert {
+    condition = output.organization_iam_requirements.by_service_account["serviceAccount:upwind-logs@upwind-orchestrator.iam.gserviceaccount.com"] == tolist([
+      "organizations/123456789012/roles/UpwindCloudLogsReader_test",
+    ])
+    error_message = "by_service_account should list the cloud logs SA's role"
+  }
 }
